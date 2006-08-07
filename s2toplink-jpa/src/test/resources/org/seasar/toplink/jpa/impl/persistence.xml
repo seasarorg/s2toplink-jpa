@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+	http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	<persistence-unit name="em" transaction-type="JTA">
+	 	<description>test</description>
+	 	<provider>test.Provider</provider>
+		<jta-data-source>
+			jdbc.DataSource
+		</jta-data-source>
+	<!-- 
+		<jta-data-source>java:/comp/env/jdbc.DataSource</jta-data-source>
+	 -->
+		<mapping-file>test/test1Orm.xml</mapping-file>
+		<mapping-file>test/test2Orm.xml</mapping-file>
+		<mapping-file>test/test3Orm.xml</mapping-file>
+	 	<jar-file></jar-file>
+	 	<class>test.Test</class>
+	 	<class>test.Test2</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<property name="toplink.target-server" value="org.seasar.toplink.jpa.S2ServerPlatform"/>
+			<property name="toplink.logging.level" value="FINE"/>
+ 		</properties>
+	</persistence-unit>
+</persistence>

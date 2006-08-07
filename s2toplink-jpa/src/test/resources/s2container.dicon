@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN" 
+	"http://www.seasar.org/dtd/components23.dtd">
+<components>
+<!-- 
+	<include path="javaee5.dicon"/>
+
+	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
+		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
+	</component>
+ -->
+	
+</components>

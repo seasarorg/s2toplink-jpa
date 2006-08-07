@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PROJECTNAME">
+  <skin>
+    <groupId>org.seasar</groupId>
+    <artifactId>seasar-skin</artifactId>
+    <version>1.0.0</version>
+  </skin>
+  <bannerRight>
+    <name>PROJECTNAME</name>
+    <src>http://www.skirnir.net/product/rst/images/rst.jpg</src>
+    <href>http://PROJECTID.sandbox.seasar.org</href>
+  </bannerRight>
+  <body>
+    <links>
+      <item name="Top" href="http://www.seasar.org/" />
+      <item name="Home" href="http://PROJECTID.sandbox.seasar.org/" />
+    </links>
+    <menu ref="reports" />
+  </body>
+</project>

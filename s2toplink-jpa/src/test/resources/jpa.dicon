@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components namespace="jpa">
+	<component name="persistenceUnitManager"
+		class="org.seasar.toplink.jpa.impl.ContainerPersistenceUnitManager"/>
+	
+	<component class="org.seasar.toplink.jpa.impl.ContainerPersistenceImpl">
+		<property name="parser">@javax.xml.parsers.SAXParserFactory@newInstance().newSAXParser()</property>
+		<property name="persistenceUnitInfoHandler">
+			<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoHandler"/>
+		</property>
+	</component>
+	
+	<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoCreatorImpl"/>
+	
+	<component class="org.seasar.toplink.jpa.impl.ToplinkJpaInstrumentation"/>
+
+</components>
