@@ -170,7 +170,7 @@ public class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
 		@Override
 		protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 			if (!name.startsWith("java.")
-			    || !name.startsWith("javax.")) {
+			    && !name.startsWith("javax.")) {
 				Class<?> c = findLoadedClass(name);
 				if (c == null) {
 					try {
