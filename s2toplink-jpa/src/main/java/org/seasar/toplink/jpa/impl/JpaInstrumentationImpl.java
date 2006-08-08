@@ -13,7 +13,6 @@ import javax.persistence.spi.ClassTransformer;
 import org.seasar.framework.exception.NoSuchMethodRuntimeException;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.toplink.jpa.JpaInstrumentation;
-import org.seasar.toplink.jpa.PersistenceUnitInfoImpl;
 
 public class JpaInstrumentationImpl implements JpaInstrumentation {
 
@@ -31,7 +30,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         protectionDomain = AccessController
                 .doPrivileged(new PrivilegedAction<ProtectionDomain>() {
                     public ProtectionDomain run() {
-                        return PersistenceUnitInfoImpl.class.getProtectionDomain();
+                        return JpaInstrumentationImpl.class.getProtectionDomain();
                     }
                 });
 
