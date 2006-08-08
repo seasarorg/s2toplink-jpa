@@ -14,6 +14,7 @@
 			<property name="toplink.target-server" value="org.seasar.toplink.jpa.S2ServerPlatform"/>
 			<property name="toplink.logging.level" value="FINE"/>
 			<property name="toplink.ddl-generation" value="drop-and-create-tables"/>
+			<property name="toplink.ddl-generation.output-mode" value="both"/>
  		</properties>
 	</persistence-unit>
 </persistence>
