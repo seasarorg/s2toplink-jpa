@@ -1,4 +1,4 @@
-package org.seasar.toplink.jpa.impl;
+package example.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
