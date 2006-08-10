@@ -9,7 +9,9 @@
 	/>
  -->
 	<component name="persistenceUnitManager"
-		class="org.seasar.toplink.jpa.impl.ContainerPersistenceUnitManager"/>
+		class="org.seasar.toplink.jpa.impl.ContainerPersistenceUnitManager">
+ 		<initMethod>#self.addPersistenceUnitProperties("persistenceUnit", #{"toplink.weaving" : "false"})</initMethod>
+	</component>
 	
 	<component class="org.seasar.toplink.jpa.impl.ContainerPersistenceImpl">
 		<property name="parser">@javax.xml.parsers.SAXParserFactory@newInstance().newSAXParser()</property>
@@ -20,6 +22,6 @@
 	
 	<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoCreatorImpl"/>
 	
-	<component class="org.seasar.toplink.jpa.impl.ToplinkJpaInstrumentation"/>
+	<component class="org.seasar.toplink.jpa.impl.TopLinkJpaInstrumentation"/>
 
 </components>

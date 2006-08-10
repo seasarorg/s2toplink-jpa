@@ -8,8 +8,6 @@ public class TestBDaoImplTest extends S2EJB3TestCase {
     
     private TestBDao testBDao;
     
-    
-
     /* (非 Javadoc)
      * @see org.seasar.framework.ejb.unit.S2EJB3TestCase#setUp()
      */
@@ -39,6 +37,17 @@ public class TestBDaoImplTest extends S2EJB3TestCase {
      */
     @Rollback
     public void testGetTestB() {
+        TestB b = new TestB();
+        b.setName("テスト");
+        testBDao.insertTestB(b);
+        
+        getEntityManager().flush();
+        getEntityManager().clear();
+        
+        TestB b2 = testBDao.getTestB(b.getId());
+        
+        assertEquals(b.getName(), b2.getName());
+        assertEquals(b.getVersion(), b2.getVersion());
 
     }
 
