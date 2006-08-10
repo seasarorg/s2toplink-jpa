@@ -1,18 +1,24 @@
 package example.entity;
 
+import static org.seasar.framework.unit.S2Assert.*;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.junit.runner.RunWith;
 import org.seasar.framework.ejb.unit.S2EJB3TestCase;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.framework.unit.annotation.Rollback;
 
-public class InsertTest extends S2EJB3TestCase {
+@RunWith(Seasar2.class)
+public class InsertTest {
+    
+    private EntityManager em;
 	
 	@Rollback
 	public void testPersist() {
 		
-		EntityManager em = getEntityManager();
 		TestA a1 = new TestA();
 		a1.setName("テスト");
 		em.persist(a1);

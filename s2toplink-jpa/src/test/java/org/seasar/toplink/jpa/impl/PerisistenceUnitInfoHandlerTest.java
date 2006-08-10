@@ -1,5 +1,10 @@
 package org.seasar.toplink.jpa.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -10,21 +15,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.seasar.framework.ejb.unit.S2EJB3TestCase;
+import org.junit.runner.RunWith;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.toplink.jpa.PersistenceUnitInfoImpl;
-import org.seasar.toplink.jpa.impl.PersistenceUnitInfoHandler;
 import org.xml.sax.SAXException;
 
-public class PerisistenceUnitInfoHandlerTest extends S2EJB3TestCase {
+@RunWith(Seasar2.class)
+public class PerisistenceUnitInfoHandlerTest {
 	
 	private PersistenceUnitInfoHandler persistenceUnitInfoHandler;
 	
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		include("PerisistenceUnitInfoHandlerTest.dicon");
-	}
-
 	public void testPerse() throws ParserConfigurationException, SAXException, IOException {
 		
 		InputStream is = getClass().getResourceAsStream("/org/seasar/toplink/jpa/impl/persistence.xml");

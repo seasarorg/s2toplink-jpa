@@ -1,33 +1,29 @@
 package example.entity;
 
-import org.seasar.framework.ejb.unit.S2EJB3TestCase;
-import org.seasar.framework.unit.annotation.Rollback;
+import static org.junit.Assert.assertEquals;
 
+import javax.persistence.EntityManager;
 
-public class TestBDaoImplTest extends S2EJB3TestCase {
+import org.junit.runner.RunWith;
+import org.seasar.framework.unit.Seasar2;
+
+@RunWith(Seasar2.class)
+public class TestBDaoImplTest {
     
     private TestBDao testBDao;
     
-    /* (非 Javadoc)
-     * @see org.seasar.framework.ejb.unit.S2EJB3TestCase#setUp()
-     */
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        include("TestBDaoImplTest.dicon");
-    }
-
+    private EntityManager em;
+    
     /*
      * 'org.seasar.toplink.jpa.impl.TestBDaoImpl.insertTestB(TestB)' のためのテスト・メソッド
      */
-    @Rollback
     public void testInsertTestB() {
         
         TestB b = new TestB();
         b.setName("テスト");
         testBDao.insertTestB(b);
         
-        TestB expected = getEntityManager().find(TestB.class, b.getId());
+        TestB expected = em.find(TestB.class, b.getId());
 
         assertEquals(expected, b);
     }
@@ -35,14 +31,13 @@ public class TestBDaoImplTest extends S2EJB3TestCase {
     /*
      * 'org.seasar.toplink.jpa.impl.TestBDaoImpl.getTestB(Integer)' のためのテスト・メソッド
      */
-    @Rollback
     public void testGetTestB() {
         TestB b = new TestB();
         b.setName("テスト");
         testBDao.insertTestB(b);
         
-        getEntityManager().flush();
-        getEntityManager().clear();
+        em.flush();
+        em.clear();
         
         TestB b2 = testBDao.getTestB(b.getId());
         
