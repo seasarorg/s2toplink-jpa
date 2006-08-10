@@ -1,22 +1,19 @@
 package example.entity;
 
-import static org.seasar.framework.unit.S2Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.junit.runner.RunWith;
-import org.seasar.framework.ejb.unit.S2EJB3TestCase;
 import org.seasar.framework.unit.Seasar2;
-import org.seasar.framework.unit.annotation.Rollback;
 
 @RunWith(Seasar2.class)
 public class InsertTest {
     
     private EntityManager em;
-	
-	@Rollback
+
 	public void testPersist() {
 		
 		TestA a1 = new TestA();
