@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.seasar.extension.j2ee.JndiResourceLocator;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 
@@ -45,7 +46,7 @@ public class DelegateDataSource implements DataSource {
 	
 	private DataSource getParent() {
 		S2Container container = SingletonS2ContainerFactory.getContainer();
-		return (DataSource) container.getComponent(name);
+		return (DataSource) container.getComponent(JndiResourceLocator.resolveName(name));
 		
 	}
 

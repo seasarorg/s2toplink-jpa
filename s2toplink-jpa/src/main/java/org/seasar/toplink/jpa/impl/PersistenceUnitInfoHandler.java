@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
-import org.seasar.toplink.jpa.DelegateDataSource;
 import org.seasar.toplink.jpa.PersistenceUnitInfoCreator;
 import org.seasar.toplink.jpa.PersistenceUnitInfoImpl;
 import org.xml.sax.Attributes;
@@ -37,7 +36,7 @@ public class PersistenceUnitInfoHandler extends DefaultHandler {
 		this.persistenceUnitInfoCreator = persistenceUnitInfoCreator;
 	}
 
-	@Binding(bindingType = BindingType.MAY)
+	@Binding(bindingType = BindingType.MUST)
 	public void setContext(Context context) {
 		this.context = context;
 	}
@@ -104,27 +103,19 @@ public class PersistenceUnitInfoHandler extends DefaultHandler {
 		} else if ("jta-data-source".equals(qName)) {
 			String name = getCharacters();
 			if (name != null) {
-				if (context != null) {
-					try {
-						persistenceUnitInfo.setJtaDataSource((DataSource) context.lookup(name));
-					} catch (NamingException e) {
-						throw new SAXException(e);
-					}
-				} else {
-					persistenceUnitInfo.setJtaDataSource(new DelegateDataSource(name));
+				try {
+					persistenceUnitInfo.setJtaDataSource((DataSource) context.lookup(name));
+				} catch (NamingException e) {
+					throw new SAXException(e);
 				}
 			}
 		} else if ("non-jta-data-source".equals(qName)) {
 			String name = getCharacters();
 			if (name != null) {
-				if (context != null) {
-					try {
-						persistenceUnitInfo.setJtaDataSource((DataSource) context.lookup(name));
-					} catch (NamingException e) {
-						throw new SAXException(e);
-					}
-				} else {
-					persistenceUnitInfo.setJtaDataSource(new DelegateDataSource(name));
+				try {
+					persistenceUnitInfo.setJtaDataSource((DataSource) context.lookup(name));
+				} catch (NamingException e) {
+					throw new SAXException(e);
 				}
 			}
 		} else if ("mapping-file".equals(qName)) {
