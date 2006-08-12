@@ -3,25 +3,26 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components namespace="jpa">
 
-<!-- 
 	<component name="persistenceUnitManager"
 		class="org.seasar.framework.jpa.PersistenceUnitManager"
 	/>
- -->
+	
+	<!-- 
 	<component name="persistenceUnitManager"
-		class="org.seasar.toplink.jpa.impl.ContainerPersistenceUnitManager">
- 		<initMethod>#self.addPersistenceUnitProperties("persistenceUnit", #{"toplink.weaving" : "false"})</initMethod>
-	</component>
+		class="org.seasar.toplink.jpa.impl.ContainerPersistenceUnitManager"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.ContainerPersistenceImpl">
 		<property name="parser">@javax.xml.parsers.SAXParserFactory@newInstance().newSAXParser()</property>
 		<property name="persistenceUnitInfoHandler">
-			<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoHandler"/>
+			<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoHandler">
+				<property name="context"><component class="javax.naming.InitialContext"/></property>
+			</component>
 		</property>
 	</component>
 	
 	<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoCreatorImpl"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.TopLinkJpaInstrumentation"/>
+	 -->
 
 </components>
