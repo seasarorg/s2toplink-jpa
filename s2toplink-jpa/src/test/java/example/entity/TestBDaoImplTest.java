@@ -1,23 +1,25 @@
 package example.entity;
 
-import static org.junit.Assert.assertEquals;
-
 import javax.persistence.EntityManager;
 
-import org.junit.runner.RunWith;
-import org.seasar.framework.unit.Seasar2;
+import org.seasar.extension.unit.S2TestCase;
 
-@RunWith(Seasar2.class)
-public class TestBDaoImplTest {
+public class TestBDaoImplTest extends S2TestCase {
     
     private TestBDao testBDao;
     
     private EntityManager em;
     
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        include(TestBDaoImplTest.class.getSimpleName() + ".dicon");
+    }
+
     /*
      * 'org.seasar.toplink.jpa.impl.TestBDaoImpl.insertTestB(TestB)' のためのテスト・メソッド
      */
-    public void testInsertTestB() {
+    public void testInsertTestBTx() {
         
         TestB b = new TestB();
         b.setName("テスト");
@@ -31,7 +33,7 @@ public class TestBDaoImplTest {
     /*
      * 'org.seasar.toplink.jpa.impl.TestBDaoImpl.getTestB(Integer)' のためのテスト・メソッド
      */
-    public void testGetTestB() {
+    public void testGetTestBTx() {
         TestB b = new TestB();
         b.setName("テスト");
         testBDao.insertTestB(b);

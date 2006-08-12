@@ -1,20 +1,22 @@
 package example.entity;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.junit.runner.RunWith;
-import org.seasar.framework.unit.Seasar2;
+import org.seasar.extension.unit.S2TestCase;
 
-@RunWith(Seasar2.class)
-public class InsertTest {
+public class InsertTest extends S2TestCase {
     
     private EntityManager em;
 
-	public void testPersist() {
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        include(InsertTest.class.getSimpleName() + ".dicon");
+    }
+
+	public void testPersistTx() {
 		
 		TestA a1 = new TestA();
 		a1.setName("テスト");

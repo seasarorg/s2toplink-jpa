@@ -1,10 +1,5 @@
 package org.seasar.toplink.jpa.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -15,17 +10,23 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.junit.runner.RunWith;
-import org.seasar.framework.unit.Seasar2;
+import org.seasar.extension.unit.S2TestCase;
 import org.seasar.toplink.jpa.PersistenceUnitInfoImpl;
 import org.xml.sax.SAXException;
 
-@RunWith(Seasar2.class)
-public class PerisistenceUnitInfoHandlerTest {
+public class PerisistenceUnitInfoHandlerTest extends S2TestCase {
 	
 	private PersistenceUnitInfoHandler persistenceUnitInfoHandler;
+    
+    
 	
-	public void testPerse() throws ParserConfigurationException, SAXException, IOException {
+	@Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        include(PerisistenceUnitInfoHandlerTest.class.getSimpleName() + ".dicon");
+    }
+
+    public void testPerse() throws ParserConfigurationException, SAXException, IOException {
 		
 		InputStream is = getClass().getResourceAsStream("/org/seasar/toplink/jpa/impl/persistence.xml");
 		SAXParserFactory factory = SAXParserFactory.newInstance();
