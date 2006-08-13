@@ -63,7 +63,7 @@ public class DelegateDataSource implements DataSource {
 
 	}
 	
-	private DataSource getParent() {
+	protected DataSource getParent() {
 		S2Container container = SingletonS2ContainerFactory.getContainer();
 		return (DataSource) container.getComponent(JndiResourceLocator.resolveName(name));
 		

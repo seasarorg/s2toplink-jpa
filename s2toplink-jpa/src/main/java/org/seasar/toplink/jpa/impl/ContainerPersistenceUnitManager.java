@@ -34,11 +34,11 @@ import org.seasar.toplink.jpa.ContainerPersistence;
  */
 public class ContainerPersistenceUnitManager extends PersistenceUnitManager {
 
-    private final Map<String, EntityManagerFactory> persistenceUnits = new ConcurrentHashMap<String, EntityManagerFactory>();
+    private final Map<String, EntityManagerFactory> persistenceUnits = new HashMap<String, EntityManagerFactory>();
 
     private final Map<EntityManagerFactory, ConcurrentMap<Transaction, EntityManager>> emfContexts = new HashMap<EntityManagerFactory, ConcurrentMap<Transaction, EntityManager>>();
     
-    private final Map<String, Map> persistenceUnitProperties = new ConcurrentHashMap<String, Map>();
+    private final Map<String, Map> persistenceUnitProperties = new HashMap<String, Map>();
 
     private ContainerPersistence containerPersistence;
     
@@ -67,21 +67,16 @@ public class ContainerPersistenceUnitManager extends PersistenceUnitManager {
         if (emf != null) {
             return emf;
         }
-        return createEntityManagerFactory(unitName);
+        return createContainerEntityManagerFactory(unitName);
     }
 
-    EntityManagerFactory createEntityManagerFactory(final String unitName) {
-        try {
-			final EntityManagerFactory emf =
-                containerPersistence.getContainerEntityManagerFactory(unitName, persistenceUnitProperties.get(unitName));
+    protected EntityManagerFactory createContainerEntityManagerFactory(final String unitName) {
+		final EntityManagerFactory emf =
+		    containerPersistence.getContainerEntityManagerFactory(unitName, persistenceUnitProperties.get(unitName));
 			
-			persistenceUnits.put(unitName, emf);
-			emfContexts.put(emf, new ConcurrentHashMap<Transaction, EntityManager>());
-			return emf;
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			throw e;
-		}
+		persistenceUnits.put(unitName, emf);
+		emfContexts.put(emf, new ConcurrentHashMap<Transaction, EntityManager>());
+		return emf;
     }
 
     public ConcurrentMap<Transaction, EntityManager> getEmfContext(

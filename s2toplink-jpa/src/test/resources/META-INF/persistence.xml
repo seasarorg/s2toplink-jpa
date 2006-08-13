@@ -5,10 +5,7 @@
 	http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
 	version="1.0">
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
-		<jta-data-source>jdbc/DataSource</jta-data-source>
-	<!-- 
-		<jta-data-source>java:/comp/env/jdbc.DataSource</jta-data-source>
-	 -->
+		<jta-data-source>java:comp/env/jdbc/DataSource</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="toplink.target-server" value="org.seasar.toplink.jpa.S2ServerPlatform"/>

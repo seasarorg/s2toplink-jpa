@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+	<component class="javax.naming.Name">
+		<aspect>
+			<component
+				class="org.seasar.framework.aop.interceptors.MockInterceptor">
+				<initMethod name="setReturnValue">
+					<arg>"toString"</arg>
+					<arg>"jdbc/DataSource"</arg>
+				</initMethod>
+			</component>
+		</aspect>
+	</component>
+
+	<component name="dataSourceFactory"
+		class="org.seasar.toplink.jpa.DataSourceFactory" />
+
+</components>
