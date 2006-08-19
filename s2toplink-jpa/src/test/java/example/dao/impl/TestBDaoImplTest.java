@@ -13,11 +13,14 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package example.entity;
+package example.dao.impl;
 
 import javax.persistence.EntityManager;
 
 import org.seasar.extension.unit.S2TestCase;
+
+import example.dao.TestBDao;
+import example.entity.TestB;
 
 /**
  * @author da-yoshi

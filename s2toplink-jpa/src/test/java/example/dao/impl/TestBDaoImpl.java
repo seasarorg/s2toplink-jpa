@@ -13,11 +13,14 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package example.entity;
+package example.dao.impl;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import example.dao.TestBDao;
+import example.entity.TestB;
 
 
 /**

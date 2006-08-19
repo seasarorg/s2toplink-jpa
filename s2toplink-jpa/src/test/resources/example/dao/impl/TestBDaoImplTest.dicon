@@ -4,6 +4,18 @@
 <components>
 	<include path="s2toplink-jpa.dicon"/>
 	
+	<component class="org.seasar.framework.convention.impl.NamingConventionImpl"/>
+	<component class="org.seasar.framework.container.cooldeploy.creator.DaoCoolCreator"/>
+	<component name="project" class="org.seasar.framework.container.cooldeploy.impl.CoolProjectImpl">
+		<property name="rootPackageName">"example"</property>
+	</component>
+	<component class="org.seasar.framework.container.cooldeploy.CoolComponentAutoRegister">
+		<initMethod name="addProject">
+			<arg>project</arg>
+		</initMethod>
+	</component>
+
+<!-- 
 	<component class="org.seasar.framework.container.autoregister.ComponentAutoRegister">
 		<initMethod name="addReferenceClass">
 			<arg>@example.entity.TestA@class</arg>
@@ -15,5 +27,6 @@
 	</component>
 	
 	<component class="org.seasar.framework.convention.impl.NamingConventionImpl"/>
+ -->
 
 </components>
