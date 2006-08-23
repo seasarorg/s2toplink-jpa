@@ -23,7 +23,7 @@ import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 import oracle.toplink.essentials.transaction.JTATransactionController;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class S2TransactionController extends JTATransactionController {

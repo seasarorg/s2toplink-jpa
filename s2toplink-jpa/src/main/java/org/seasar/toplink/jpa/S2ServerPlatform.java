@@ -19,7 +19,7 @@ import oracle.toplink.essentials.internal.sessions.DatabaseSessionImpl;
 import oracle.toplink.essentials.platform.server.ServerPlatformBase;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class S2ServerPlatform extends ServerPlatformBase {

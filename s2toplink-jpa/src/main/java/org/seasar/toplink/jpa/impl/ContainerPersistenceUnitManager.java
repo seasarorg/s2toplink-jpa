@@ -29,7 +29,7 @@ import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.toplink.jpa.ContainerPersistence;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class ContainerPersistenceUnitManager extends PersistenceUnitManager {

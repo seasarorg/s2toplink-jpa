@@ -30,7 +30,7 @@ import org.seasar.toplink.jpa.PersistenceUnitInfoImpl;
 import org.xml.sax.SAXException;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class PerisistenceUnitInfoHandlerTest extends S2TestCase {

@@ -26,7 +26,7 @@ import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class DelegateDataSource implements DataSource {

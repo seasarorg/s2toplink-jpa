@@ -20,7 +20,7 @@ import javax.naming.Name;
 import org.seasar.extension.unit.S2TestCase;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class DataSourceFactoryTest extends S2TestCase {

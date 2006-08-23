@@ -26,7 +26,7 @@ import example.entity.TestB;
 
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 @Stateless

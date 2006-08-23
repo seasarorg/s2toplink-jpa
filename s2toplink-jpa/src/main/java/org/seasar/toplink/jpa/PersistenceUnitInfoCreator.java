@@ -16,7 +16,7 @@
 package org.seasar.toplink.jpa;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public interface PersistenceUnitInfoCreator {

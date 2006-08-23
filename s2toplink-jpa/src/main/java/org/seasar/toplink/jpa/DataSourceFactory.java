@@ -22,7 +22,7 @@ import javax.naming.Name;
 import javax.naming.spi.ObjectFactory;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class DataSourceFactory implements ObjectFactory {

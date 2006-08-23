@@ -29,7 +29,7 @@ import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class PersistenceUnitInfoImpl implements PersistenceUnitInfo {

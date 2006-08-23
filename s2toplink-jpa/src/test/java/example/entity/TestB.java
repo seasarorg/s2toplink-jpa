@@ -23,7 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 @Entity

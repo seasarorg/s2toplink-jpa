@@ -24,7 +24,7 @@ import javax.persistence.spi.ClassTransformer;
 import oracle.toplink.essentials.internal.weaving.TopLinkWeaver;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class TopLinkJpaInstrumentation extends JpaInstrumentationImpl {

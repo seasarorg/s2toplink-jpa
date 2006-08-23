@@ -21,7 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 @Entity

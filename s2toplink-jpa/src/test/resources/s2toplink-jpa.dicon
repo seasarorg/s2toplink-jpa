@@ -9,5 +9,4 @@
 	</component>
 
 	<component name="entityManager" class="org.seasar.framework.jpa.TxScopedEntityManagerProxy"/>
-	
 </components>

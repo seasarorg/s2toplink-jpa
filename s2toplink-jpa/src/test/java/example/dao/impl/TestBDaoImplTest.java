@@ -23,7 +23,7 @@ import example.dao.TestBDao;
 import example.entity.TestB;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class TestBDaoImplTest extends S2TestCase {

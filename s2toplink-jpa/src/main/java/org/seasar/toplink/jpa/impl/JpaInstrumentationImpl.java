@@ -30,7 +30,7 @@ import org.seasar.framework.util.ClassUtil;
 import org.seasar.toplink.jpa.JpaInstrumentation;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class JpaInstrumentationImpl implements JpaInstrumentation {

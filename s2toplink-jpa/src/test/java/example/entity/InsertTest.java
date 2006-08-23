@@ -22,7 +22,7 @@ import javax.persistence.EntityManager;
 import org.seasar.extension.unit.S2TestCase;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class InsertTest extends S2TestCase {

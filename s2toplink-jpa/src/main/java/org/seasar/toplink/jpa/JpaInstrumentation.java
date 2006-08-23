@@ -18,7 +18,7 @@ package org.seasar.toplink.jpa;
 import javax.persistence.spi.ClassTransformer;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public interface JpaInstrumentation {

@@ -20,7 +20,7 @@ import org.seasar.toplink.jpa.PersistenceUnitInfoCreator;
 import org.seasar.toplink.jpa.PersistenceUnitInfoImpl;
 
 /**
- * @author da-yoshi
+ * @author Hidenoshin Yoshida
  *
  */
 public class PersistenceUnitInfoCreatorImpl implements
