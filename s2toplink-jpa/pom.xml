@@ -134,6 +134,11 @@
 			<name>The Seasar Foundation Maven2 Repository</name>
 			<url>http://maven.seasar.org/maven2</url>
 		</repository>
+		<repository>
+			<id>java.net</id>
+			<url>https://maven-repository.dev.java.net/nonav/repository</url>
+			<layout>legacy</layout>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
