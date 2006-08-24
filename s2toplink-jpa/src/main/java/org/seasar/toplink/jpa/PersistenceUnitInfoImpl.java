@@ -23,12 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.persistence.PersistenceException;
 import javax.persistence.spi.ClassTransformer;
 import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
-
-import org.seasar.framework.exception.IORuntimeException;
 
 /**
  * @author Hidenoshin Yoshida
@@ -163,7 +162,7 @@ public class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
 			try {
 				urlList.add(new URL(root));
 			} catch (MalformedURLException e) {
-                throw new IORuntimeException(e);
+                throw new PersistenceException(e);
 			}
 		} else {
 			urlList.add(getPersistenceUnitRootUrl());

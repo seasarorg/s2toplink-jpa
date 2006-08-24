@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.persistence.PersistenceException;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 
@@ -125,7 +126,7 @@ public class PersistenceUnitInfoHandler extends DefaultHandler {
 				try {
 					persistenceUnitInfo.setJtaDataSource((DataSource) context.lookup(name));
 				} catch (NamingException e) {
-					throw new SAXException(e);
+					throw new PersistenceException(e);
 				}
 			}
 		} else if ("non-jta-data-source".equals(qName)) {
@@ -134,7 +135,7 @@ public class PersistenceUnitInfoHandler extends DefaultHandler {
 				try {
 					persistenceUnitInfo.setJtaDataSource((DataSource) context.lookup(name));
 				} catch (NamingException e) {
-					throw new SAXException(e);
+					throw new PersistenceException(e);
 				}
 			}
 		} else if ("mapping-file".equals(qName)) {

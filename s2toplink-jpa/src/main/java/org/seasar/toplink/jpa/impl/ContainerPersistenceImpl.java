@@ -69,26 +69,32 @@ public class ContainerPersistenceImpl implements
 	}
 	
 	@InitMethod
-	public void init() throws IOException, MalformedURLException, SAXException {
-		Enumeration<URL> persistenceUrls = Thread.currentThread()
-			.getContextClassLoader()
-			.getResources("META-INF/persistence.xml");
-		while (persistenceUrls.hasMoreElements()) {
-			URL url = persistenceUrls.nextElement();
-			URL rootUrl = getPersistenceUnitRootUrl(url);
-			InputStream in = url.openStream();
-			try {
-				parser.parse(url.openStream(), persistenceUnitInfoHandler);
-				List<PersistenceUnitInfoImpl> puiList = persistenceUnitInfoHandler.getPersistenceUnitInfoList();
-				for (PersistenceUnitInfoImpl info : puiList) {
-					info.setPersistenceUnitRootUrl(rootUrl);
-					puiMap.put(info.getPersistenceUnitName(), info);
-				}
-			} finally {
-				in.close();
-			}			
-		}
-		findAllProviders();
+	public void init() {
+		try {
+            Enumeration<URL> persistenceUrls = Thread.currentThread()
+            	.getContextClassLoader()
+            	.getResources("META-INF/persistence.xml");
+            while (persistenceUrls.hasMoreElements()) {
+            	URL url = persistenceUrls.nextElement();
+            	URL rootUrl = getPersistenceUnitRootUrl(url);
+            	InputStream in = url.openStream();
+            	try {
+            		parser.parse(url.openStream(), persistenceUnitInfoHandler);
+            		List<PersistenceUnitInfoImpl> puiList = persistenceUnitInfoHandler.getPersistenceUnitInfoList();
+            		for (PersistenceUnitInfoImpl info : puiList) {
+            			info.setPersistenceUnitRootUrl(rootUrl);
+            			puiMap.put(info.getPersistenceUnitName(), info);
+            		}
+            	} finally {
+            		in.close();
+            	}			
+            }
+            findAllProviders();
+        } catch (IOException e) {
+            throw new PersistenceException(e);
+        } catch (SAXException e) {
+            throw new PersistenceException(e);
+        }
 	}
 	
 	public PersistenceUnitInfo getPersistenceUnitInfo(String persistenceUnitName) {

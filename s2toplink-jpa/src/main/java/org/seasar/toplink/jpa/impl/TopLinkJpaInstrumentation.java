@@ -19,11 +19,8 @@ import java.io.IOException;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.persistence.PersistenceException;
 import javax.persistence.spi.ClassTransformer;
-
-import org.seasar.framework.exception.IORuntimeException;
-import org.seasar.framework.exception.IllegalAccessRuntimeException;
-import org.seasar.framework.exception.InvocationTargetRuntimeException;
 
 import oracle.toplink.essentials.internal.weaving.TopLinkWeaver;
 
@@ -52,13 +49,13 @@ public class TopLinkJpaInstrumentation extends JpaInstrumentationImpl {
                                 protectionDomain);
                     }
                 } catch (IllegalAccessException e) {
-                    throw new IllegalAccessRuntimeException(ClassLoader.class, e);
+                    throw new PersistenceException(e);
                 } catch (InvocationTargetException e) {
-                    throw new InvocationTargetRuntimeException(ClassLoader.class, e);
+                    throw new PersistenceException(e);
                 } catch (IllegalClassFormatException e) {
-                    throw new RuntimeException(e);
+                    throw new PersistenceException(e);
                 } catch (IOException e) {
-                    throw new IORuntimeException(e);
+                    throw new PersistenceException(e);
                 }
 
             }
