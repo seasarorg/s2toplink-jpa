@@ -21,6 +21,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.persistence.spi.ClassTransformer;
 
+import org.seasar.framework.exception.IORuntimeException;
+import org.seasar.framework.exception.IllegalAccessRuntimeException;
+import org.seasar.framework.exception.InvocationTargetRuntimeException;
+
 import oracle.toplink.essentials.internal.weaving.TopLinkWeaver;
 
 /**
@@ -47,16 +51,14 @@ public class TopLinkJpaInstrumentation extends JpaInstrumentationImpl {
                                 bytes.length,
                                 protectionDomain);
                     }
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(e);
                 } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalAccessRuntimeException(ClassLoader.class, e);
                 } catch (InvocationTargetException e) {
-                    throw new RuntimeException(e);
+                    throw new InvocationTargetRuntimeException(ClassLoader.class, e);
                 } catch (IllegalClassFormatException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw new IORuntimeException(e);
                 }
 
             }

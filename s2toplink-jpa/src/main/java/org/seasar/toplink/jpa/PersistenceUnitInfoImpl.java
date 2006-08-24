@@ -28,6 +28,8 @@ import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 
+import org.seasar.framework.exception.IORuntimeException;
+
 /**
  * @author Hidenoshin Yoshida
  *
@@ -161,7 +163,7 @@ public class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
 			try {
 				urlList.add(new URL(root));
 			} catch (MalformedURLException e) {
-				throw new RuntimeException(e);
+                throw new IORuntimeException(e);
 			}
 		} else {
 			urlList.add(getPersistenceUnitRootUrl());

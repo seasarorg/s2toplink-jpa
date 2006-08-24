@@ -129,7 +129,8 @@ public class ContainerPersistenceImpl implements
 		return rootUrl;
 	}
 
-	private void findAllProviders() {
+	@SuppressWarnings("unchecked")
+    private void findAllProviders() {
 		try {
 			ClassLoader loader = Thread.currentThread().getContextClassLoader();
 			Enumeration<URL> resources = loader

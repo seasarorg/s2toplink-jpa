@@ -35,7 +35,8 @@ public class InsertTest extends S2TestCase {
         include(InsertTest.class.getSimpleName() + ".dicon");
     }
 
-	public void testPersistTx() {
+	@SuppressWarnings("unchecked")
+    public void testPersistTx() {
 		
 		TestA a1 = new TestA();
 		a1.setName("テスト");
