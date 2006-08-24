@@ -1,0 +1,34 @@
+<project name="s2toplink-jpa" default="dist" basedir=".">
+	<property name="ver" value="1.0.0-beta-1"/>
+
+	<target name="dist">
+		<zip zipfile="target/S2TopLink-JPA-${ver}.zip">
+			<zipfileset prefix="s2toplink-jpa" dir=".">
+				<exclude name="**/build/**"/>
+				<exclude name="**/target/**"/>
+				<exclude name="**/testdb/**"/>
+				<exclude name="**/createDDL.jdbc"/>
+				<exclude name="**/dropDDL.jdbc"/>
+				<exclude name="**/derby.log"/>
+			</zipfileset>
+			<zipfileset prefix="s2toplink-jpa/lib" dir="target">
+				<include name="s2toplink-jpa-${ver}.jar"/>
+				<include name="s2toplink-jpa-${ver}-sources.jar"/>
+			</zipfileset>
+			<zipfileset prefix="s2toplink-jpa/resources" dir="src/test/resources">
+				<include name="jdbc.dicon"/>
+				<include name="s2toplink-jpa.dicon"/>
+				<include name="jndi.properties"/>
+				<include name="jpa.dicon"/>
+			</zipfileset>
+			<zipfileset prefix="s2toplink-jpa/resources/META-INF" dir="src/test/resources/META-INF">
+				<include name="persistence.xml"/>
+			</zipfileset>
+			<zipfileset prefix="s2toplink-jpa/doc" dir="../s2toplink-www">
+				<exclude name="**/download/**"/>
+				<exclude name=".project"/>
+				<exclude name="**/.settings/**"/>
+			</zipfileset>
+		</zip>
+	</target>
+</project>
