@@ -7,16 +7,19 @@
 		class="org.seasar.framework.jpa.PersistenceUnitManager"
 	/>
 	
-	<!-- 
+	<!--
+	Webアプリケーションで@OneToOne、@ManyToOneのfetch = FetchType.LAZY
+	オプションを有効にするときには、上記のComponent（persistenceUnitManager）を
+	下記の内容に置き換えてください。
+	但し、対象Entityを利用するクラスをS2Containerに登録する際に、
+	Seasar2の自動登録機能を使って登録する必要があります。
+	
 	<component name="persistenceUnitManager"
 		class="org.seasar.toplink.jpa.impl.ContainerPersistenceUnitManager"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.ContainerPersistenceImpl">
-		<property name="parser">@javax.xml.parsers.SAXParserFactory@newInstance().newSAXParser()</property>
 		<property name="persistenceUnitInfoHandler">
-			<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoHandler">
-				<property name="context"><component class="javax.naming.InitialContext"/></property>
-			</component>
+			<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoHandler"/>
 		</property>
 	</component>
 	

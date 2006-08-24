@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.PersistenceException;
 import javax.persistence.spi.PersistenceUnitTransactionType;
@@ -56,7 +57,7 @@ public class PersistenceUnitInfoHandler extends DefaultHandler {
 		this.persistenceUnitInfoCreator = persistenceUnitInfoCreator;
 	}
 
-	@Binding(bindingType = BindingType.MUST)
+	@Binding(bindingType = BindingType.MAY)
 	public void setContext(Context context) {
 		this.context = context;
 	}
@@ -73,6 +74,13 @@ public class PersistenceUnitInfoHandler extends DefaultHandler {
 
 	@Override
 	public void startDocument() throws SAXException {
+        if (context == null) {
+            try {
+                context = new InitialContext();
+            } catch (NamingException e) {
+                throw new PersistenceException(e);
+            }
+        }
 		persistenceUnitInfoList = new ArrayList<PersistenceUnitInfoImpl>();
 	}
 

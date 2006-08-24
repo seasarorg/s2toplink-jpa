@@ -34,7 +34,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitInfo;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.toplink.jpa.ContainerPersistence;
@@ -74,6 +76,9 @@ public class ContainerPersistenceImpl implements
             Enumeration<URL> persistenceUrls = Thread.currentThread()
             	.getContextClassLoader()
             	.getResources("META-INF/persistence.xml");
+            if (parser == null) {
+                parser = SAXParserFactory.newInstance().newSAXParser();
+            }
             while (persistenceUrls.hasMoreElements()) {
             	URL url = persistenceUrls.nextElement();
             	URL rootUrl = getPersistenceUnitRootUrl(url);
@@ -93,6 +98,8 @@ public class ContainerPersistenceImpl implements
         } catch (IOException e) {
             throw new PersistenceException(e);
         } catch (SAXException e) {
+            throw new PersistenceException(e);
+        } catch (ParserConfigurationException e) {
             throw new PersistenceException(e);
         }
 	}
