@@ -2,10 +2,11 @@
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
+	<include path="aop.dicon"/>
 	<include path="s2toplink-jpa.dicon"/>
-	
+<!--
 	<component class="org.seasar.framework.convention.impl.NamingConventionImpl"/>
-	<component class="org.seasar.framework.container.cooldeploy.creator.DaoCoolCreator"/>
+	<component class="org.seasar.framework.container.creator.DaoCreator"/>
 	<component name="project" class="org.seasar.framework.container.cooldeploy.impl.CoolProjectImpl">
 		<property name="rootPackageName">"example"</property>
 	</component>
@@ -14,19 +15,17 @@
 			<arg>project</arg>
 		</initMethod>
 	</component>
+-->
 
-<!-- 
-	<component class="org.seasar.framework.container.autoregister.ComponentAutoRegister">
-		<initMethod name="addReferenceClass">
-			<arg>@example.entity.TestA@class</arg>
-		</initMethod>
-		<initMethod name="addClassPattern">
-			<arg>"example.entity"</arg>
-			<arg>".*DaoImpl"</arg>
+	<component class="org.seasar.framework.convention.impl.NamingConventionImpl">
+		<initMethod name="addRootPackageName">
+			<arg>"example"</arg>
 		</initMethod>
 	</component>
-	
-	<component class="org.seasar.framework.convention.impl.NamingConventionImpl"/>
- -->
+	<component class="org.seasar.framework.container.creator.DaoCreator"/>
+	<component name="daoCustomizer" class="org.seasar.framework.container.customizer.AspectCustomizer">
+		<property name="interceptorName">"aop.traceInterceptor"</property>
+	</component>
+	<component class="org.seasar.framework.container.cooldeploy.CoolComponentAutoRegister"/>
 
 </components>
