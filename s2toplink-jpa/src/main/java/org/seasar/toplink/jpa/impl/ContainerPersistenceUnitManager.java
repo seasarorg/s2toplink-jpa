@@ -30,30 +30,33 @@ import org.seasar.toplink.jpa.ContainerPersistence;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
-public class ContainerPersistenceUnitManager extends PersistenceUnitManager {
+public class ContainerPersistenceUnitManager implements PersistenceUnitManager {
 
     private final Map<String, EntityManagerFactory> persistenceUnits = new HashMap<String, EntityManagerFactory>();
 
     private final Map<EntityManagerFactory, ConcurrentMap<Transaction, EntityManager>> emfContexts = new HashMap<EntityManagerFactory, ConcurrentMap<Transaction, EntityManager>>();
-    
+
     private final Map<String, Map> persistenceUnitProperties = new HashMap<String, Map>();
 
     private ContainerPersistence containerPersistence;
-    
+
     public void setContainerPersistence(
-		ContainerPersistence containerPersistence) {
-		this.containerPersistence = containerPersistence;
-	}
-    
-    public void addPersistenceUnitProperties(String persistenceUnitName, Map persistenceUnitProperties) {
-        this.persistenceUnitProperties.put(persistenceUnitName, persistenceUnitProperties);
+            ContainerPersistence containerPersistence) {
+        this.containerPersistence = containerPersistence;
     }
 
-	@DestroyMethod
+    public void addPersistenceUnitProperties(String persistenceUnitName,
+            Map persistenceUnitProperties) {
+        this.persistenceUnitProperties.put(persistenceUnitName,
+                persistenceUnitProperties);
+    }
+
+    @DestroyMethod
     public void close() {
-        for (final Map.Entry<String, EntityManagerFactory> entry : persistenceUnits.entrySet()) {
+        for (final Map.Entry<String, EntityManagerFactory> entry : persistenceUnits
+                .entrySet()) {
             entry.getValue().close();
         }
         persistenceUnits.clear();
@@ -70,13 +73,16 @@ public class ContainerPersistenceUnitManager extends PersistenceUnitManager {
         return createContainerEntityManagerFactory(unitName);
     }
 
-    protected EntityManagerFactory createContainerEntityManagerFactory(final String unitName) {
-		final EntityManagerFactory emf =
-		    containerPersistence.getContainerEntityManagerFactory(unitName, persistenceUnitProperties.get(unitName));
-			
-		persistenceUnits.put(unitName, emf);
-		emfContexts.put(emf, new ConcurrentHashMap<Transaction, EntityManager>());
-		return emf;
+    protected EntityManagerFactory createContainerEntityManagerFactory(
+            final String unitName) {
+        final EntityManagerFactory emf = containerPersistence
+                .getContainerEntityManagerFactory(unitName,
+                        persistenceUnitProperties.get(unitName));
+
+        persistenceUnits.put(unitName, emf);
+        emfContexts.put(emf,
+                new ConcurrentHashMap<Transaction, EntityManager>());
+        return emf;
     }
 
     public ConcurrentMap<Transaction, EntityManager> getEmfContext(
