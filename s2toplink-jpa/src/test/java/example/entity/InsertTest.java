@@ -45,7 +45,6 @@ public class InsertTest extends S2TestCase {
 		List<TestA> list = (List<TestA>) em.createQuery("SELECT a FROM TestA a").getResultList();
         assertEquals(1, list.size());
         TestA a = list.get(0);
-        assertEquals(1, a.getId().intValue());
         assertEquals("テスト", a.getName());
         assertEquals(1, a.getVersion().intValue());
 	}
