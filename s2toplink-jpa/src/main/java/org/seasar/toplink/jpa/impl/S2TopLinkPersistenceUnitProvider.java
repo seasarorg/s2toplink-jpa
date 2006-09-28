@@ -1,7 +1,8 @@
 package org.seasar.toplink.jpa.impl;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
+import oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
@@ -39,7 +40,8 @@ public class S2TopLinkPersistenceUnitProvider implements
     
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
 //        return containerPersistence.getContainerEntityManagerFactory(unitName, null);
-        return Persistence.createEntityManagerFactory(unitName);
+        EntityManagerFactoryProvider provider = new EntityManagerFactoryProvider();
+        return provider.createEntityManagerFactory(unitName, null);
     }
 
 }
