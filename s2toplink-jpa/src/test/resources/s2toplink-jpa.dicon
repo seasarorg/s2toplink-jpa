@@ -4,9 +4,12 @@
 <components namespace="s2toplinkJPA">
 	<include path="javaee5.dicon"/>
 
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider"/>
+	
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
 	</component>
 
 	<component name="entityManager" class="org.seasar.framework.jpa.TxScopedEntityManagerProxy"/>
+
 </components>
