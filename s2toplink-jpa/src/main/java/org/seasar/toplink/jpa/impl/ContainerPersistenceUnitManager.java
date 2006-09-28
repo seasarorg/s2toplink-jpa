@@ -25,7 +25,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transaction;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
+import org.seasar.framework.jpa.PersistenceUnitContext;
 import org.seasar.framework.jpa.PersistenceUnitManager;
+import org.seasar.framework.jpa.PersistenceUnitProvider;
 import org.seasar.toplink.jpa.ContainerPersistence;
 
 /**
@@ -88,6 +90,21 @@ public class ContainerPersistenceUnitManager implements PersistenceUnitManager {
     public ConcurrentMap<Transaction, EntityManager> getEmfContext(
             final EntityManagerFactory emf) {
         return emfContexts.get(emf);
+    }
+
+    public void addProvider(PersistenceUnitProvider provider) {
+        // TODO 自動生成されたメソッド・スタブ
+        
+    }
+
+    public PersistenceUnitContext getPersistenceUnitContext(EntityManagerFactory emf) {
+        // TODO 自動生成されたメソッド・スタブ
+        return null;
+    }
+
+    public void removeProvider(PersistenceUnitProvider provider) {
+        // TODO 自動生成されたメソッド・スタブ
+        
     }
 
 }
