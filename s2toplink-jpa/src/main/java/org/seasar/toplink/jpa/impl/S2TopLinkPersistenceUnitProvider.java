@@ -8,7 +8,6 @@ import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
-import org.seasar.toplink.jpa.ContainerPersistence;
 
 public class S2TopLinkPersistenceUnitProvider implements
         PersistenceUnitProvider {
@@ -16,16 +15,9 @@ public class S2TopLinkPersistenceUnitProvider implements
     
     protected PersistenceUnitManager persistenceUnitManager;
     
-    private ContainerPersistence containerPersistence;
-
     public void setPersistenceUnitManager(
             PersistenceUnitManager persistenceUnitManager) {
         this.persistenceUnitManager = persistenceUnitManager;
-    }
-
-
-    public void setContainerPersistence(ContainerPersistence containerPersistence) {
-        this.containerPersistence = containerPersistence;
     }
 
     @InitMethod
@@ -39,7 +31,6 @@ public class S2TopLinkPersistenceUnitProvider implements
     }
     
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
-//        return containerPersistence.getContainerEntityManagerFactory(unitName, null);
         EntityManagerFactoryProvider provider = new EntityManagerFactoryProvider();
         return provider.createEntityManagerFactory(unitName, null);
     }
