@@ -5,13 +5,14 @@
 	http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
 	version="1.0">
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
-		<jta-data-source>java:comp/env/jdbc/DataSource</jta-data-source>
+		<jta-data-source>java:comp/env/jdbc/dataSource</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-			<property name="toplink.target-server" value="org.seasar.toplink.jpa.S2ServerPlatform"/>
+			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatform"/>
 			<property name="toplink.logging.level" value="FINE"/>
 			<property name="toplink.ddl-generation" value="create-tables"/>
 			<property name="toplink.ddl-generation.output-mode" value="both"/>
+			<property name="toplink.weaving" value="false"/>
  		</properties>
 	</persistence-unit>
 </persistence>

@@ -13,11 +13,12 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.toplink.jpa;
+package org.seasar.toplink.jpa.datasource;
 
 import javax.naming.Name;
 
 import org.seasar.extension.unit.S2TestCase;
+import org.seasar.toplink.jpa.datasource.DelegateDataSource;
 
 /**
  * @author Hidenoshin Yoshida
@@ -36,7 +37,7 @@ public class DataSourceFactoryTest extends S2TestCase {
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.DataSourceFactory#getObjectInstance(java.lang.Object, javax.naming.Name, javax.naming.Context, java.util.Hashtable)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.datasource.DataSourceFactory#getObjectInstance(java.lang.Object, javax.naming.Name, javax.naming.Context, java.util.Hashtable)} のためのテスト・メソッド。
      * @throws Exception 
      */
     public void testGetObjectInstance() throws Exception {

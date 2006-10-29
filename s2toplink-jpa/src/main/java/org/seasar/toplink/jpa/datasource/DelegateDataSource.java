@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.toplink.jpa;
+package org.seasar.toplink.jpa.datasource;
 
 import java.io.PrintWriter;
 import java.sql.Connection;

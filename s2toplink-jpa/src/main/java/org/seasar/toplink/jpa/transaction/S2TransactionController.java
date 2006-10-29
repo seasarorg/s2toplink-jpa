@@ -13,21 +13,23 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.toplink.jpa;
+package org.seasar.toplink.jpa.transaction;
 
-import java.util.Map;
+import javax.transaction.TransactionManager;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.spi.PersistenceUnitInfo;
+import org.seasar.framework.container.S2Container;
+import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
+
+import oracle.toplink.essentials.transaction.JTATransactionController;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public interface ContainerPersistence {
+public class S2TransactionController extends JTATransactionController {
 
-	PersistenceUnitInfo getPersistenceUnitInfo(String persistenceUnitName);
-	
-	EntityManagerFactory getContainerEntityManagerFactory(String persistenceUnitName, Map map);
-	
+	protected TransactionManager acquireTransactionManager() throws Exception {
+		S2Container container = SingletonS2ContainerFactory.getContainer();
+		return (TransactionManager) container.getComponent(TransactionManager.class);
+    }
 }

@@ -13,14 +13,23 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.toplink.jpa;
+package org.seasar.toplink.jpa.datasource;
+
+import java.util.Hashtable;
+
+import javax.naming.Context;
+import javax.naming.Name;
+import javax.naming.spi.ObjectFactory;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public interface PersistenceUnitInfoCreator {
-		
-	PersistenceUnitInfoImpl createPersistenceUnitInfo();
+public class DataSourceFactory implements ObjectFactory {
+
+	public Object getObjectInstance(Object obj, Name name, Context nameCtx,
+			Hashtable<?, ?> environment) throws Exception {
+		return new DelegateDataSource(name.toString());
+	}
 
 }

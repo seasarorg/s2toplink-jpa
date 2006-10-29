@@ -13,23 +13,29 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.toplink.jpa;
+package org.seasar.toplink.jpa.platform.server;
 
-import java.util.Hashtable;
+import org.seasar.toplink.jpa.transaction.S2TransactionController;
 
-import javax.naming.Context;
-import javax.naming.Name;
-import javax.naming.spi.ObjectFactory;
+import oracle.toplink.essentials.internal.sessions.DatabaseSessionImpl;
+import oracle.toplink.essentials.platform.server.ServerPlatformBase;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class DataSourceFactory implements ObjectFactory {
+public class S2ServerPlatform extends ServerPlatformBase {
 
-	public Object getObjectInstance(Object obj, Name name, Context nameCtx,
-			Hashtable<?, ?> environment) throws Exception {
-		return new DelegateDataSource(name.toString());
+	public S2ServerPlatform(DatabaseSessionImpl newDatabaseSession) {
+		super(newDatabaseSession);
+	}
+
+	@Override
+	public Class getExternalTransactionControllerClass() {
+    	if (externalTransactionControllerClass == null){
+    		externalTransactionControllerClass = S2TransactionController.class;
+    	}
+        return externalTransactionControllerClass;
 	}
 
 }
