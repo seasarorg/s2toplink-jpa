@@ -9,7 +9,7 @@
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="persistenceProvider">
-			<component class="org.seasar.toplink.jpa.impl.S2EntityManagerFactoryProvider"/>
+			<component class="oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider"/>
 		</property>
 	</component>
 	

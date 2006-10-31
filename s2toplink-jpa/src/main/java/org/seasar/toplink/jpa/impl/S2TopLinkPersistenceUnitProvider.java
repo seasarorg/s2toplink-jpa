@@ -3,6 +3,8 @@ package org.seasar.toplink.jpa.impl;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
 
+import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
+
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.PersistenceUnitManager;
@@ -16,6 +18,8 @@ public class S2TopLinkPersistenceUnitProvider implements
     
     protected PersistenceProvider persistenceProvider;
     
+    protected JavaSECMPInitializer javaSECMPInitializer;
+    
     public void setPersistenceUnitManager(
             PersistenceUnitManager persistenceUnitManager) {
         this.persistenceUnitManager = persistenceUnitManager;
@@ -23,6 +27,10 @@ public class S2TopLinkPersistenceUnitProvider implements
 
     public void setPersistenceProvider(PersistenceProvider persistenceProvider) {
         this.persistenceProvider = persistenceProvider;
+    }
+
+    public void setJavaSECMPInitializer(JavaSECMPInitializer javaSECMPInitializer) {
+        this.javaSECMPInitializer = javaSECMPInitializer;
     }
 
     @InitMethod
