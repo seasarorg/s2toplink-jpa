@@ -3,9 +3,20 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="javaee5.dicon"/>
+	<include path="convention.dicon"/>
 
-	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider"/>
+	<component name="mappingFileAutoDetector" class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
+		<property name="persistenceProvider">
+			<component class="org.seasar.toplink.jpa.impl.S2EntityManagerFactoryProvider"/>
+		</property>
+	</component>
+	
+	<component name="javaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer">
+		<initMethod>#self.initialize(#{})</initMethod>
+	</component>
+
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
 	</component>

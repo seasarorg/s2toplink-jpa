@@ -15,6 +15,8 @@
  */
 package example.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,9 +27,14 @@ import javax.persistence.Version;
  *
  */
 @Entity
-public class TestA {
+public class TestA implements Serializable{
 
-	@Id
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -3595253150033544915L;
+
+    @Id
 	@GeneratedValue
 	private Integer id;
 	

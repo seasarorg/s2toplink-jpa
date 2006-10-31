@@ -42,7 +42,7 @@ public class InsertTest extends S2TestCase {
 		a1.setName("テスト");
 		em.persist(a1);
 		
-		List<TestA> list = (List<TestA>) em.createQuery("SELECT a FROM TestA a").getResultList();
+		List<TestA> list = (List<TestA>) em.createNamedQuery("testPersistTx").getResultList();
         assertEquals(1, list.size());
         TestA a = list.get(0);
         assertEquals("テスト", a.getName());
