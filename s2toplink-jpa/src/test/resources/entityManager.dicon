@@ -16,7 +16,7 @@
 		</property>
 	</component>
 	
-	<component name="javaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer">
+	<component name="s2JavaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer">
 		<initMethod>#self.initialize(#{})</initMethod>
 	</component>
 
