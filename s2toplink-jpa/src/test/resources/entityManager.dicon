@@ -5,7 +5,10 @@
 	<include path="javaee5.dicon"/>
 	<include path="convention.dicon"/>
 
-	<component name="mappingFileAutoDetector" class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
+<!--
+	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector"/>
+-->
+	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="persistenceProvider">

@@ -4,19 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.seasar.framework.autodetector.ResourceAutoDetector;
-import org.seasar.framework.util.tiger.CollectionsUtil;
-
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 import oracle.toplink.essentials.logging.AbstractSessionLog;
 import oracle.toplink.essentials.logging.SessionLog;
 
+import org.seasar.framework.autodetector.ClassAutoDetector;
+import org.seasar.framework.autodetector.ResourceAutoDetector;
+import org.seasar.framework.util.tiger.CollectionsUtil;
+
 public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
     
-    protected Map<String, List<ResourceAutoDetector>> mappingFileAutoDetectors = CollectionsUtil
-    .newHashMap();
+    protected Map<String, List<ClassAutoDetector>> persistenceClassAutoDetectors =
+        CollectionsUtil.newHashMap();
+    
+    protected Map<String, List<ResourceAutoDetector>> mappingFileAutoDetectors =
+        CollectionsUtil.newHashMap();
 
+
+    public void setPersistenceClassAutoDetector(
+            final ClassAutoDetector[] detectors) {
+        for (final ClassAutoDetector detector : detectors) {
+            addPersistenceClassAutoDetector(detector);
+        }
+    }
+
+    public void addPersistenceClassAutoDetector(final ClassAutoDetector detector) {
+        addPersistenceClassAutoDetector(null, detector);
+    }
+
+    public void addPersistenceClassAutoDetector(final String unitName,
+            final ClassAutoDetector detector) {
+        if (!persistenceClassAutoDetectors.containsKey(unitName)) {
+            persistenceClassAutoDetectors.put(unitName,
+                    new ArrayList<ClassAutoDetector>());
+        }
+        persistenceClassAutoDetectors.get(unitName).add(detector);
+    }
+    
     public void setMappingFileAutoDetector(
             final ResourceAutoDetector[] resourceAutoDetectors) {
         for (final ResourceAutoDetector detector : resourceAutoDetectors) {
@@ -46,22 +71,31 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
     @Override
     protected boolean callPredeploy(SEPersistenceUnitInfo persistenceUnitInfo, Map m) {
         
-        List<ResourceAutoDetector> mapFileList = mappingFileAutoDetectors.get(persistenceUnitInfo.getPersistenceUnitName());
-        List<ResourceAutoDetector> mapFileList2 = mappingFileAutoDetectors.get(null);
-        if (mapFileList == null) {
-            mapFileList =  mapFileList2;
-        } else if (mapFileList2 != null){
-            mapFileList.addAll(mapFileList2);
-        }
-        if (mapFileList != null) {
-            for (ResourceAutoDetector rad : mapFileList) {
+        setMappingFiles(persistenceUnitInfo, mappingFileAutoDetectors.get(persistenceUnitInfo.getPersistenceUnitName()));
+        setMappingFiles(persistenceUnitInfo, mappingFileAutoDetectors.get(null));
+        setManagedClasses(persistenceUnitInfo, persistenceClassAutoDetectors.get(persistenceUnitInfo.getPersistenceUnitName()));
+        setManagedClasses(persistenceUnitInfo, persistenceClassAutoDetectors.get(null));
+        return super.callPredeploy(persistenceUnitInfo, m);
+    }
+
+    private void setMappingFiles(SEPersistenceUnitInfo persistenceUnitInfo, List<ResourceAutoDetector> autoDetectList) {
+        if (autoDetectList != null) {
+            for (ResourceAutoDetector rad : autoDetectList) {
                 for (ResourceAutoDetector.Entry entry : rad.detect()) {
                     persistenceUnitInfo.getMappingFileNames().add(entry.getPath());
                 }
             }
         }
-        return super.callPredeploy(persistenceUnitInfo, m);
     }
-
+    
+    private void setManagedClasses(SEPersistenceUnitInfo persistenceUnitInfo, List<ClassAutoDetector> autoDetectList) {
+        if (autoDetectList != null) {
+            for (ClassAutoDetector cad : autoDetectList) {
+                for (Class clazz : cad.detect()) {
+                    persistenceUnitInfo.getManagedClassNames().add(clazz.getName());
+                }
+            }
+        }
+    }
 
 }
