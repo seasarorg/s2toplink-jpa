@@ -6,6 +6,6 @@
 
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
-	<component name="s2JavaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer"/>
+	<component name="JavaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer"/>
 
 </components>

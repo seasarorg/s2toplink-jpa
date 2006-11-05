@@ -3,18 +3,14 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="javaee5.dicon"/>
-	<include path="convention.dicon"/>
-	
-	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="persistenceProvider">
 			<component class="oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider"/>
 		</property>
-	</component>
-	
-	<component name="javaSECMPInitializer" class="oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer">
-		@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer(#{})
+		<property name="javaSECMPInitializer">
+			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa-agent.dicon", #{})
+		</property>
 	</component>
 	
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
