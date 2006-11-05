@@ -1,15 +1,12 @@
 package org.seasar.toplink.jpa.impl;
 
-import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 import oracle.toplink.essentials.logging.AbstractSessionLog;
-import oracle.toplink.essentials.logging.SessionLog;
 
 import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.S2Container;
@@ -18,14 +15,32 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 
 public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
     
-    public static final String DEFAULT_AGENT_CONFIG_PATH = "s2toplink-jpa-agent.dicon";
+    public static JavaSECMPInitializer getJavaSECMPInitializer(String configPath, Map properties) {
+        if (javaSECMPInitializer == null) {
+           initializeFromContainer(configPath, properties);
+        }   
+        return javaSECMPInitializer;
+    }
+    
+    public static void initializeFromContainer(String configPath, Map properties) {
+        if (javaSECMPInitializer != null) {
+            return;
+        }
+        S2Container container = S2ContainerFactory.create(configPath);
+        try {
+            javaSECMPInitializer = (JavaSECMPInitializer) container.getComponent(JavaSECMPInitializer.class);
+            AbstractSessionLog.getLog().setLevel(JavaSECMPInitializer.getTopLinkLoggingLevel());
+            javaSECMPInitializer.initialize(properties);
+        } finally {
+            container.destroy();
+        }
+    }
     
 //    protected Map<String, List<ClassAutoDetector>> persistenceClassAutoDetectors =
 //        CollectionsUtil.newHashMap();
     
     protected Map<String, List<ResourceAutoDetector>> mappingFileAutoDetectors =
         CollectionsUtil.newHashMap();
-
 
 //    public void setPersistenceClassAutoDetector(
 //            final ClassAutoDetector[] detectors) {
@@ -66,43 +81,8 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         }
         mappingFileAutoDetectors.get(unitName).add(detector);
     }
-    
-    public static JavaSECMPInitializer getJavaSECMPInitializer(Map properties) {
-        if (javaSECMPInitializer == null) {
-            S2JavaSECMPInitializer.initializeFromMain(properties);
-        }   
-        return javaSECMPInitializer;
-    }
-    
-    protected static void initializeFromAgent(String agentArgs, Instrumentation instrumentation) throws Exception {
-        AbstractSessionLog.getLog().setLevel(JavaSECMPInitializer.getTopLinkLoggingLevel());
 
-        globalInstrumentation = instrumentation;
 
-        String configPath = agentArgs != null ? agentArgs : DEFAULT_AGENT_CONFIG_PATH;
-        S2Container container = S2ContainerFactory.create(configPath);
-
-        try {
-            javaSECMPInitializer = (JavaSECMPInitializer) container.getComponent(JavaSECMPInitializer.class);
-            javaSECMPInitializer.initialize(new HashMap());
-        } finally {
-            container.destroy();
-        }
-    }
-    
-    public static void initializeFromMain(Map m) {
-        if (javaSECMPInitializer != null) {
-            return;
-        }
-
-        javaSECMPInitializer = new S2JavaSECMPInitializer();
-        AbstractSessionLog.getLog().setLevel(JavaSECMPInitializer.getTopLinkLoggingLevel());
-
-        AbstractSessionLog.getLog().log(SessionLog.FINER, "cmp_init_initialize_from_main");
-
-        javaSECMPInitializer.initialize(m);
-    }
-    
     @Override
     protected boolean callPredeploy(SEPersistenceUnitInfo persistenceUnitInfo, Map m) {
         
