@@ -4,10 +4,7 @@
 <components>
 	<include path="javaee5.dicon"/>
 	<include path="convention.dicon"/>
-
-<!--
-	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector"/>
--->
+	
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
@@ -16,10 +13,10 @@
 		</property>
 	</component>
 	
-	<component name="s2JavaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer">
-		<initMethod>#self.initialize(#{})</initMethod>
+	<component name="javaSECMPInitializer" class="oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer">
+		@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer(#{})
 	</component>
-
+	
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
 	</component>
