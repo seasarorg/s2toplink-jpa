@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
-
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 import oracle.toplink.essentials.logging.AbstractSessionLog;
@@ -135,8 +133,4 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
 //        }
 //    }
     
-    public PersistenceUnitInfo getPersistenceUnitInfo(String unitName) {
-        return emSetupPersistenceUnitInfos.get(unitName);
-    }
-
 }
