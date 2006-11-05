@@ -1,7 +1,8 @@
 package org.seasar.toplink.jpa.impl;
 
 import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Field;
+
+import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
 public class S2JavaSECMPInitializerAgent {
     
@@ -19,8 +20,6 @@ public class S2JavaSECMPInitializerAgent {
     }
 
     public static void initializeFromMain(Instrumentation instr) throws Exception {
-        Class cls = Class.forName("oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer");
-        Field field = cls.getField("globalInstrumentation");
-        field.set(null, instr);
+        JavaSECMPInitializer.globalInstrumentation = instr;
     }
 }
