@@ -2,9 +2,7 @@ package org.seasar.toplink.jpa.impl;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
-import javax.persistence.spi.PersistenceUnitInfo;
 
-import oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider;
 import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerSetupImpl;
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
@@ -48,24 +46,9 @@ public class S2TopLinkPersistenceUnitProvider implements
     
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
         EntityManagerSetupImpl setUp = javaSECMPInitializer.getEntityManagerSetupImpl(unitName);
-        if (setUp != null) {
-            PersistenceUnitInfo unitInfo = setUp.getPersistenceUnitInfo();
-            if (!checkPersistenceProvider(unitInfo)) {
-                return null;
-            }
+        if (setUp == null) {
+            return null;
         }
         return persistenceProvider.createEntityManagerFactory(unitName, null);
     }
-    
-    protected boolean checkPersistenceProvider(PersistenceUnitInfo unitInfo) {
-        if (unitInfo == null) {
-            return false;
-        }
-        String persistenceProviderName = unitInfo.getPersistenceProviderClassName();
-        return persistenceProviderName == null
-            || EntityManagerFactoryProvider.class.getName().equals(persistenceProviderName)
-            || oracle.toplink.essentials.PersistenceProvider.class.getName().equals(persistenceProviderName)
-            || "".equals(persistenceProviderName);
-    }
-
 }
