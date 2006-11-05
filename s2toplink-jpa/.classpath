@@ -7,8 +7,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
-	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials-agent.jar" sourcepath="libsrc/glassfish-persistence-v2-b24-src.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials.jar" sourcepath="libsrc/glassfish-persistence-v2-b24-src.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials-agent.jar" sourcepath="libsrc/glassfish-persistence-v2-b22-src.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials.jar" sourcepath="libsrc/glassfish-persistence-v2-b22-src.zip"/>
 	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="lib" path="lib/derbyLocale_ja_JP.jar"/>
 	<classpathentry kind="lib" path="lib/derbytools.jar"/>
