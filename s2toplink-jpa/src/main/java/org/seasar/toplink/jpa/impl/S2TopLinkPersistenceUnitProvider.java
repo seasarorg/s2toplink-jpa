@@ -5,6 +5,8 @@ import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitInfo;
 
 import oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider;
+import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerSetupImpl;
+import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
@@ -19,7 +21,7 @@ public class S2TopLinkPersistenceUnitProvider implements
     
     protected PersistenceProvider persistenceProvider;
     
-    protected S2JavaSECMPInitializer s2JavaSECMPInitializer;
+    protected JavaSECMPInitializer javaSECMPInitializer;
     
     public void setPersistenceUnitManager(
             PersistenceUnitManager persistenceUnitManager) {
@@ -30,8 +32,8 @@ public class S2TopLinkPersistenceUnitProvider implements
         this.persistenceProvider = persistenceProvider;
     }
 
-    public void setS2JavaSECMPInitializer(S2JavaSECMPInitializer s2JavaSECMPInitializer) {
-        this.s2JavaSECMPInitializer = s2JavaSECMPInitializer;
+    public void setJavaSECMPInitializer(JavaSECMPInitializer javaSECMPInitializer) {
+        this.javaSECMPInitializer = javaSECMPInitializer;
     }
 
     @InitMethod
@@ -45,12 +47,14 @@ public class S2TopLinkPersistenceUnitProvider implements
     }
     
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
-        PersistenceUnitInfo unitInfo = s2JavaSECMPInitializer.getPersistenceUnitInfo(unitName);
-        if (checkPersistenceProvider(unitInfo)) {
-            return persistenceProvider.createEntityManagerFactory(unitName, null);
-        } else {
-            return null;
+        EntityManagerSetupImpl setUp = javaSECMPInitializer.getEntityManagerSetupImpl(unitName);
+        if (setUp != null) {
+            PersistenceUnitInfo unitInfo = setUp.getPersistenceUnitInfo();
+            if (!checkPersistenceProvider(unitInfo)) {
+                return null;
+            }
         }
+        return persistenceProvider.createEntityManagerFactory(unitName, null);
     }
     
     protected boolean checkPersistenceProvider(PersistenceUnitInfo unitInfo) {
