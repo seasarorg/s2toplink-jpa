@@ -5,18 +5,6 @@
 	<include path="aop.dicon"/>
 	<include path="entityManager.dicon"/>
 <!--
-	<component class="org.seasar.framework.convention.impl.NamingConventionImpl"/>
-	<component class="org.seasar.framework.container.creator.DaoCreator"/>
-	<component name="project" class="org.seasar.framework.container.cooldeploy.impl.CoolProjectImpl">
-		<property name="rootPackageName">"example"</property>
-	</component>
-	<component class="org.seasar.framework.container.cooldeploy.CoolComponentAutoRegister">
-		<initMethod name="addProject">
-			<arg>project</arg>
-		</initMethod>
-	</component>
--->
-
 	<component class="org.seasar.framework.convention.impl.NamingConventionImpl">
 		<initMethod name="addRootPackageName">
 			<arg>"example"</arg>
@@ -27,5 +15,9 @@
 		<property name="interceptorName">"aop.traceInterceptor"</property>
 	</component>
 	<component class="org.seasar.framework.container.cooldeploy.CoolComponentAutoRegister"/>
+-->
 
+	<component class="example.dao.impl.TestBDaoImpl">
+		<aspect>aop.traceInterceptor</aspect>
+	</component>
 </components>
