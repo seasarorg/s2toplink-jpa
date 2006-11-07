@@ -25,11 +25,11 @@ import javax.naming.spi.ObjectFactory;
  * @author Hidenoshin Yoshida
  *
  */
-public class DataSourceFactory implements ObjectFactory {
+public class DataSourceProxyFactory implements ObjectFactory {
 
 	public Object getObjectInstance(Object obj, Name name, Context nameCtx,
 			Hashtable<?, ?> environment) throws Exception {
-		return new DelegateDataSource(name.toString());
+		return new DataSourceProxy(name.toString());
 	}
 
 }

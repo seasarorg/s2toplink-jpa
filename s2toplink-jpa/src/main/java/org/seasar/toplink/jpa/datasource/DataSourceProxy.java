@@ -29,41 +29,41 @@ import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
  * @author Hidenoshin Yoshida
  *
  */
-public class DelegateDataSource implements DataSource {
+public class DataSourceProxy implements DataSource {
 	
 	private String name;
 
-	public DelegateDataSource(String name) {
+	public DataSourceProxy(String name) {
 		this.name = name;
 	}
 
 	public Connection getConnection() throws SQLException {
-		return getParent().getConnection();
+		return getDataSource().getConnection();
 	}
 
 	public Connection getConnection(String username, String password)
 			throws SQLException {
-		return getParent().getConnection(username, password);
+		return getDataSource().getConnection(username, password);
 	}
 
 	public PrintWriter getLogWriter() throws SQLException {
-		return getParent().getLogWriter();
+		return getDataSource().getLogWriter();
 	}
 
 	public int getLoginTimeout() throws SQLException {
-		return getParent().getLoginTimeout();
+		return getDataSource().getLoginTimeout();
 	}
 
 	public void setLogWriter(PrintWriter out) throws SQLException {
-		getParent().setLogWriter(out);
+		getDataSource().setLogWriter(out);
 	}
 
 	public void setLoginTimeout(int seconds) throws SQLException {
-		getParent().setLoginTimeout(seconds);
+		getDataSource().setLoginTimeout(seconds);
 
 	}
 	
-	protected DataSource getParent() {
+	protected DataSource getDataSource() {
 		S2Container container = SingletonS2ContainerFactory.getContainer();
 		return (DataSource) container.getComponent(JndiResourceLocator.resolveName(name));
 		

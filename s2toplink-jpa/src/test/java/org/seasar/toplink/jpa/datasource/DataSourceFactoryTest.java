@@ -18,7 +18,7 @@ package org.seasar.toplink.jpa.datasource;
 import javax.naming.Name;
 
 import org.seasar.extension.unit.S2TestCase;
-import org.seasar.toplink.jpa.datasource.DelegateDataSource;
+import org.seasar.toplink.jpa.datasource.DataSourceProxy;
 
 /**
  * @author Hidenoshin Yoshida
@@ -28,7 +28,7 @@ public class DataSourceFactoryTest extends S2TestCase {
 
     private Name name;
     
-    private DataSourceFactory dataSourceFactory;
+    private DataSourceProxyFactory dataSourceFactory;
     
     @Override
     protected void setUp() throws Exception {
@@ -37,13 +37,13 @@ public class DataSourceFactoryTest extends S2TestCase {
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.datasource.DataSourceFactory#getObjectInstance(java.lang.Object, javax.naming.Name, javax.naming.Context, java.util.Hashtable)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.datasource.DataSourceProxyFactory#getObjectInstance(java.lang.Object, javax.naming.Name, javax.naming.Context, java.util.Hashtable)} のためのテスト・メソッド。
      * @throws Exception 
      */
     public void testGetObjectInstance() throws Exception {
         Object obj = dataSourceFactory.getObjectInstance(
                 null, name, null, null);
-        assertTrue(obj instanceof DelegateDataSource);
+        assertTrue(obj instanceof DataSourceProxy);
     }
 
 }
