@@ -76,7 +76,7 @@ public class PersistenceUnitInfoFactoryImpl implements
 
     private void setMappingFiles(PersistenceUnitInfo unitInfo) {
         setMappingFiles(unitInfo, autoDetectorFactory.getResourceAutoDetectorList(null));
-        if (StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
+        if (!StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
             setMappingFiles(unitInfo, autoDetectorFactory.getResourceAutoDetectorList(unitInfo.getPersistenceUnitName()));            
         }
     }
