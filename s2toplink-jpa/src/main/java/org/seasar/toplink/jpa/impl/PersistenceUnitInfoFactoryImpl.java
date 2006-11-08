@@ -1,5 +1,6 @@
 package org.seasar.toplink.jpa.impl;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 
 import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.S2Container;
+import org.seasar.framework.util.StringUtil;
 import org.seasar.toplink.jpa.AutoDetectorFactory;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
 import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
@@ -68,27 +70,33 @@ public class PersistenceUnitInfoFactoryImpl implements
         s2UnitInfo.setExcludeUnlistedClasses(unitInfo.excludeUnlistedClasses());
         s2UnitInfo.setProperties(unitInfo.getProperties());
         
-        
-        
-        setMappingFiles(s2UnitInfo, autoDetectorFactory.getResourceAutoDetectorList(s2UnitInfo.getPersistenceUnitName()));
-        setMappingFiles(s2UnitInfo, autoDetectorFactory.getResourceAutoDetectorList(null));
-        
+        setMappingFiles(s2UnitInfo);
         return s2UnitInfo;
     }
+
+    private void setMappingFiles(PersistenceUnitInfo unitInfo) {
+        setMappingFiles(unitInfo, autoDetectorFactory.getResourceAutoDetectorList(null));
+        if (StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
+            setMappingFiles(unitInfo, autoDetectorFactory.getResourceAutoDetectorList(unitInfo.getPersistenceUnitName()));            
+        }
+    }
     
-    private void setMappingFiles(PersistenceUnitInfo persistenceUnitInfo, List<ResourceAutoDetector> autoDetectList) {
+    private void setMappingFiles(final PersistenceUnitInfo persistenceUnitInfo, List<ResourceAutoDetector> autoDetectList) {
         if (autoDetectList != null) {
             for (ResourceAutoDetector rad : autoDetectList) {
-                for (ResourceAutoDetector.Entry entry : rad.detect()) {
-                    persistenceUnitInfo.getMappingFileNames().add(entry.getPath());
-                }
+                rad.detect(new ResourceAutoDetector.ResourceHandler() {
+
+                    public void processResource(String path, InputStream is) {
+                        persistenceUnitInfo.getMappingFileNames().add(path);
+                    }
+                    
+                });
             }
         }
     }
 
     public void addAutoDetectResult(PersistenceUnitInfo persistenceUnitInfo) {
-        setMappingFiles(persistenceUnitInfo, autoDetectorFactory.getResourceAutoDetectorList(persistenceUnitInfo.getPersistenceUnitName()));
-        setMappingFiles(persistenceUnitInfo, autoDetectorFactory.getResourceAutoDetectorList(null));
+        setMappingFiles(persistenceUnitInfo);
     }
 
 }
