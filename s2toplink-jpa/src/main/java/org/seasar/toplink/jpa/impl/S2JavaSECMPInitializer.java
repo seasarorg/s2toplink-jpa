@@ -47,10 +47,10 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         persistenceUnitInfoFactory.addAutoDetectResult(persistenceUnitInfo);
         return super.callPredeploy(persistenceUnitInfo, m);
     }
-    
+
     @Override
-    public ClassLoader createTempLoader(Collection col) {
+    protected ClassLoader createTempLoader(Collection col) {
         return super.createTempLoader(col);
     }
-
+   
 }

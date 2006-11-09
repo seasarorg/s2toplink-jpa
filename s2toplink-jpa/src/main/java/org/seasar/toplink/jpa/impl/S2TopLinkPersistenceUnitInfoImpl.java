@@ -15,9 +15,9 @@ import org.seasar.toplink.jpa.datasource.DataSourceProxy;
 
 public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         implements S2TopLinkPersistenceUnitInfo {
-    
+
     protected Set<String> tempClassNameSet;
-    
+
     protected JpaInstrumentation jpaInstrumentation;
     
     protected S2JavaSECMPInitializer javaSECMPInitializer;
@@ -26,8 +26,7 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         this.jpaInstrumentation = jpaInstrumentation;
     }
 
-    public void setJavaSECMPInitializer(
-            S2JavaSECMPInitializer javaSECMPInitializer) {
+    public void setJavaSECMPInitializer(S2JavaSECMPInitializer javaSECMPInitializer) {
         this.javaSECMPInitializer = javaSECMPInitializer;
     }
 
@@ -45,11 +44,23 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
 
     @Override
     public ClassLoader getNewTempClassLoader() {
-        
-        if (tempClassNameSet == null) {
-            tempClassNameSet =  PersistenceUnitProcessor.buildClassSet(this);
-        }
 
+        if (tempClassNameSet == null) {
+            tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this);
+        }
+//        URL[] urls = null;
+//        if (getClassLoader() instanceof URLClassLoader) {
+//            urls = URLClassLoader.class.cast(getClassLoader()).getURLs();
+//        } else {
+//            List<URL> urlList = new ArrayList<URL>();
+//            if (getPersistenceUnitRootUrl() != null) {
+//                urlList.add(getPersistenceUnitRootUrl());
+//            }
+//            if (getJarFileUrls() != null) {
+//                urlList.addAll(getJarFileUrls());
+//            }
+//            urls = urlList.toArray(new URL[urlList.size()]);
+//        }
         return javaSECMPInitializer.createTempLoader(tempClassNameSet);
     }
 

@@ -102,7 +102,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         BufferedInputStream in = null;
         try {
             out = new ByteArrayOutputStream();
-            in = new BufferedInputStream(loader.getResourceAsStream(className));
+            in = new BufferedInputStream(loader.getResourceAsStream(className + ".class"));
             int i;
             while ((i = in.read()) != -1) {
                 out.write(i);
