@@ -8,6 +8,8 @@ import org.seasar.framework.jpa.metadata.AttributeDesc;
 
 public class TopLinkAttributeDesc implements AttributeDesc {
     
+    private DatabaseMapping mapping;
+    
     private Class<?> elementType;
     
     private String name;
@@ -29,6 +31,7 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     private boolean version;
     
     public TopLinkAttributeDesc(DatabaseMapping mapping) {
+        this.mapping = mapping;
         this.type = mapping.getAttributeAccessor().getAttributeClass();
         this.name = mapping.getAttributeName();
         this.id = mapping.isPrimaryKeyMapping();
@@ -37,6 +40,7 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     
     
     public Class<?> getElementType() {
+        //TODO
         return elementType;
     }
 
@@ -45,10 +49,12 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public int getSqlType() {
+        // TODO
         return sqlType;
     }
 
     public TemporalType getTemporalType() {
+        // TODO
         return temporalType;
     }
 
@@ -57,11 +63,11 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public Object getValue(Object entity) {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
+        return mapping.getAttributeValueFromObject(entity);
     }
 
     public boolean isAssociation() {
+        // TODO
         return association;
     }
 
@@ -70,6 +76,7 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public boolean isComponent() {
+        // TODO
         return component;
     }
 
@@ -78,12 +85,12 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public boolean isVersion() {
+        // TODO
         return version;
     }
 
     public void setValue(Object entity, Object value) {
-        // TODO 自動生成されたメソッド・スタブ
-
+        mapping.setAttributeValueInObject(entity, value);
     }
 
     public void setTemporalType(TemporalType temporalType) {
