@@ -16,6 +16,8 @@
 	-->
 	
 	<component class="oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider"/>
+	
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkDialect"/>
 
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
