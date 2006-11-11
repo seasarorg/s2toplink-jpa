@@ -2,14 +2,23 @@ package org.seasar.toplink.jpa.metadata;
 
 import javax.persistence.TemporalType;
 
+import oracle.toplink.essentials.descriptors.ClassDescriptor;
+import oracle.toplink.essentials.descriptors.VersionLockingPolicy;
+import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
+import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
+import oracle.toplink.essentials.internal.helper.DatabaseField;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.mappings.ForeignReferenceMapping;
+import oracle.toplink.essentials.threetier.ServerSession;
 
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 
 public class TopLinkAttributeDesc implements AttributeDesc {
     
-    private DatabaseMapping mapping;
+    protected EntityManagerFactoryImpl entityManagerFactoryImpl;
+    
+    protected DatabaseMapping mapping;
+    
     
     private Class<?> elementType;
     
@@ -31,16 +40,34 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     
     private boolean version;
     
-    public TopLinkAttributeDesc(DatabaseMapping mapping) {
+    public TopLinkAttributeDesc(DatabaseMapping mapping, EntityManagerFactoryImpl entityManagerFactoryImpl) {
         this.mapping = mapping;
-        this.type = mapping.getAttributeAccessor().getAttributeClass();
+        this.entityManagerFactoryImpl = entityManagerFactoryImpl;
+        ServerSession serverSession = entityManagerFactoryImpl.getServerSession();
         this.name = mapping.getAttributeName();
+        this.type = mapping.getAttributeAccessor().getAttributeClass();
         this.id = mapping.isPrimaryKeyMapping();
         this.collection = mapping.isCollectionMapping();
+        this.association = mapping.isForeignReferenceMapping();
         if (collection && mapping instanceof ForeignReferenceMapping) {
             ForeignReferenceMapping fMapping = ForeignReferenceMapping.class.cast(mapping);
             elementType = fMapping.getReferenceClass();
         }
+        ClassDescriptor descriptor = mapping.getDescriptor();
+        if (descriptor.usesVersionLocking()) {
+            VersionLockingPolicy vPolicy = VersionLockingPolicy.class.cast(descriptor.getOptimisticLockingPolicy());
+            if (mapping.getField() != null && vPolicy.getWriteLockFieldName().equals(mapping.getField().getQualifiedName())) {
+                version = true;
+            }
+        }
+        if (mapping.getField() != null) {
+            DatabaseField field = mapping.getField();
+            DatabasePlatform platform = serverSession.getPlatform();
+            sqlType = platform.getJDBCType(field);
+        } else {
+            // TODO
+        }
+        this.component = mapping.isAggregateMapping();
     }
     
     
@@ -53,7 +80,6 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public int getSqlType() {
-        // TODO
         return sqlType;
     }
 
@@ -71,7 +97,6 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public boolean isAssociation() {
-        // TODO
         return association;
     }
 
@@ -80,7 +105,6 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public boolean isComponent() {
-        // TODO
         return component;
     }
 

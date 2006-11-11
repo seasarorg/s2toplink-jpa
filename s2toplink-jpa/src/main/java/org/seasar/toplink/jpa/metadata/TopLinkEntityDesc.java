@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import oracle.toplink.essentials.descriptors.ClassDescriptor;
-import oracle.toplink.essentials.descriptors.VersionLockingPolicy;
+import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
+import oracle.toplink.essentials.threetier.ServerSession;
 
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
@@ -24,8 +25,9 @@ public class TopLinkEntityDesc implements EntityDesc {
     private TopLinkAttributeDesc idAttributeDesc;
     
     @SuppressWarnings("unchecked")
-    public TopLinkEntityDesc(ClassDescriptor classDescriptor) {
-        this.classDescriptor = classDescriptor;
+    public TopLinkEntityDesc(Class<?> entityClass, EntityManagerFactoryImpl entityManagerFactoryImpl) {
+        ServerSession serverSession = entityManagerFactoryImpl.getServerSession();
+        this.classDescriptor = serverSession.getClassDescriptor(entityClass);
         List<DatabaseMapping> mappings = (List<DatabaseMapping>) classDescriptor.getMappings();
         int size = mappings.size();
         attributeDescs = new TopLinkAttributeDesc[size];
@@ -33,17 +35,11 @@ public class TopLinkEntityDesc implements EntityDesc {
         attributeDescMap = new HashMap<String, TopLinkAttributeDesc>(size);
         for (int i = 0; i < size; i++) {
             DatabaseMapping mapping = mappings.get(i);
-            attributeDescs[i] = new TopLinkAttributeDesc(mapping);
+            attributeDescs[i] = new TopLinkAttributeDesc(mapping, entityManagerFactoryImpl);
             attributeNames[i] = attributeDescs[i].getName();
             attributeDescMap.put(attributeDescs[i].getName(), attributeDescs[i]);
             if (mapping.isPrimaryKeyMapping()) {
                 idAttributeDesc = attributeDescs[i];
-            }
-            if (classDescriptor.usesVersionLocking()) {
-                VersionLockingPolicy vPolicy = VersionLockingPolicy.class.cast(classDescriptor.getOptimisticLockingPolicy());
-                if (mapping.getField() != null && vPolicy.getWriteLockFieldName().equals(mapping.getField().getQualifiedName())) {
-                    attributeDescs[i].setVersion(true);
-                }
             }
         }
     }

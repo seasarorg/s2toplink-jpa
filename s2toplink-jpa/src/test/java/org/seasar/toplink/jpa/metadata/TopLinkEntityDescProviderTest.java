@@ -5,7 +5,7 @@ import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 
-import example.entity.TestA;
+import example.entity.TestC;
 
 public class TopLinkEntityDescProviderTest extends S2TestCase {
 
@@ -20,17 +20,21 @@ public class TopLinkEntityDescProviderTest extends S2TestCase {
 
 
     public void testCreateEntityDescTx() {
-        EntityDesc desc = entityDescProvider.createEntityDesc(TestA.class);
-        assertEquals(TestA.class, desc.getEntityClass());
-        assertEquals("TestA", desc.getEntityName());
+        EntityDesc desc = entityDescProvider.createEntityDesc(TestC.class);
+        assertEquals(TestC.class, desc.getEntityClass());
+        assertEquals("Test_C", desc.getEntityName());
         for (AttributeDesc aDesc : desc.getAttributeDescs()) {
-            System.out.println(aDesc.getName());
-            System.out.println(aDesc.getType());
-            System.out.println(aDesc.isId());
-            System.out.println(aDesc.isVersion());
-            System.out.println(aDesc.getElementType());
+            System.out.println("NAME:" + aDesc.getName());
+            System.out.println("TYPE:" + aDesc.getType());
+            System.out.println("ID:" + aDesc.isId());
+            System.out.println("VERSION:" + aDesc.isVersion());
+            System.out.println("ELEMENT_TYPE:" + aDesc.getElementType());
+            System.out.println("ASSOCIATION:" + aDesc.isAssociation());
+            System.out.println("COLLECTION:" + aDesc.isCollection());
+            System.out.println("COMPONENT:" + aDesc.isComponent());
+            System.out.println("SQLTYPE:" + aDesc.getSqlType());
+            System.out.println();
         }
-        System.out.println();
         for (String name : desc.getAttributeNames()) {
             System.out.println(name);
         }
@@ -40,6 +44,7 @@ public class TopLinkEntityDescProviderTest extends S2TestCase {
         System.out.println(desc.getIdAttributeDesc().isId());
         System.out.println(desc.getIdAttributeDesc().isVersion());
         System.out.println(desc.getIdAttributeDesc().getElementType());
+        System.out.println(desc.getIdAttributeDesc().isAssociation());
     }
 
 }
