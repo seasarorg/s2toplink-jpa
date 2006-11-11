@@ -16,10 +16,12 @@
 package example.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 /**
@@ -42,6 +44,8 @@ public class TestA implements Serializable{
 	
 	@Version
 	private Integer version;
+    
+    private Set<TestB> testbs;
 
 	public Integer getId() {
 		return id;
@@ -66,4 +70,13 @@ public class TestA implements Serializable{
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
+
+    @OneToMany(mappedBy = "testa")
+    public Set<TestB> getTestbs() {
+        return testbs;
+    }
+
+    public void setTestbs(Set<TestB> testbs) {
+        this.testbs = testbs;
+    }
 }

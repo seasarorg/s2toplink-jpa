@@ -3,6 +3,7 @@ package org.seasar.toplink.jpa.metadata;
 import javax.persistence.TemporalType;
 
 import oracle.toplink.essentials.mappings.DatabaseMapping;
+import oracle.toplink.essentials.mappings.ForeignReferenceMapping;
 
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 
@@ -36,11 +37,14 @@ public class TopLinkAttributeDesc implements AttributeDesc {
         this.name = mapping.getAttributeName();
         this.id = mapping.isPrimaryKeyMapping();
         this.collection = mapping.isCollectionMapping();
+        if (collection && mapping instanceof ForeignReferenceMapping) {
+            ForeignReferenceMapping fMapping = ForeignReferenceMapping.class.cast(mapping);
+            elementType = fMapping.getReferenceClass();
+        }
     }
     
     
     public Class<?> getElementType() {
-        //TODO
         return elementType;
     }
 
