@@ -23,7 +23,7 @@ public class S2TopLinkServlet extends S2ContainerServlet {
     @Override
     public void init() {
         String useStaticContext = getServletConfig().getInitParameter(USE_STATIC_CONTEXT);
-        if (useStaticContext != null && Boolean.parseBoolean(useStaticContext)) {
+        if (Boolean.parseBoolean(useStaticContext)) {
             String originalConfigPath = SingletonS2ContainerFactory.getConfigPath();
             try {
                 String predeployConfig = DEFAULT_PREDEPLOY_CONFIG_PATH;
@@ -46,7 +46,7 @@ public class S2TopLinkServlet extends S2ContainerServlet {
     @Override
     public void destroy() {
         String useStaticContext = getServletConfig().getInitParameter(USE_STATIC_CONTEXT);
-        if (useStaticContext != null && Boolean.parseBoolean(useStaticContext)) {
+        if (Boolean.parseBoolean(useStaticContext)) {
             S2Container container = SingletonS2ContainerFactory.getContainer();
             PersistenceUnitManagerImpl pumi =
                 PersistenceUnitManagerImpl.class.cast(container.getComponent(PersistenceUnitManagerImpl.class));

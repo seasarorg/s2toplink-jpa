@@ -15,10 +15,10 @@
  */
 package org.seasar.toplink.jpa.platform.server;
 
-import org.seasar.toplink.jpa.transaction.S2TransactionController;
-
 import oracle.toplink.essentials.internal.sessions.DatabaseSessionImpl;
 import oracle.toplink.essentials.platform.server.ServerPlatformBase;
+
+import org.seasar.toplink.jpa.transaction.S2TransactionController;
 
 /**
  * @author Hidenoshin Yoshida
