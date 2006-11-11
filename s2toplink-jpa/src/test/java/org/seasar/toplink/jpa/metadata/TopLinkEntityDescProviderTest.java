@@ -27,6 +27,7 @@ public class TopLinkEntityDescProviderTest extends S2TestCase {
             System.out.println(aDesc.getName());
             System.out.println(aDesc.getType());
             System.out.println(aDesc.isId());
+            System.out.println(aDesc.isVersion());
         }
         System.out.println();
         for (String name : desc.getAttributeNames()) {
@@ -36,6 +37,7 @@ public class TopLinkEntityDescProviderTest extends S2TestCase {
         System.out.println(desc.getIdAttributeDesc().getName());
         System.out.println(desc.getIdAttributeDesc().getType());
         System.out.println(desc.getIdAttributeDesc().isId());
+        System.out.println(desc.getIdAttributeDesc().isVersion());
     }
 
 }

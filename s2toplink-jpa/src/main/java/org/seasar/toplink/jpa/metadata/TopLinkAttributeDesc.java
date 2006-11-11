@@ -85,7 +85,6 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public boolean isVersion() {
-        // TODO
         return version;
     }
 
