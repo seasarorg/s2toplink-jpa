@@ -8,7 +8,10 @@ import oracle.toplink.essentials.descriptors.ClassDescriptor;
 import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.sessions.Project;
 
+import org.seasar.framework.container.annotation.tiger.DestroyMethod;
+import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.metadata.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 
@@ -24,6 +27,16 @@ public class TopLinkEntityDescProvider implements EntityDescProvider {
         this.entityManagerFactoryImpl = EntityManagerFactoryImpl.class.cast(entityManagerFactory);        
         Project project = entityManagerFactoryImpl.getServerSession().getProject();
         classDescriptorMap = (Map<Class<?>, ClassDescriptor>) project.getDescriptors();
+    }
+
+    @InitMethod
+    public void register() {
+        EntityDescFactory.addProvider(this);
+    }
+
+    @DestroyMethod
+    public void unregister() {
+        EntityDescFactory.removeProvider(this);
     }
 
     public EntityDesc createEntityDesc(Class<?> entityClass) {
