@@ -18,6 +18,7 @@
 	<component class="oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkDialect"/>
+	<component class="org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider"/>
 
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
