@@ -3,9 +3,9 @@ package org.seasar.toplink.jpa.impl;
 import java.util.HashMap;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitInfo;
 
+import oracle.toplink.essentials.PersistenceProvider;
 import oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
