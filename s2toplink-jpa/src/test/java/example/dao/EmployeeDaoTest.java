@@ -29,6 +29,7 @@ public class EmployeeDaoTest extends S2TestCase {
     public void testFindByExampleTx() {
     
         Employee employee = new Employee();
+        employee.setId(1);
         employee.setName("test");
         employeeDao.findByExample(employee);
     }
