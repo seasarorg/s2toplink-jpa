@@ -28,8 +28,9 @@ public class S2TopLinkDialect implements Dialect {
     }
 
     public Connection getConnection(EntityManager em) {
-        if (em.getDelegate() instanceof oracle.toplink.essentials.ejb.cmp3.EntityManager) {
-            oracle.toplink.essentials.ejb.cmp3.EntityManager toplinkEm = oracle.toplink.essentials.ejb.cmp3.EntityManager.class.cast(em.getDelegate());
+        Object delegate = em.getDelegate();
+        if (delegate instanceof oracle.toplink.essentials.ejb.cmp3.EntityManager) {
+            oracle.toplink.essentials.ejb.cmp3.EntityManager toplinkEm = oracle.toplink.essentials.ejb.cmp3.EntityManager.class.cast(delegate);
             return toplinkEm.getServerSession().getLogin().getConnector().connect(new Properties());
         }
         return null;

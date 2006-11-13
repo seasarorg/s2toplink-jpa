@@ -21,12 +21,20 @@ public class EmployeeDaoTest extends S2TestCase {
     public void testFindAllTx() {
         employeeDao.findAll();
     }
-
+    
     public void testFindByNameTx() {
+        employeeDao.findByName("test");
+    }
+
+    public void testFindByExampleTx() {
     
         Employee employee = new Employee();
         employee.setName("test");
         employeeDao.findByExample(employee);
+    }
+    
+    public void testFindByNameSqlTx() {
+        employeeDao.findByNameSql("test");
     }
 
 }
