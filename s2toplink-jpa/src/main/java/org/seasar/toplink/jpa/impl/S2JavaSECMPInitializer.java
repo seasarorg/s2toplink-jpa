@@ -25,6 +25,7 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
             return;
         }
         S2Container container = S2ContainerFactory.create(configPath);
+        container.init();
         try {
             javaSECMPInitializer = (JavaSECMPInitializer) container.getComponent(JavaSECMPInitializer.class);
             AbstractSessionLog.getLog().setLevel(JavaSECMPInitializer.getTopLinkLoggingLevel());

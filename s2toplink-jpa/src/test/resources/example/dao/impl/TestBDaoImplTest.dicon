@@ -3,6 +3,7 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="aop.dicon"/>
+	<include path="creator.dicon"/>
 	<include path="entityManager.dicon"/>
 <!--
 	<component class="org.seasar.framework.convention.impl.NamingConventionImpl">
