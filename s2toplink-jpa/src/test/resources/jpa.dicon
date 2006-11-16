@@ -19,6 +19,7 @@
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkDialect"/>
 	<component class="org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider"/>
+	<component class="org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider"/>
 
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")

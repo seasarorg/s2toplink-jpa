@@ -5,7 +5,6 @@ import javax.persistence.TemporalType;
 import oracle.toplink.essentials.descriptors.ClassDescriptor;
 import oracle.toplink.essentials.descriptors.VersionLockingPolicy;
 import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
-import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.internal.helper.DatabaseField;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.mappings.ForeignReferenceMapping;
@@ -15,7 +14,7 @@ import org.seasar.framework.jpa.metadata.AttributeDesc;
 
 public class TopLinkAttributeDesc implements AttributeDesc {
     
-    protected EntityManagerFactoryImpl entityManagerFactoryImpl;
+    protected ServerSession serverSession;
     
     protected DatabaseMapping mapping;
     
@@ -40,10 +39,9 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     
     private boolean version;
     
-    public TopLinkAttributeDesc(DatabaseMapping mapping, EntityManagerFactoryImpl entityManagerFactoryImpl) {
+    public TopLinkAttributeDesc(DatabaseMapping mapping, ServerSession serverSession) {
         this.mapping = mapping;
-        this.entityManagerFactoryImpl = entityManagerFactoryImpl;
-        ServerSession serverSession = entityManagerFactoryImpl.getServerSession();
+        this.serverSession = serverSession;
         this.name = mapping.getAttributeName();
         this.type = mapping.getAttributeAccessor().getAttributeClass();
         this.id = mapping.isPrimaryKeyMapping();
@@ -158,6 +156,11 @@ public class TopLinkAttributeDesc implements AttributeDesc {
 
     public void setVersion(boolean version) {
         this.version = version;
+    }
+
+
+    public DatabaseMapping getMapping() {
+        return mapping;
     }
 
 }

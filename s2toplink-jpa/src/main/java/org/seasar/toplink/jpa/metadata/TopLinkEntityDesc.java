@@ -9,12 +9,13 @@ import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.threetier.ServerSession;
 
-import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 
 public class TopLinkEntityDesc implements EntityDesc {
     
     protected ClassDescriptor classDescriptor;
+    
+    private ServerSession serverSession;
     
     protected Map<String, TopLinkAttributeDesc> attributeDescMap;
     
@@ -23,6 +24,8 @@ public class TopLinkEntityDesc implements EntityDesc {
     protected String[] attributeNames;
     
     private TopLinkAttributeDesc idAttributeDesc;
+    
+    private List<String> tableNames;
     
     @SuppressWarnings("unchecked")
     public TopLinkEntityDesc(Class<?> entityClass, EntityManagerFactoryImpl entityManagerFactoryImpl) {
@@ -35,20 +38,22 @@ public class TopLinkEntityDesc implements EntityDesc {
         attributeDescMap = new HashMap<String, TopLinkAttributeDesc>(size);
         for (int i = 0; i < size; i++) {
             DatabaseMapping mapping = mappings.get(i);
-            attributeDescs[i] = new TopLinkAttributeDesc(mapping, entityManagerFactoryImpl);
+            attributeDescs[i] = new TopLinkAttributeDesc(mapping, serverSession);
             attributeNames[i] = attributeDescs[i].getName();
             attributeDescMap.put(attributeDescs[i].getName(), attributeDescs[i]);
             if (mapping.isPrimaryKeyMapping()) {
                 idAttributeDesc = attributeDescs[i];
             }
         }
+        tableNames = (List<String>) classDescriptor.getTableNames();
+        
     }
 
-    public AttributeDesc getAttributeDesc(String attributeName) {
+    public TopLinkAttributeDesc getAttributeDesc(String attributeName) {
         return attributeDescMap.get(attributeName);
     }
 
-    public AttributeDesc[] getAttributeDescs() {
+    public TopLinkAttributeDesc[] getAttributeDescs() {
         return attributeDescs;
     }
 
@@ -64,8 +69,17 @@ public class TopLinkEntityDesc implements EntityDesc {
         return classDescriptor.getAlias();
     }
 
-    public AttributeDesc getIdAttributeDesc() {
+    public TopLinkAttributeDesc getIdAttributeDesc() {
         return idAttributeDesc;
     }
 
+    public List<String> getTableNames() {
+        return tableNames;
+    }
+
+    public ServerSession getServerSession() {
+        return serverSession;
+    }
+
+    
 }

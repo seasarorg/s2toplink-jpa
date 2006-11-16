@@ -3,5 +3,5 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="creator.dicon"/>
-	<include path="entityManager.dicon"/>
+	<include path="jpa.dicon"/>
 </components>
