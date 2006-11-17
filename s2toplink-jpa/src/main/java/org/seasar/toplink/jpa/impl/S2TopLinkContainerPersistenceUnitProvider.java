@@ -3,9 +3,9 @@ package org.seasar.toplink.jpa.impl;
 import java.util.HashMap;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitInfo;
 
-import oracle.toplink.essentials.PersistenceProvider;
 import oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
@@ -58,7 +58,7 @@ public class S2TopLinkContainerPersistenceUnitProvider implements
         if (providerClassName == null
             || providerClassName.equals("")
             || providerClassName.equals(EntityManagerFactoryProvider.class.getName())
-            || providerClassName.equals(PersistenceProvider.class.getName())){
+            || providerClassName.equals(oracle.toplink.essentials.PersistenceProvider.class.getName())){
         
             return persistenceProvider.createContainerEntityManagerFactory(unitInfo, new HashMap());
         }
