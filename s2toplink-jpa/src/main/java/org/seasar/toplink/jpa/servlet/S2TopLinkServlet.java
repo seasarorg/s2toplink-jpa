@@ -18,7 +18,7 @@ public class S2TopLinkServlet extends S2ContainerServlet {
     
     public static final String USE_STATIC_CONTEXT = "useStaticContext";
     
-    public static final String DEFAULT_PREDEPLOY_CONFIG_PATH = "entityManager.dicon";
+    public static final String DEFAULT_PREDEPLOY_CONFIG_PATH = "jpa.dicon";
 
     @Override
     public void init() {
