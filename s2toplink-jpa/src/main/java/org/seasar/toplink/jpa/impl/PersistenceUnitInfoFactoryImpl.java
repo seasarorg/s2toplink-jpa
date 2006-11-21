@@ -14,6 +14,7 @@ import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 
 import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.S2Container;
+import org.seasar.framework.util.ResourceTraversal;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.toplink.jpa.AutoDetectorFactory;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
@@ -84,7 +85,7 @@ public class PersistenceUnitInfoFactoryImpl implements
     private void setMappingFiles(final PersistenceUnitInfo persistenceUnitInfo, List<ResourceAutoDetector> autoDetectList) {
         if (autoDetectList != null) {
             for (ResourceAutoDetector rad : autoDetectList) {
-                rad.detect(new ResourceAutoDetector.ResourceHandler() {
+                rad.detect(new ResourceTraversal.ResourceHandler() {
 
                     public void processResource(String path, InputStream is) {
                         persistenceUnitInfo.getMappingFileNames().add(path);
