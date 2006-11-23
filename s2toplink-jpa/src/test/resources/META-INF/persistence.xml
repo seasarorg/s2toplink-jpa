@@ -6,13 +6,13 @@
 	version="1.0">
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
 		<jta-data-source>java:comp/env/jdbc/dataSource</jta-data-source>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatform"/>
 			<property name="toplink.logging.level" value="FINE"/>
 			<property name="toplink.ddl-generation" value="create-tables"/>
 			<property name="toplink.ddl-generation.output-mode" value="both"/>
-			<property name="toplink.weaving" value="false"/>
+			<property name="toplink.weaving" value="true"/>
  		</properties>
 	</persistence-unit>
 </persistence>

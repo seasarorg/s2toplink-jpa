@@ -12,8 +12,11 @@ import oracle.toplink.essentials.ejb.cmp3.persistence.Archive;
 import oracle.toplink.essentials.ejb.cmp3.persistence.PersistenceUnitProcessor;
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 
+import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.S2Container;
+import org.seasar.framework.util.ClassTraversal;
+import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.ResourceTraversal;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.toplink.jpa.AutoDetectorFactory;
@@ -72,6 +75,7 @@ public class PersistenceUnitInfoFactoryImpl implements
         s2UnitInfo.setProperties(unitInfo.getProperties());
         
         setMappingFiles(s2UnitInfo);
+        setPersistenceClasses(s2UnitInfo);
         return s2UnitInfo;
     }
 
@@ -82,13 +86,34 @@ public class PersistenceUnitInfoFactoryImpl implements
         }
     }
     
-    private void setMappingFiles(final PersistenceUnitInfo persistenceUnitInfo, List<ResourceAutoDetector> autoDetectList) {
+    private void setMappingFiles(final PersistenceUnitInfo unitInfo, List<ResourceAutoDetector> autoDetectList) {
         if (autoDetectList != null) {
             for (ResourceAutoDetector rad : autoDetectList) {
                 rad.detect(new ResourceTraversal.ResourceHandler() {
 
                     public void processResource(String path, InputStream is) {
-                        persistenceUnitInfo.getMappingFileNames().add(path);
+                        unitInfo.getMappingFileNames().add(path);
+                    }
+                    
+                });
+            }
+        }
+    }
+    private void setPersistenceClasses(PersistenceUnitInfo unitInfo) {
+        setPersistenceClasses(unitInfo, autoDetectorFactory.getClassAutoDetectorList(null));
+        if (!StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
+            setPersistenceClasses(unitInfo, autoDetectorFactory.getClassAutoDetectorList(unitInfo.getPersistenceUnitName()));
+        }
+    }
+    
+    private void setPersistenceClasses(final PersistenceUnitInfo unitInfo, List<ClassAutoDetector> autoDetectList) {
+        if (autoDetectList != null) {
+            for (ClassAutoDetector cad : autoDetectList) {
+                cad.detect(new ClassTraversal.ClassHandler() {
+
+                    public void processClass(String packageName, String shortClassName) {
+                        unitInfo.getManagedClassNames().add(ClassUtil.concatName(packageName, shortClassName));
+                        
                     }
                     
                 });
@@ -96,8 +121,9 @@ public class PersistenceUnitInfoFactoryImpl implements
         }
     }
 
-    public void addAutoDetectResult(PersistenceUnitInfo persistenceUnitInfo) {
-        setMappingFiles(persistenceUnitInfo);
+    public void addAutoDetectResult(PersistenceUnitInfo unitInfo) {
+        setMappingFiles(unitInfo);
+        setPersistenceClasses(unitInfo);
     }
 
 }
