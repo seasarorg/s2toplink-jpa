@@ -1,1 +1,0 @@
-SELECT id, name FROM Employee WHERE name = /*name*/'Foo'

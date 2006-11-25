@@ -12,6 +12,5 @@
 	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="lib" path="lib/derbyLocale_ja_JP.jar"/>
 	<classpathentry kind="lib" path="lib/derbytools.jar"/>
-	<classpathentry kind="lib" path="lib/kuina-dao-1.0.0-rc1-SNAPSHOT.jar" sourcepath="/kuina-dao/src/main/java"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
