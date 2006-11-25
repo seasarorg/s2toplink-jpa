@@ -1,6 +1,7 @@
 package org.seasar.toplink.jpa.platform.database;
 
 import oracle.toplink.essentials.platform.database.HSQLPlatform;
+import oracle.toplink.essentials.queryframework.ValueReadQuery;
 
 public class HSQLDBPlatform extends HSQLPlatform {
 
@@ -15,5 +16,18 @@ public class HSQLDBPlatform extends HSQLPlatform {
     
     public boolean supportsNativeSequenceNumbers() {
         return true;
+    }
+    
+    public ValueReadQuery buildSelectQueryForNativeSequence(String seqName, Integer size) {
+        String sequenceName = getQualifiedSequenceName(seqName);
+        return new ValueReadQuery("SELECT NEXT VALUE FOR "  + sequenceName + " FROM DUAL_" + sequenceName);
+    }
+
+    protected String getQualifiedSequenceName(String seqName) {
+        if (getTableQualifier().equals("")) {
+            return seqName;
+        } else {
+            return getTableQualifier() + "." + seqName;
+        }
     }
 }
