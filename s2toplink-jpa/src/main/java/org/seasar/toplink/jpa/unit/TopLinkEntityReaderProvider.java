@@ -16,6 +16,7 @@
 package org.seasar.toplink.jpa.unit;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
@@ -56,30 +57,29 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
     }
 
     public EntityReader createEntityReader(final Collection<?> entities) {
-//        if (entities == null) {
-//            return null;
-//        }
-//
-//        final Collection<Object> newEntities = flatten(entities);
-//        if (newEntities.isEmpty()) {
-//            return null;
-//        }
-//
-//        final Map<Class<?>, HibernateEntityDesc<?>> entityDescs = CollectionsUtil
-//                .newHashMap();
-//        for (final Object entity : newEntities) {
-//            final Class<?> entityClass = entity.getClass();
-//            if (entityDescs.containsKey(entityClass)) {
-//                continue;
-//            }
-//            final HibernateEntityDesc<?> entityDesc = getEntityDesc(entityClass);
-//            if (entityDescs == null) {
-//                return null;
-//            }
-//            entityDescs.put(entityClass, entityDesc);
-//        }
-//        return new HibernateEntityCollectionReader(newEntities, entityDescs);
-        return null;
+        if (entities == null) {
+            return null;
+        }
+
+        final Collection<Object> newEntities = flatten(entities);
+        if (newEntities.isEmpty()) {
+            return null;
+        }
+
+        final Map<Class<?>, TopLinkEntityDesc> entityDescs = CollectionsUtil
+                .newHashMap();
+        for (final Object entity : newEntities) {
+            final Class<?> entityClass = entity.getClass();
+            if (entityDescs.containsKey(entityClass)) {
+                continue;
+            }
+            final TopLinkEntityDesc entityDesc = getEntityDesc(entityClass);
+            if (entityDescs == null) {
+                return null;
+            }
+            entityDescs.put(entityClass, entityDesc);
+        }
+        return new TopLinkEntityCollectionReader(newEntities, entityDescs);
     }
 
     protected Collection<Object> flatten(final Collection<?> entities) {

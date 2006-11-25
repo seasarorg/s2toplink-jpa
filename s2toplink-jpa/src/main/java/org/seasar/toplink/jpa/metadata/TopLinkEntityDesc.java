@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import oracle.toplink.essentials.descriptors.ClassDescriptor;
+import oracle.toplink.essentials.descriptors.InheritancePolicy;
 import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.threetier.ServerSession;
@@ -48,7 +49,7 @@ public class TopLinkEntityDesc implements EntityDesc {
     
     @SuppressWarnings("unchecked")
     public TopLinkEntityDesc(Class<?> entityClass, EntityManagerFactoryImpl entityManagerFactoryImpl) {
-        ServerSession serverSession = entityManagerFactoryImpl.getServerSession();
+        this.serverSession = entityManagerFactoryImpl.getServerSession();
         this.classDescriptor = serverSession.getClassDescriptor(entityClass);
         List<DatabaseMapping> mappings = (List<DatabaseMapping>) classDescriptor.getMappings();
         int size = mappings.size();
@@ -100,5 +101,12 @@ public class TopLinkEntityDesc implements EntityDesc {
         return serverSession;
     }
 
+    public boolean hasDiscriminatorColumn() {
+        return classDescriptor.getInheritancePolicyOrNull() != null;
+    }
     
+    public InheritancePolicy getInheritancePolicy() {
+        return classDescriptor.getInheritancePolicyOrNull();
+    }
+
 }

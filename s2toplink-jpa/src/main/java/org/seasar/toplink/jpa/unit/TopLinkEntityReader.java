@@ -16,17 +16,22 @@
 package org.seasar.toplink.jpa.unit;
 
 import java.util.List;
+import java.util.Map;
 
+import oracle.toplink.essentials.descriptors.InheritancePolicy;
 import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
 import oracle.toplink.essentials.internal.helper.DatabaseField;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.threetier.ServerSession;
 
+import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
 import org.seasar.extension.dataset.impl.DataSetImpl;
+import org.seasar.extension.dataset.states.RowStates;
 import org.seasar.extension.dataset.types.ColumnTypes;
 import org.seasar.framework.jpa.unit.EntityReader;
+import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.toplink.jpa.metadata.TopLinkAttributeDesc;
 import org.seasar.toplink.jpa.metadata.TopLinkEntityDesc;
 
@@ -40,9 +45,13 @@ public class TopLinkEntityReader implements EntityReader {
     
     private TopLinkEntityDesc entityDesc;
 
+    protected TopLinkEntityReader() {
+    }
+    
     public TopLinkEntityReader(Object entity, TopLinkEntityDesc topLinkEntityDesc) {
         this.entityDesc = topLinkEntityDesc;
         setupColumns();
+        setupRow(entity);
         
     }
 
@@ -57,7 +66,7 @@ public class TopLinkEntityReader implements EntityReader {
             }
         }
         setupAttributeColumns();
-//        setupDiscriminatorColumn();
+        setupDiscriminatorColumn();
     }
 
     @SuppressWarnings("unchecked")
@@ -65,7 +74,7 @@ public class TopLinkEntityReader implements EntityReader {
         ServerSession serverSession = entityDesc.getServerSession();
         DatabasePlatform platform = serverSession.getPlatform();
         
-        for (TopLinkAttributeDesc attribute : entityDesc.getAttributeDescs()) {
+        for (TopLinkAttributeDesc attribute : entityDesc.getAttributeDescs()) { 
             DatabaseMapping mapping = attribute.getMapping();
             List<DatabaseField> fields = mapping.getFields();
             for (DatabaseField field : fields) {
@@ -77,18 +86,54 @@ public class TopLinkEntityReader implements EntityReader {
         }
     }
     
-//    protected void setupDiscriminatorColumn() {
-//        if (!getEntityDesc().hasDiscriminatorColumn()) {
-//            return;
-//        }
-//        final String tableName = getEntityDesc().getPrimaryTableName();
-//        final String columnName = getEntityDesc().getDiscriminatorColumnName();
-//        final DataTable table = dataSet.getTable(tableName);
-//        if (!table.hasColumn(columnName)) {
-//            final int sqlType = getEntityDesc().getDiscriminatorSqlType();
-//            table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
-//        }
-//    }
+    protected void setupDiscriminatorColumn() {
+        if (!getEntityDesc().hasDiscriminatorColumn()) {
+            return;
+        }
+        InheritancePolicy inheritancePolicy = getEntityDesc().getInheritancePolicy();
+        DatabaseField field = inheritancePolicy.getClassIndicatorField();
+        DataTable table = dataSet.getTable(field.getTableName());
+        
+        ServerSession serverSession = entityDesc.getServerSession();
+        DatabasePlatform platform = serverSession.getPlatform();
+        
+        int sqlType = platform.getJDBCType(field);
+        table.addColumn(field.getQualifiedName(), ColumnTypes.getColumnType(sqlType));
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected void setupRow(final Object entity) {
+        Map<String, DataRow> rowMap = CollectionsUtil.newHashMap();
+        for (TopLinkAttributeDesc attribute : entityDesc.getAttributeDescs()) { 
+            DatabaseMapping mapping = attribute.getMapping();
+            List<DatabaseField> fields = mapping.getFields();
+            for (DatabaseField field : fields) {
+                DataTable table = dataSet.getTable(field.getTableName());
+                DataRow row = rowMap.get(table.getTableName());
+                if (row == null) {
+                    row = table.addRow();
+                    rowMap.put(table.getTableName(), row);
+                }
+                row.setValue(field.getQualifiedName(), mapping.getAttributeValueFromObject(entity));
+            }
+            
+        }
+        if (getEntityDesc().hasDiscriminatorColumn()) {
+            InheritancePolicy inheritancePolicy = getEntityDesc().getInheritancePolicy();
+            DatabaseField field = inheritancePolicy.getClassIndicatorField();
+            DataTable table = dataSet.getTable(field.getTableName());
+            DataRow row = rowMap.get(table.getTableName());
+            if (row == null) {
+                row = table.addRow();
+                rowMap.put(table.getTableName(), row);
+            }
+            Object value = inheritancePolicy.getClassIndicatorMapping().get(getEntityDesc().getEntityClass());
+            row.setValue(field.getQualifiedName(), value);
+        }
+        for (String key : rowMap.keySet()) {
+            rowMap.get(key).setState(RowStates.UNCHANGED);
+        }
+    }
 
     
     protected TopLinkEntityDesc getEntityDesc() {
