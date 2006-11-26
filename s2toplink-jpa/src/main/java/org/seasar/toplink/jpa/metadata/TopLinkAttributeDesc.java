@@ -15,6 +15,8 @@
  */
 package org.seasar.toplink.jpa.metadata;
 
+import java.sql.Types;
+
 import javax.persistence.TemporalType;
 
 import oracle.toplink.essentials.descriptors.ClassDescriptor;
@@ -85,6 +87,20 @@ public class TopLinkAttributeDesc implements AttributeDesc {
             // TODO
         }
         this.component = mapping.isAggregateMapping();
+        switch (sqlType) {
+        case Types.DATE:
+            temporalType = TemporalType.DATE;
+            break;
+        case Types.TIME:
+            temporalType = TemporalType.TIME;
+            break;
+        case Types.TIMESTAMP:
+            temporalType = TemporalType.TIMESTAMP;
+            break;
+
+        default:
+            break;
+        }
     }
     
     
@@ -101,7 +117,6 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     }
 
     public TemporalType getTemporalType() {
-        // TODO
         return temporalType;
     }
 
