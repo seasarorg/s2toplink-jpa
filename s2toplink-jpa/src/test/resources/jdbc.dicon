@@ -20,35 +20,23 @@
 	<component class="org.seasar.extension.jdbc.impl.BooleanToIntStatementFactory"/>
 	-->
 
-	<!-- for Derby -->
-	<component name="xaDataSource"
-		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
-		<property name="driverClassName">
-			"org.apache.derby.jdbc.EmbeddedDriver"
-		</property>
-		<property name="URL">
-			"jdbc:derby:testdb;create=true"
-		</property>
-		<!-- 
-		<property name="user">""</property>
-		<property name="password">""</property>
-		 -->
-	</component>
-
 	<!-- for HSQLDB -->
-	<!--
 	<component name="xaDataSource"
 		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
 		<property name="driverClassName">
 			"org.hsqldb.jdbcDriver"
 		</property>
 		<property name="URL">
+			<!--
 			"jdbc:hsqldb:hsql://localhost:9001"
+			-->
+			"jdbc:hsqldb:file:"
+				+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.datasource.DataSourceFactoryTest@class).getCanonicalPath()
+				+ "/data/demo"
 		</property>
 		<property name="user">"sa"</property>
 		<property name="password">""</property>
 	</component>
-	-->
 
 	<!-- for Oracle -->
 	<!--
@@ -62,6 +50,10 @@
 		</property>
 		<property name="user">"xxx"</property>
 		<property name="password">"xxx"</property>
+		<initMethod name="addProperty">
+			<arg>"includeSynonyms"</arg>
+			<arg>"true"</arg>
+		</initMethod>
 	</component>
 	-->
 
