@@ -16,6 +16,8 @@
 package org.seasar.toplink.jpa.metadata;
 
 import java.sql.Types;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.TemporalType;
 
@@ -87,19 +89,21 @@ public class TopLinkAttributeDesc implements AttributeDesc {
             // TODO
         }
         this.component = mapping.isAggregateMapping();
-        switch (sqlType) {
-        case Types.DATE:
-            temporalType = TemporalType.DATE;
-            break;
-        case Types.TIME:
-            temporalType = TemporalType.TIME;
-            break;
-        case Types.TIMESTAMP:
-            temporalType = TemporalType.TIMESTAMP;
-            break;
+        if (type == Date.class || type == Calendar.class) {
+            switch (sqlType) {
+            case Types.DATE:
+                temporalType = TemporalType.DATE;
+                break;
+            case Types.TIME:
+                temporalType = TemporalType.TIME;
+                break;
+            case Types.TIMESTAMP:
+                temporalType = TemporalType.TIMESTAMP;
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
     }
     
