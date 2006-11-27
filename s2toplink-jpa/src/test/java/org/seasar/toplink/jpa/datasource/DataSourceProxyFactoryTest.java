@@ -172,12 +172,12 @@ public class DataSourceProxyFactoryTest extends S2TestCase {
      * @throws Exception 
      */
     public void testGetObjectInstance() throws Exception {
-        
-        Object obj = factory.getObjectInstance(null, new TestName(), null, null);
+        Name name = new TestName();
+        Object obj = factory.getObjectInstance(null, name, null, null);
         assertEquals(DataSourceProxy.class, obj.getClass());
         Field field = obj.getClass().getDeclaredField("name");
         field.setAccessible(true);
-        assertEquals("dataSource", field.get(obj).toString());
+        assertEquals(name.toString(), field.get(obj));
     }
 
 }
