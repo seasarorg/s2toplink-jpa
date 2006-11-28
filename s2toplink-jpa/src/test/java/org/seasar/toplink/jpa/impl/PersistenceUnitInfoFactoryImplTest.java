@@ -28,6 +28,7 @@ import oracle.toplink.essentials.internal.ejb.cmp3.jdbc.base.DataSourceImpl;
 
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
+import org.seasar.toplink.jpa.entity.Customer;
 
 /**
  * @author Hidenoshin Yoshida
@@ -41,7 +42,7 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
     
     private static final String MAPPING_FILE_NAME = "org/seasar/toplink/jpa/entity/CustomerOrm.xml";
     
-    private static final String CLASS_NAME = "org.seasar.toplink.jpa.entity.Customer";
+    private static final String CLASS_NAME = Customer.class.getName();
     
     /* (non-Javadoc)
      * @see junit.framework.TestCase#setUp()
