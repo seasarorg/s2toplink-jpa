@@ -59,7 +59,7 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
         PersistenceUnitInfoFactoryImpl impl = PersistenceUnitInfoFactoryImpl.class.cast(unitInfoFactory);
         impl.init();
         Map<String, SEPersistenceUnitInfo> map = impl.sePersistenceUnitInfoMap;
-        assertEquals(1, map.size());
+        assertEquals(4, map.size());
         SEPersistenceUnitInfo info = map.get("persistenceUnit");
         assertEquals("persistenceUnit", info.getPersistenceUnitName());
     }
