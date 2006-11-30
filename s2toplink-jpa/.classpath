@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" output="build/test-classes" path="src/test/java"/>
-	<classpathentry kind="src" output="build/test-classes" path="src/test/resources"/>
+	<classpathentry output="build/test-classes" kind="src" path="src/test/java"/>
+	<classpathentry output="build/test-classes" kind="src" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
-	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials-agent.jar" sourcepath="libsrc/glassfish-persistence-v2-b22-src.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials.jar" sourcepath="libsrc/glassfish-persistence-v2-b22-src.zip"/>
+	<classpathentry exported="true" sourcepath="libsrc/glassfish-persistence-v2-b26-src.zip" kind="lib" path="lib/toplink-essentials-agent.jar"/>
+	<classpathentry exported="true" sourcepath="libsrc/glassfish-persistence-v2-b26-src.zip" kind="lib" path="lib/toplink-essentials.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

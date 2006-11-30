@@ -65,7 +65,7 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
     public ClassLoader getNewTempClassLoader() {
 
         if (tempClassNameSet == null) {
-            tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this);
+            tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this, getClassLoader());
         }
 //        URL[] urls = null;
 //        if (getClassLoader() instanceof URLClassLoader) {
