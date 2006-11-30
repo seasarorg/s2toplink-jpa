@@ -16,10 +16,12 @@
 package org.seasar.toplink.jpa.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -31,8 +33,6 @@ import javax.persistence.Version;
 @Entity
 public class Customer {
     
-    @Id
-    @GeneratedValue
     private Integer id;
     
     private String name;
@@ -43,13 +43,13 @@ public class Customer {
     
     private Integer age;
     
-    @Temporal(TemporalType.DATE)
     private Date birthday;
     
     private Sex sex;
     
-    @Version
     private Integer version;
+    
+    private Set<Product> products;
 
     public void setId(Integer id) {
         this.id = id;
@@ -75,6 +75,7 @@ public class Customer {
         this.age = age;
     }
 
+    @Temporal(TemporalType.DATE)
     public Date getBirthday() {
         return birthday;
     }
@@ -83,6 +84,8 @@ public class Customer {
         this.birthday = birthday;
     }
 
+    @Id
+    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -111,8 +114,18 @@ public class Customer {
         this.sex = sex;
     }
 
+    @Version
     public Integer getVersion() {
         return version;
+    }
+
+    @OneToMany(mappedBy = "customer")
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 
 }

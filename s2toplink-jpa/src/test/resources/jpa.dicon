@@ -5,15 +5,15 @@
 	<include path="javaee5.dicon"/>
 	<include path="s2toplink-jpa.dicon"/>
 	
+	<!--
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="javaSECMPInitializer">
 			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa.dicon", #{})
 		</property>
 	</component>
-
-	<!--
-	<component class="org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProvider"/>
 	-->
+
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProvider"/>
 	
 	<component class="oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider"/>
 	

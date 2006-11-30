@@ -73,9 +73,9 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         return super.createTempLoader(col);
     }
 
-    @Override
-    public ClassLoader createTempLoader(Collection col, boolean shouldOverrideLoadClassForCollectionMembers) {
-        return super.createTempLoader(col, shouldOverrideLoadClassForCollectionMembers);
-    }
+//    @Override
+//    public ClassLoader createTempLoader(Collection col, boolean shouldOverrideLoadClassForCollectionMembers) {
+//        return super.createTempLoader(col, shouldOverrideLoadClassForCollectionMembers);
+//    }
    
 }

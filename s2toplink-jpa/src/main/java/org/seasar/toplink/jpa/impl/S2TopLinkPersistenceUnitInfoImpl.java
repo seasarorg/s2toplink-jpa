@@ -15,15 +15,14 @@
  */
 package org.seasar.toplink.jpa.impl;
 
-import java.util.Set;
-
 import javax.persistence.spi.ClassTransformer;
 import javax.sql.DataSource;
 
-import oracle.toplink.essentials.ejb.cmp3.persistence.PersistenceUnitProcessor;
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.jdbc.base.DataSourceImpl;
 
+import org.seasar.framework.container.annotation.tiger.Binding;
+import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.toplink.jpa.JpaInstrumentation;
 import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 import org.seasar.toplink.jpa.datasource.DataSourceProxy;
@@ -35,19 +34,19 @@ import org.seasar.toplink.jpa.datasource.DataSourceProxy;
 public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         implements S2TopLinkPersistenceUnitInfo {
 
-    protected Set<String> tempClassNameSet;
+//    protected Set<String> tempClassNameSet;
 
     protected JpaInstrumentation jpaInstrumentation;
     
-    protected S2JavaSECMPInitializer javaSECMPInitializer;
+//    protected S2JavaSECMPInitializer javaSECMPInitializer;
 
     public void setJpaInstrumentation(JpaInstrumentation jpaInstrumentation) {
         this.jpaInstrumentation = jpaInstrumentation;
     }
 
-    public void setJavaSECMPInitializer(S2JavaSECMPInitializer javaSECMPInitializer) {
-        this.javaSECMPInitializer = javaSECMPInitializer;
-    }
+//    public void setJavaSECMPInitializer(S2JavaSECMPInitializer javaSECMPInitializer) {
+//        this.javaSECMPInitializer = javaSECMPInitializer;
+//    }
 
     @Override
     public void addTransformer(ClassTransformer transformer) {
@@ -56,17 +55,17 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         }
     }
 
-    @Override
-    public ClassLoader getClassLoader() {
-        return Thread.currentThread().getContextClassLoader();
-    }
+//    @Override
+//    public ClassLoader getClassLoader() {
+//        return Thread.currentThread().getContextClassLoader();
+//    }
 
-    @Override
-    public ClassLoader getNewTempClassLoader() {
-
-        if (tempClassNameSet == null) {
-            tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this, getClassLoader());
-        }
+//    @Override
+//    public ClassLoader getNewTempClassLoader() {
+//
+//        if (tempClassNameSet == null) {
+//            tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this, getClassLoader());
+//        }
 //        URL[] urls = null;
 //        if (getClassLoader() instanceof URLClassLoader) {
 //            urls = URLClassLoader.class.cast(getClassLoader()).getURLs();
@@ -80,18 +79,19 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
 //            }
 //            urls = urlList.toArray(new URL[urlList.size()]);
 //        }
-        return javaSECMPInitializer.createTempLoader(tempClassNameSet);
-    }
+//        return javaSECMPInitializer.createTempLoader(tempClassNameSet);
+//    }
+
+//    @Override
+//    public void setClassLoader(ClassLoader loader) {
+//    }
+//
+//    @Override
+//    public void setNewTempClassLoader(ClassLoader loader) {
+//    }
 
     @Override
-    public void setClassLoader(ClassLoader loader) {
-    }
-
-    @Override
-    public void setNewTempClassLoader(ClassLoader loader) {
-    }
-
-    @Override
+    @Binding(bindingType = BindingType.NONE)
     public void setJtaDataSource(DataSource jtaDataSource) {
         if (jtaDataSource != null && jtaDataSource instanceof DataSourceImpl) {
             String jtaDsName = DataSourceImpl.class.cast(jtaDataSource)
@@ -102,6 +102,7 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
     }
 
     @Override
+    @Binding(bindingType = BindingType.NONE)
     public void setNonJtaDataSource(DataSource nonJtaDataSource) {
         if (nonJtaDataSource != null
                 && nonJtaDataSource instanceof DataSourceImpl) {
