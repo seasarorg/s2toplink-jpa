@@ -18,12 +18,16 @@ package org.seasar.toplink.jpa.impl;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.ProtectionDomain;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.spi.ClassTransformer;
@@ -33,6 +37,7 @@ import oracle.toplink.essentials.internal.weaving.TopLinkWeaver;
 
 import org.seasar.framework.exception.NoSuchMethodRuntimeException;
 import org.seasar.framework.util.ClassUtil;
+import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.toplink.jpa.JpaInstrumentation;
 
 /**
@@ -40,13 +45,17 @@ import org.seasar.toplink.jpa.JpaInstrumentation;
  *
  */
 public class JpaInstrumentationImpl implements JpaInstrumentation {
-
+    
     public static final String DEFINE_CLASS_METHOD_NAME = "defineClass";
+    
+    public static final String FIND_RESOURCE_METHOD_NAME = "findResource";
 
     // static fields
     protected static final ProtectionDomain protectionDomain;
 
     protected static Method defineClassMethod;
+    
+    protected static Method findResourceMethod;
 
     // static initializer
     static {
@@ -76,6 +85,23 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
                 return null;
             }
         });
+
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+            public Object run() {
+                final Class[] paramTypes = new Class[] {String.class};
+                try {
+                    final Class loader = ClassUtil.forName(ClassLoader.class
+                            .getName());
+                    findResourceMethod = loader.getDeclaredMethod(
+                            FIND_RESOURCE_METHOD_NAME, paramTypes);
+                    findResourceMethod.setAccessible(true);
+                } catch (final NoSuchMethodException e) {
+                    throw new NoSuchMethodRuntimeException(ClassLoader.class,
+                            FIND_RESOURCE_METHOD_NAME, paramTypes, e);
+                }
+                return null;
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -87,17 +113,18 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
                     .getClassDetailsMap();
             for (String className : map.keySet()) {
                 try {
-                    byte[] temp = getClassBytes(className, classLoader);
-                    byte[] bytes = classTransformer.transform(classLoader,
+                    ResourceData data = getResourceData(classLoader, className);
+                    byte[] temp = getClassBytes(data);
+                    byte[] bytes = classTransformer.transform(data.getLoader(),
                             className, null, protectionDomain, temp);
                     if (bytes != null) {
                         defineClassMethod.invoke(
-                                classLoader,
-                                className.replace('/', '.'),
-                                bytes,
-                                0,
-                                bytes.length,
-                                protectionDomain);
+                            data.getLoader(),
+                            className.replace('/', '.'),
+                            bytes,
+                            0,
+                            bytes.length,
+                            protectionDomain);
                     }
                 } catch (IllegalArgumentException e) {
                     throw new RuntimeException(e);
@@ -115,13 +142,13 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         }
     }
 
-    private byte[] getClassBytes(String className, ClassLoader loader)
+    private byte[] getClassBytes(ResourceData data)
             throws IOException {
         ByteArrayOutputStream out = null;
-        BufferedInputStream in = null;
+        InputStream in = null;
         try {
             out = new ByteArrayOutputStream();
-            in = new BufferedInputStream(loader.getResourceAsStream(className + ".class"));
+            in = data.getIn();
             int i;
             while ((i = in.read()) != -1) {
                 out.write(i);
@@ -142,6 +169,69 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
                 }
             }
         }
+    }
+    
+    private ResourceData getResourceData(ClassLoader loader, String className) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException {
+        Object ret = null;
+        className = className + ".class";
+        for (ClassLoader cl : getClassLoaderList(loader)) {
+            ret = findResourceMethod.invoke(cl, className);
+            if (ret != null) {
+                URL url = URL.class.cast(ret);
+                ResourceData data = new ResourceData();
+                data.setLoader(cl);
+                data.setIn(new BufferedInputStream(url.openStream()));
+                return data;
+            }
+        }
+        return null;
+    }
+    
+    private List<ClassLoader> getClassLoaderList(ClassLoader loader) {
+        LinkedList<ClassLoader> list = CollectionsUtil.newLinkedList();
+        list.add(loader);
+        while (loader.getParent() != null && loader.getParent() != loader) {
+            list.addFirst(loader.getParent());
+            loader = loader.getParent();
+        }
+        return list;
+    }
+    
+    private class ResourceData {
+        
+        private InputStream in;
+        
+        private ClassLoader loader;
+
+        /**
+         * @return in
+         */
+        public InputStream getIn() {
+            return in;
+        }
+
+        /**
+         * @param in 設定する in
+         */
+        public void setIn(InputStream in) {
+            this.in = in;
+        }
+
+        /**
+         * @return loader
+         */
+        public ClassLoader getLoader() {
+            return loader;
+        }
+
+        /**
+         * @param loader 設定する loader
+         */
+        public void setLoader(ClassLoader loader) {
+            this.loader = loader;
+        }
+        
+        
     }
 
 }
