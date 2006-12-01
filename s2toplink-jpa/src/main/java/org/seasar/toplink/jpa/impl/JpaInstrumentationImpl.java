@@ -126,8 +126,6 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
                             bytes.length,
                             protectionDomain);
                     }
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(e);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 } catch (InvocationTargetException e) {
@@ -171,7 +169,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         }
     }
     
-    private ResourceData getResourceData(ClassLoader loader, String className) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException {
+    private ResourceData getResourceData(ClassLoader loader, String className) throws IllegalAccessException, InvocationTargetException, IOException {
         Object ret = null;
         className = className + ".class";
         for (ClassLoader cl : getClassLoaderList(loader)) {
