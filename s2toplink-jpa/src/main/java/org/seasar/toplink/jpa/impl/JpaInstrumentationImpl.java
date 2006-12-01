@@ -35,7 +35,11 @@ import javax.persistence.spi.ClassTransformer;
 import oracle.toplink.essentials.internal.weaving.ClassDetails;
 import oracle.toplink.essentials.internal.weaving.TopLinkWeaver;
 
+import org.seasar.framework.exception.IORuntimeException;
+import org.seasar.framework.exception.IllegalAccessRuntimeException;
+import org.seasar.framework.exception.InvocationTargetRuntimeException;
 import org.seasar.framework.exception.NoSuchMethodRuntimeException;
+import org.seasar.framework.util.ClassLoaderUtil;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.toplink.jpa.JpaInstrumentation;
@@ -113,10 +117,17 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
                     .getClassDetailsMap();
             for (String className : map.keySet()) {
                 try {
-                    ResourceData data = getResourceData(classLoader, className);
+                    if (ClassLoaderUtil.findLoadedClass(classLoader, className.replace('/', '.')) != null) {
+                        return;
+                    }
+                } catch (ClassNotFoundException e) {
+//                    throw new ClassNotFoundRuntimeException(e);
+                }
+                ResourceData data = getResourceData(classLoader, className);
+                try {
                     byte[] temp = getClassBytes(data);
                     byte[] bytes = classTransformer.transform(data.getLoader(),
-                            className, null, protectionDomain, temp);
+                                className, null, protectionDomain, temp);
                     if (bytes != null) {
                         defineClassMethod.invoke(
                             data.getLoader(),
@@ -127,13 +138,13 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
                             protectionDomain);
                     }
                 } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalAccessRuntimeException(data.getLoader().getClass(), e);
                 } catch (InvocationTargetException e) {
-                    throw new RuntimeException(e);
+                    throw new InvocationTargetRuntimeException(data.getLoader().getClass(), e);
                 } catch (IllegalClassFormatException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw new IORuntimeException(e);
                 }
 
             }
@@ -169,17 +180,27 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         }
     }
     
-    private ResourceData getResourceData(ClassLoader loader, String className) throws IllegalAccessException, InvocationTargetException, IOException {
+    private ResourceData getResourceData(ClassLoader loader, String className) {
         Object ret = null;
         className = className + ".class";
         for (ClassLoader cl : getClassLoaderList(loader)) {
-            ret = findResourceMethod.invoke(cl, className);
-            if (ret != null) {
-                URL url = URL.class.cast(ret);
-                ResourceData data = new ResourceData();
-                data.setLoader(cl);
-                data.setIn(new BufferedInputStream(url.openStream()));
-                return data;
+            try {
+                ret = findResourceMethod.invoke(cl, className);
+                if (ret != null) {
+                    URL url = URL.class.cast(ret);
+                    ResourceData data = new ResourceData();
+                    data.setLoader(cl);
+                    try {
+                        data.setIn(new BufferedInputStream(url.openStream()));
+                    } catch (IOException e) {
+                        throw new IORuntimeException(e);
+                    }
+                    return data;
+                }
+            } catch (IllegalAccessException e) {
+                throw new IllegalAccessRuntimeException(cl.getClass(), e);
+            } catch (InvocationTargetException e) {
+                throw new InvocationTargetRuntimeException(cl.getClass(), e);
             }
         }
         return null;
