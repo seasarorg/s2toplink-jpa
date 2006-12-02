@@ -21,7 +21,6 @@ import java.util.Map;
 
 import oracle.toplink.essentials.descriptors.ClassDescriptor;
 import oracle.toplink.essentials.descriptors.InheritancePolicy;
-import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.threetier.ServerSession;
 
@@ -48,8 +47,8 @@ public class TopLinkEntityDesc implements EntityDesc {
     private List<String> tableNames;
     
     @SuppressWarnings("unchecked")
-    public TopLinkEntityDesc(Class<?> entityClass, EntityManagerFactoryImpl entityManagerFactoryImpl) {
-        this.serverSession = entityManagerFactoryImpl.getServerSession();
+    public TopLinkEntityDesc(Class<?> entityClass, ServerSession serverSession) {
+        this.serverSession = serverSession;
         this.classDescriptor = serverSession.getClassDescriptor(entityClass);
         List<DatabaseMapping> mappings = (List<DatabaseMapping>) classDescriptor.getMappings();
         int size = mappings.size();

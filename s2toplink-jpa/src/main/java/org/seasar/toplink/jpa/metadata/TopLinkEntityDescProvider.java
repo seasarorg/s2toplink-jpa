@@ -18,6 +18,7 @@ package org.seasar.toplink.jpa.metadata;
 import javax.persistence.EntityManagerFactory;
 
 import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
+import oracle.toplink.essentials.threetier.ServerSession;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
@@ -49,7 +50,11 @@ public class TopLinkEntityDescProvider implements EntityDescProvider {
     }
 
     public EntityDesc createEntityDesc(Class<?> entityClass) {
-        return new TopLinkEntityDesc(entityClass, entityManagerFactoryImpl);
+        ServerSession serverSession = entityManagerFactoryImpl.getServerSession();
+        if (serverSession.getDescriptor(entityClass) != null) {
+            return new TopLinkEntityDesc(entityClass, serverSession);
+        }
+        return null;
     }
 
 }
