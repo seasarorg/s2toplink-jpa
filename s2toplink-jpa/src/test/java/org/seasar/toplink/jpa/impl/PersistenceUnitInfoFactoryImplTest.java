@@ -82,10 +82,9 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
         assertEquals(CLASS_NAME, classList.get(0));
         assertTrue(info.excludeUnlistedClasses());
         Properties prop = info.getProperties();
-        assertEquals("org.seasar.toplink.jpa.platform.server.S2ServerPlatform", prop.getProperty("toplink.target-server"));
+        assertEquals("org.seasar.toplink.jpa.platform.server.S2ServerPlatformForTest", prop.getProperty("toplink.target-server"));
         assertEquals("org.seasar.toplink.jpa.platform.database.HSQLDBPlatform", prop.getProperty("toplink.target-database"));
         assertEquals("FINE", prop.getProperty("toplink.logging.level"));
-        assertEquals("org.seasar.toplink.jpa.platform.server.S2ServerPlatform", prop.getProperty("toplink.target-server"));
     }
 
     /**

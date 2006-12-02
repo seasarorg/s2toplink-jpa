@@ -34,7 +34,7 @@ public class DataSourceProxy implements DataSource {
 	private String name;
 
 	public DataSourceProxy(String name) {
-		this.name = name;
+		this.name = JndiResourceLocator.resolveName(name);
 	}
 
 	public Connection getConnection() throws SQLException {
@@ -65,7 +65,7 @@ public class DataSourceProxy implements DataSource {
 	
 	protected DataSource getDataSource() {
 		S2Container container = SingletonS2ContainerFactory.getContainer();
-		return (DataSource) container.getComponent(JndiResourceLocator.resolveName(name));
+		return DataSource.class.cast(container.getComponent(name));
 		
 	}
 
