@@ -35,6 +35,7 @@ import javax.persistence.spi.ClassTransformer;
 import oracle.toplink.essentials.internal.weaving.ClassDetails;
 import oracle.toplink.essentials.internal.weaving.TopLinkWeaver;
 
+import org.seasar.framework.exception.ClassNotFoundRuntimeException;
 import org.seasar.framework.exception.IORuntimeException;
 import org.seasar.framework.exception.IllegalAccessRuntimeException;
 import org.seasar.framework.exception.InvocationTargetRuntimeException;
@@ -118,12 +119,15 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
             for (String className : map.keySet()) {
                 try {
                     if (ClassLoaderUtil.findLoadedClass(classLoader, className.replace('/', '.')) != null) {
-                        return;
+                        continue;
                     }
                 } catch (ClassNotFoundException e) {
-//                    throw new ClassNotFoundRuntimeException(e);
+                    throw new ClassNotFoundRuntimeException(e);
                 }
                 ResourceData data = getResourceData(classLoader, className);
+                if (data == null) {
+                    continue;
+                }
                 try {
                     byte[] temp = getClassBytes(data);
                     byte[] bytes = classTransformer.transform(data.getLoader(),
