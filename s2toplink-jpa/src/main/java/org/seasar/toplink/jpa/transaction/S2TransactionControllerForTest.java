@@ -19,15 +19,17 @@ import javax.transaction.TransactionManager;
 
 import oracle.toplink.essentials.transaction.JTATransactionController;
 
+import org.seasar.extension.jta.SingletonTransactionManagerProxy;
+
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2TransactionControllerForTest extends JTATransactionController {
 
     @Override
     protected TransactionManager acquireTransactionManager() throws Exception {
-        return new TransactionManagerProxy();
+        return new SingletonTransactionManagerProxy();
     }
 
 }

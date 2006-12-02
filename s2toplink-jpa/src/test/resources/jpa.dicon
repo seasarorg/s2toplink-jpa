@@ -21,11 +21,9 @@
 	<component class="org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider"/>
 	<component class="org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider"/>
 
-	<!-- for test -->	
-	<component name="dataSourceProxy" class="org.seasar.toplink.jpa.datasource.DataSourceProxy">
-		<arg>"jdbc.dataSource"</arg>
-	</component>
-	
+	<!-- for test -->
+	<component name="dataSourceProxy" class="org.seasar.extension.datasource.impl.SingletonDataSourceProxy"/>
+
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
 	</component>

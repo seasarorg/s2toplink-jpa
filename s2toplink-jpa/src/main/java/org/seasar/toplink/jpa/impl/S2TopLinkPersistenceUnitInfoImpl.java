@@ -21,32 +21,33 @@ import javax.sql.DataSource;
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.jdbc.base.DataSourceImpl;
 
+import org.seasar.extension.datasource.impl.SingletonDataSourceProxy;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.toplink.jpa.JpaInstrumentation;
 import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
-import org.seasar.toplink.jpa.datasource.DataSourceProxy;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         implements S2TopLinkPersistenceUnitInfo {
 
-//    protected Set<String> tempClassNameSet;
+    // protected Set<String> tempClassNameSet;
 
     protected JpaInstrumentation jpaInstrumentation;
-    
-//    protected S2JavaSECMPInitializer javaSECMPInitializer;
+
+    // protected S2JavaSECMPInitializer javaSECMPInitializer;
 
     public void setJpaInstrumentation(JpaInstrumentation jpaInstrumentation) {
         this.jpaInstrumentation = jpaInstrumentation;
     }
 
-//    public void setJavaSECMPInitializer(S2JavaSECMPInitializer javaSECMPInitializer) {
-//        this.javaSECMPInitializer = javaSECMPInitializer;
-//    }
+    // public void setJavaSECMPInitializer(S2JavaSECMPInitializer
+    // javaSECMPInitializer) {
+    // this.javaSECMPInitializer = javaSECMPInitializer;
+    // }
 
     @Override
     public void addTransformer(ClassTransformer transformer) {
@@ -55,40 +56,41 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         }
     }
 
-//    @Override
-//    public ClassLoader getClassLoader() {
-//        return Thread.currentThread().getContextClassLoader();
-//    }
+    // @Override
+    // public ClassLoader getClassLoader() {
+    // return Thread.currentThread().getContextClassLoader();
+    // }
 
-//    @Override
-//    public ClassLoader getNewTempClassLoader() {
-//
-//        if (tempClassNameSet == null) {
-//            tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this, getClassLoader());
-//        }
-//        URL[] urls = null;
-//        if (getClassLoader() instanceof URLClassLoader) {
-//            urls = URLClassLoader.class.cast(getClassLoader()).getURLs();
-//        } else {
-//            List<URL> urlList = new ArrayList<URL>();
-//            if (getPersistenceUnitRootUrl() != null) {
-//                urlList.add(getPersistenceUnitRootUrl());
-//            }
-//            if (getJarFileUrls() != null) {
-//                urlList.addAll(getJarFileUrls());
-//            }
-//            urls = urlList.toArray(new URL[urlList.size()]);
-//        }
-//        return javaSECMPInitializer.createTempLoader(tempClassNameSet);
-//    }
+    // @Override
+    // public ClassLoader getNewTempClassLoader() {
+    //
+    // if (tempClassNameSet == null) {
+    // tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this,
+    // getClassLoader());
+    // }
+    // URL[] urls = null;
+    // if (getClassLoader() instanceof URLClassLoader) {
+    // urls = URLClassLoader.class.cast(getClassLoader()).getURLs();
+    // } else {
+    // List<URL> urlList = new ArrayList<URL>();
+    // if (getPersistenceUnitRootUrl() != null) {
+    // urlList.add(getPersistenceUnitRootUrl());
+    // }
+    // if (getJarFileUrls() != null) {
+    // urlList.addAll(getJarFileUrls());
+    // }
+    // urls = urlList.toArray(new URL[urlList.size()]);
+    // }
+    // return javaSECMPInitializer.createTempLoader(tempClassNameSet);
+    // }
 
-//    @Override
-//    public void setClassLoader(ClassLoader loader) {
-//    }
-//
-//    @Override
-//    public void setNewTempClassLoader(ClassLoader loader) {
-//    }
+    // @Override
+    // public void setClassLoader(ClassLoader loader) {
+    // }
+    //
+    // @Override
+    // public void setNewTempClassLoader(ClassLoader loader) {
+    // }
 
     @Override
     @Binding(bindingType = BindingType.NONE)
@@ -96,7 +98,7 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         if (jtaDataSource != null && jtaDataSource instanceof DataSourceImpl) {
             String jtaDsName = DataSourceImpl.class.cast(jtaDataSource)
                     .getName();
-            jtaDataSource = new DataSourceProxy(jtaDsName);
+            jtaDataSource = new SingletonDataSourceProxy(jtaDsName);
         }
         super.setJtaDataSource(jtaDataSource);
     }
@@ -108,7 +110,7 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
                 && nonJtaDataSource instanceof DataSourceImpl) {
             String nonJtaDsName = DataSourceImpl.class.cast(nonJtaDataSource)
                     .getName();
-            nonJtaDataSource = new DataSourceProxy(nonJtaDsName);
+            nonJtaDataSource = new SingletonDataSourceProxy(nonJtaDsName);
         }
         super.setNonJtaDataSource(nonJtaDataSource);
     }
