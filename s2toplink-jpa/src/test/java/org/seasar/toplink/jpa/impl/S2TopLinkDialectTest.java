@@ -28,7 +28,9 @@ import org.seasar.framework.jpa.Dialect;
  */
 public class S2TopLinkDialectTest extends S2TestCase {
     
-    private EntityManager em;
+    private EntityManager entityManager;
+    
+    private EntityManager mockEntityManager;
 
     private Dialect dialect;
     
@@ -40,9 +42,11 @@ public class S2TopLinkDialectTest extends S2TestCase {
 
     public void testGetConnectionTx() {
         
-        Connection con = dialect.getConnection(em);
-        System.out.println(con);
+        Connection con = dialect.getConnection(entityManager);
+        assertNotNull(con);
+        con = dialect.getConnection(mockEntityManager);
+        assertNull(con);
         
     }
-
+    
 }
