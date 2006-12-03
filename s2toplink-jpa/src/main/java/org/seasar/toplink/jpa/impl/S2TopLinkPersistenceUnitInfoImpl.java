@@ -15,15 +15,19 @@
  */
 package org.seasar.toplink.jpa.impl;
 
+import java.util.Set;
+
 import javax.persistence.spi.ClassTransformer;
 import javax.sql.DataSource;
 
+import oracle.toplink.essentials.ejb.cmp3.persistence.PersistenceUnitProcessor;
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.jdbc.base.DataSourceImpl;
 
 import org.seasar.extension.datasource.impl.SingletonDataSourceProxy;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
+import org.seasar.framework.convention.NamingConvention;
 import org.seasar.toplink.jpa.JpaInstrumentation;
 import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 
@@ -34,20 +38,19 @@ import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         implements S2TopLinkPersistenceUnitInfo {
 
-    // protected Set<String> tempClassNameSet;
+    protected Set<String> tempClassNameSet;
 
     protected JpaInstrumentation jpaInstrumentation;
-
-    // protected S2JavaSECMPInitializer javaSECMPInitializer;
+    
+    protected NamingConvention namingConvention;
 
     public void setJpaInstrumentation(JpaInstrumentation jpaInstrumentation) {
         this.jpaInstrumentation = jpaInstrumentation;
     }
 
-    // public void setJavaSECMPInitializer(S2JavaSECMPInitializer
-    // javaSECMPInitializer) {
-    // this.javaSECMPInitializer = javaSECMPInitializer;
-    // }
+    public void setNamingConvention(NamingConvention namingConvention) {
+        this.namingConvention = namingConvention;
+    }
 
     @Override
     public void addTransformer(ClassTransformer transformer) {
@@ -56,41 +59,27 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         }
     }
 
-    // @Override
-    // public ClassLoader getClassLoader() {
-    // return Thread.currentThread().getContextClassLoader();
-    // }
+    @Override
+    public ClassLoader getClassLoader() {
+        if (super.getClassLoader() == null) {
+            setClassLoader(Thread.currentThread().getContextClassLoader());
+        }
+        return super.getClassLoader();
+    }
 
-    // @Override
-    // public ClassLoader getNewTempClassLoader() {
-    //
-    // if (tempClassNameSet == null) {
-    // tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this,
-    // getClassLoader());
-    // }
-    // URL[] urls = null;
-    // if (getClassLoader() instanceof URLClassLoader) {
-    // urls = URLClassLoader.class.cast(getClassLoader()).getURLs();
-    // } else {
-    // List<URL> urlList = new ArrayList<URL>();
-    // if (getPersistenceUnitRootUrl() != null) {
-    // urlList.add(getPersistenceUnitRootUrl());
-    // }
-    // if (getJarFileUrls() != null) {
-    // urlList.addAll(getJarFileUrls());
-    // }
-    // urls = urlList.toArray(new URL[urlList.size()]);
-    // }
-    // return javaSECMPInitializer.createTempLoader(tempClassNameSet);
-    // }
-
-    // @Override
-    // public void setClassLoader(ClassLoader loader) {
-    // }
-    //
-    // @Override
-    // public void setNewTempClassLoader(ClassLoader loader) {
-    // }
+    @Override
+    public ClassLoader getNewTempClassLoader() {
+        if (super.getNewTempClassLoader() == null) {
+            if (!excludeUnlistedClasses() && tempClassNameSet == null) {
+                tempClassNameSet = PersistenceUnitProcessor.buildClassSet(this,
+                        getClassLoader());
+            }
+            S2TopLinkTempClassLoader loader = new S2TopLinkTempClassLoader(getClassLoader(), namingConvention);
+            loader.setTempClassNameSet(tempClassNameSet);
+            setNewTempClassLoader(loader);
+        }
+        return super.getNewTempClassLoader();
+    }
 
     @Override
     @Binding(bindingType = BindingType.NONE)
