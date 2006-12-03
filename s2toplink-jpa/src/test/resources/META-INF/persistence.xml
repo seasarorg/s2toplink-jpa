@@ -22,6 +22,10 @@
 
 			<property name="toplink.target-database" value="org.seasar.toplink.jpa.platform.database.HSQLDBPlatform"/>
 			<property name="toplink.logging.level" value="FINE"/>
+
+        	<!-- for test -->
+        	<property name="toplink.cache.shared.default" value="false"/>
+
 			<!-- 
 			<property name="toplink.ddl-generation" value="create-tables"/>
 			<property name="toplink.ddl-generation.output-mode" value="both"/>
