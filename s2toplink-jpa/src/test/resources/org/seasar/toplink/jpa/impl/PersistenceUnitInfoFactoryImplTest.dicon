@@ -22,10 +22,7 @@
 	
 	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector">
 		<property name="classLoader">
-			<component class="org.seasar.framework.container.hotdeploy.HotdeployClassLoader">
-				<arg>@java.lang.Thread@currentThread().contextClassLoader</arg>
-				<arg>convention.namingConvention</arg>
-			</component>
+			<component class="org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader"/>
 		</property>
 	</component>
 

@@ -4,4 +4,11 @@
 <components>
 	<include path="jpa.dicon"/>
 	
+	<component name="mockEntityManager"
+		class="javax.persistence.EntityManager">
+		<aspect>
+			<component class="org.seasar.framework.aop.interceptors.MockInterceptor"/>
+		</aspect>
+	</component>
+	
 </components>
