@@ -26,7 +26,7 @@ import org.seasar.framework.jpa.PersistenceUnitProvider;
  * @author Hidenoshin Yoshida
  *
  */
-public class S2TopLinkContainerPersistenceUnitProviderTest extends S2TestCase {
+public class S2TopLinkPersistenceUnitProviderTest extends S2TestCase {
     
     private PersistenceUnitProvider provider;
 
@@ -35,13 +35,14 @@ public class S2TopLinkContainerPersistenceUnitProviderTest extends S2TestCase {
      */
     protected void setUp() throws Exception {
         super.setUp();
-        include(S2TopLinkContainerPersistenceUnitProviderTest.class.getSimpleName() + ".dicon");
+        include("jpa.dicon");
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProvider#createEntityManagerFactory(java.lang.String)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider#createEntityManagerFactory(java.lang.String)} のためのテスト・メソッド。
      */
     public void testCreateEntityManagerFactory() {
+        assertTrue(provider instanceof S2TopLinkPersistenceUnitProvider);
         EntityManagerFactory factory = provider.createEntityManagerFactory("persistenceUnit");
         assertNotNull(factory);
         assertTrue(factory instanceof EntityManagerFactoryImpl);

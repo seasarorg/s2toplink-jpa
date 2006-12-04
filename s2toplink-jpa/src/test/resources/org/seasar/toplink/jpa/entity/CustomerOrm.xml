@@ -8,5 +8,12 @@
 	<named-native-query name="testSql">
 		<query>SELECT * FROM CUSTOMER</query>
 	</named-native-query>
+	
+	<named-native-query name="countCustomer" result-set-mapping="count">
+		<query>SELECT COUNT(*) AS CNT FROM CUSTOMER</query>
+	</named-native-query>
+	<sql-result-set-mapping name="count">	
+		<column-result name="CNT"/>
+	</sql-result-set-mapping>
     
 </entity-mappings>
