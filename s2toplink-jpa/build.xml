@@ -6,20 +6,19 @@
 			<zipfileset prefix="s2toplink-jpa" dir=".">
 				<exclude name="**/build/**"/>
 				<exclude name="**/target/**"/>
-				<exclude name="**/testdb/**"/>
-				<exclude name="createDDL.jdbc"/>
-				<exclude name="dropDDL.jdbc"/>
-				<exclude name="derby.log"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/lib" dir="target">
 				<include name="s2toplink-jpa-${ver}.jar"/>
 				<include name="s2toplink-jpa-${ver}-sources.jar"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/resources" dir="src/test/resources">
+				<include name="convention.dicon"/>
+				<include name="env.txt"/>
 				<include name="jdbc.dicon"/>
-				<include name="s2toplink-jpa.dicon"/>
 				<include name="jndi.properties"/>
 				<include name="jpa.dicon"/>
+				<include name="log4j.properties"/>
+				<include name="s2toplink-jpa.dicon"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/resources/META-INF" dir="src/test/resources/META-INF">
 				<include name="persistence.xml"/>
