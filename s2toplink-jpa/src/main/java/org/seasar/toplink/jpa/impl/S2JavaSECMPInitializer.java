@@ -15,7 +15,6 @@
  */
 package org.seasar.toplink.jpa.impl;
 
-import java.util.Collection;
 import java.util.Map;
 
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
@@ -68,14 +67,4 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         return super.callPredeploy(persistenceUnitInfo, m);
     }
 
-    @Override
-    public ClassLoader createTempLoader(Collection col) {
-        return super.createTempLoader(col);
-    }
-
-//    @Override
-//    public ClassLoader createTempLoader(Collection col, boolean shouldOverrideLoadClassForCollectionMembers) {
-//        return super.createTempLoader(col, shouldOverrideLoadClassForCollectionMembers);
-//    }
-   
 }
