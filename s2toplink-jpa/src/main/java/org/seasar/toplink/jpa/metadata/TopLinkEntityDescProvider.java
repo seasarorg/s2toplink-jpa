@@ -32,11 +32,15 @@ import org.seasar.framework.jpa.metadata.EntityDescProvider;
  */
 public class TopLinkEntityDescProvider implements EntityDescProvider {
     
-    protected EntityManagerFactoryImpl entityManagerFactoryImpl;
+    protected EntityManagerFactoryImpl emf;
+    
+    protected ServerSession serverSession;
+    
+    
     
     @SuppressWarnings("unchecked")
     public TopLinkEntityDescProvider(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactoryImpl = EntityManagerFactoryImpl.class.cast(entityManagerFactory);
+        this.emf = EntityManagerFactoryImpl.class.cast(entityManagerFactory);
     }
 
     @InitMethod
@@ -50,7 +54,9 @@ public class TopLinkEntityDescProvider implements EntityDescProvider {
     }
 
     public EntityDesc createEntityDesc(Class<?> entityClass) {
-        ServerSession serverSession = entityManagerFactoryImpl.getServerSession();
+        if (serverSession == null) {
+            serverSession = emf.getServerSession();
+        }
         if (serverSession.getDescriptor(entityClass) != null) {
             return new TopLinkEntityDesc(entityClass, serverSession);
         }
