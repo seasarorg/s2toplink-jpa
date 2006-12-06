@@ -18,6 +18,8 @@ package org.seasar.toplink.jpa.metadata;
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
+import org.seasar.toplink.jpa.entity.Customer;
+import org.seasar.toplink.jpa.entity.Product;
 
 /**
  * @author Hidenoshin Yoshida
@@ -41,6 +43,10 @@ public class TopLinkEntityDescProviderTest extends S2TestCase {
     public void testCreateEntityDesc() {
         EntityDesc desc = provider.createEntityDesc(Integer.class);
         assertNull(desc);
+        desc = provider.createEntityDesc(Customer.class);
+        assertNotNull(desc);
+        desc = provider.createEntityDesc(Product.class);
+        assertNotNull(desc);
     }
 
 }

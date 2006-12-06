@@ -1,0 +1,176 @@
+/*
+ * Copyright 2004-2006 the Seasar Foundation and the Others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+package org.seasar.toplink.jpa.metadata;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.EntityManagerFactory;
+
+import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
+import oracle.toplink.essentials.threetier.ServerSession;
+
+import org.seasar.extension.unit.S2TestCase;
+import org.seasar.framework.jpa.metadata.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDescFactory;
+import org.seasar.toplink.jpa.entity.Customer;
+import org.seasar.toplink.jpa.entity.Product;
+
+/**
+ * @author Hidenoshin Yoshida
+ *
+ */
+public class TopLinkEntityDescTest extends S2TestCase {
+    
+    private EntityManagerFactory emf;
+    
+    /* (non-Javadoc)
+     * @see junit.framework.TestCase#setUp()
+     */
+    protected void setUp() throws Exception {
+        super.setUp();
+        include("jpa.dicon");
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#TopLinkEntityDesc(java.lang.Class, oracle.toplink.essentials.threetier.ServerSession)} のためのテスト・メソッド。
+     */
+    public void testTopLinkEntityDesc() {
+        ServerSession serverSession = EntityManagerFactoryImpl.class.cast(emf).getServerSession();
+        TopLinkEntityDesc desc = new TopLinkEntityDesc(Customer.class, serverSession);
+        assertEquals(serverSession, desc.getServerSession());
+        assertEquals(serverSession.getDescriptor(Customer.class), desc.classDescriptor);
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getAttributeDesc(java.lang.String)} のためのテスト・メソッド。
+     */
+    public void testGetAttributeDesc() {
+        EntityDesc desc = EntityDescFactory.getEntityDesc(Customer.class);
+        assertEquals(desc.getAttributeDesc("id").getName(), "id");
+        assertEquals(desc.getAttributeDesc("name").getName(), "name");
+        assertEquals(desc.getAttributeDesc("address").getName(), "address");
+        assertEquals(desc.getAttributeDesc("phone").getName(), "phone");
+        assertEquals(desc.getAttributeDesc("age").getName(), "age");
+        assertEquals(desc.getAttributeDesc("birthday").getName(), "birthday");
+        assertEquals(desc.getAttributeDesc("sex").getName(), "sex");
+        assertEquals(desc.getAttributeDesc("version").getName(), "version");
+        assertEquals(desc.getAttributeDesc("products").getName(), "products");
+        assertNull(desc.getAttributeDesc(null));
+        assertNull(desc.getAttributeDesc(""));
+        
+        desc = EntityDescFactory.getEntityDesc(Product.class);
+        assertEquals(desc.getAttributeDesc("id").getName(), "id");
+        assertEquals(desc.getAttributeDesc("name").getName(), "name");
+        assertEquals(desc.getAttributeDesc("version").getName(), "version");
+        assertEquals(desc.getAttributeDesc("customer").getName(), "customer");
+        assertNull(desc.getAttributeDesc(null));
+        assertNull(desc.getAttributeDesc(""));
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getAttributeDescs()} のためのテスト・メソッド。
+     */
+    public void testGetAttributeDescs() {
+        EntityDesc desc = EntityDescFactory.getEntityDesc(Customer.class);
+        assertEquals(9, desc.getAttributeDescs().length);
+        desc = EntityDescFactory.getEntityDesc(Product.class);
+        assertEquals(4, desc.getAttributeDescs().length);
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getAttributeNames()} のためのテスト・メソッド。
+     */
+    public void testGetAttributeNames() {
+        EntityDesc desc = EntityDescFactory.getEntityDesc(Customer.class);
+        String[] names = desc.getAttributeNames();
+        assertEquals(9, names.length);
+        List<String> list = Arrays.asList(names);
+        list.contains("id");
+        list.contains("name");
+        list.contains("address");
+        list.contains("phone");
+        list.contains("age");
+        list.contains("birthday");
+        list.contains("sex");
+        list.contains("version");
+        list.contains("products");
+        desc = EntityDescFactory.getEntityDesc(Product.class);
+        names = desc.getAttributeNames();
+        assertEquals(4, names.length);
+        list = Arrays.asList(names);
+        list.contains("id");
+        list.contains("name");
+        list.contains("version");
+        list.contains("customer");
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getEntityClass()} のためのテスト・メソッド。
+     */
+    public void testGetEntityClass() {
+        EntityDesc desc = EntityDescFactory.getEntityDesc(Customer.class);
+        assertEquals(desc.getEntityClass(), Customer.class);
+        desc = EntityDescFactory.getEntityDesc(Product.class);
+        assertEquals(desc.getEntityClass(), Product.class);
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getEntityName()} のためのテスト・メソッド。
+     */
+    public void testGetEntityName() {
+        EntityDesc desc = EntityDescFactory.getEntityDesc(Customer.class);
+        assertEquals(desc.getEntityName(), Customer.class.getSimpleName());
+        desc = EntityDescFactory.getEntityDesc(Product.class);
+        assertEquals(desc.getEntityName(), Product.class.getSimpleName());
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getIdAttributeDesc()} のためのテスト・メソッド。
+     */
+    public void testGetIdAttributeDesc() {
+//        fail("まだ実装されていません。");
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getTableNames()} のためのテスト・メソッド。
+     */
+    public void testGetTableNames() {
+//        fail("まだ実装されていません。");
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getServerSession()} のためのテスト・メソッド。
+     */
+    public void testGetServerSession() {
+//        fail("まだ実装されていません。");
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#hasDiscriminatorColumn()} のためのテスト・メソッド。
+     */
+    public void testHasDiscriminatorColumn() {
+//        fail("まだ実装されていません。");
+    }
+
+    /**
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getInheritancePolicy()} のためのテスト・メソッド。
+     */
+    public void testGetInheritancePolicy() {
+//        fail("まだ実装されていません。");
+    }
+
+}
