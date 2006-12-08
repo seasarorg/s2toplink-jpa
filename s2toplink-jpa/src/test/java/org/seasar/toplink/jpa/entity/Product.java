@@ -29,15 +29,18 @@ import javax.persistence.Version;
 @Entity
 public class Product {
     
+    @Id
+    @GeneratedValue
     private Integer id;
     
     private String name;
 
+    @Version
     private Integer version;
     
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     public Customer getCustomer() {
         return customer;
     }
@@ -46,8 +49,6 @@ public class Product {
         this.customer = customer;
     }
 
-    @Id
-    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -64,7 +65,6 @@ public class Product {
         this.name = name;
     }
 
-    @Version
     public Integer getVersion() {
         return version;
     }

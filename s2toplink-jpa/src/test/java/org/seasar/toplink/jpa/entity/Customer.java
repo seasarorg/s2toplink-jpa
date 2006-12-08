@@ -33,6 +33,8 @@ import javax.persistence.Version;
 @Entity
 public class Customer {
     
+    @Id
+    @GeneratedValue
     private Integer id;
     
     private String name;
@@ -43,12 +45,15 @@ public class Customer {
     
     private Integer age;
     
+    @Temporal(TemporalType.DATE)
     private Date birthday;
     
     private Sex sex;
     
+    @Version
     private Integer version;
     
+    @OneToMany(mappedBy = "customer")
     private Set<Product> products;
 
     public void setId(Integer id) {
@@ -75,7 +80,6 @@ public class Customer {
         this.age = age;
     }
 
-    @Temporal(TemporalType.DATE)
     public Date getBirthday() {
         return birthday;
     }
@@ -84,8 +88,6 @@ public class Customer {
         this.birthday = birthday;
     }
 
-    @Id
-    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -114,12 +116,10 @@ public class Customer {
         this.sex = sex;
     }
 
-    @Version
     public Integer getVersion() {
         return version;
     }
 
-    @OneToMany(mappedBy = "customer")
     public Set<Product> getProducts() {
         return products;
     }
