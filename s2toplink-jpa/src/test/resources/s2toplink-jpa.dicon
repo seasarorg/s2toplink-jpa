@@ -12,7 +12,11 @@
 	
 	<component class="org.seasar.toplink.jpa.impl.AutoDetectorFactoryImpl"/>
 
-	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
+	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector">
+		<initMethod name="addIgnoreResourceNamePattern">
+			<arg>"META-INF/orm.xml"</arg>
+		</initMethod>
+	</component>
 	
 	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector">
 		<property name="classLoader">
