@@ -20,16 +20,27 @@
 	<component class="org.seasar.extension.jdbc.impl.BooleanToIntStatementFactory"/>
 	-->
 
+	<!-- for Derby -->
+	<component name="xaDataSource"
+		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
+		<property name="driverClassName">
+			"org.apache.derby.jdbc.EmbeddedDriver"
+		</property>
+		<property name="URL">
+			"jdbc:derby:testdata"
+		</property>
+		<property name="user">""</property>
+		<property name="password">""</property>
+	</component>
+	
 	<!-- for HSQLDB -->
+	<!-- 
 	<component name="xaDataSource"
 		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
 		<property name="driverClassName">
 			"org.hsqldb.jdbcDriver"
 		</property>
 		<property name="URL">
-			<!--
-			"jdbc:hsqldb:hsql://localhost:9001"
-			-->
 			"jdbc:hsqldb:file:"
 				+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.entity.Customer@class).getCanonicalPath()
 				+ "/data/demo"
@@ -37,6 +48,7 @@
 		<property name="user">"sa"</property>
 		<property name="password">""</property>
 	</component>
+	 -->
 
 	<!-- for Oracle -->
 	<!--
