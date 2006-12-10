@@ -131,7 +131,9 @@
 		</repository>
 		<repository>
 			<id>java.net</id>
-			<url>https://maven-repository.dev.java.net/nonav/repository</url>
+			<url>
+				https://maven-repository.dev.java.net/nonav/repository
+			</url>
 			<layout>legacy</layout>
 		</repository>
 	</repositories>
@@ -176,10 +178,21 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>1.8.0.1</version>
-			<type>jar</type>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.2.1.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derbytools</artifactId>
+			<version>10.2.1.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derbyLocale_ja_JP</artifactId>
+			<version>10.2.1.6</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
