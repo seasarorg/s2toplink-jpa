@@ -64,7 +64,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
 
     // static initializer
     static {
-        protectionDomain = (ProtectionDomain) AccessController
+        protectionDomain = AccessController
                 .doPrivileged(new PrivilegedAction<ProtectionDomain>() {
                     public ProtectionDomain run() {
                         return JpaInstrumentationImpl.class
