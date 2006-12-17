@@ -142,14 +142,20 @@ public class TopLinkEntityDescTest extends S2TestCase {
      * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getIdAttributeDesc()} のためのテスト・メソッド。
      */
     public void testGetIdAttributeDesc() {
-//        fail("まだ実装されていません。");
+        EntityDesc desc = EntityDescFactory.getEntityDesc(Customer.class);
+        assertEquals(desc.getIdAttributeDesc(), desc.getAttributeDesc("id"));
+        desc = EntityDescFactory.getEntityDesc(Product.class);
+        assertEquals(desc.getIdAttributeDesc(), desc.getAttributeDesc("id"));
     }
 
     /**
      * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getTableNames()} のためのテスト・メソッド。
      */
     public void testGetTableNames() {
-//        fail("まだ実装されていません。");
+        TopLinkEntityDesc desc = TopLinkEntityDesc.class.cast(EntityDescFactory.getEntityDesc(Customer.class));
+        assertEquals(desc.getTableNames(), Arrays.asList(new String[]{"CUSTOMER"}));
+        desc = TopLinkEntityDesc.class.cast(EntityDescFactory.getEntityDesc(Product.class));
+        assertEquals(desc.getTableNames(), Arrays.asList(new String[]{"PRODUCT"}));
     }
 
     /**
