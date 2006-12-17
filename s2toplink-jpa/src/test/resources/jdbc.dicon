@@ -27,7 +27,9 @@
 			"org.apache.derby.jdbc.EmbeddedDriver"
 		</property>
 		<property name="URL">
-			"jdbc:derby:testdata"
+			"jdbc:derby:"
+				+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProviderTest@class).getCanonicalPath()
+				+ "/derby"
 		</property>
 		<property name="user">""</property>
 		<property name="password">""</property>
