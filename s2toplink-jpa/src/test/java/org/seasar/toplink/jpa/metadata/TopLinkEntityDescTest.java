@@ -27,6 +27,7 @@ import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.toplink.jpa.entity.Customer;
+import org.seasar.toplink.jpa.entity.Enemy;
 import org.seasar.toplink.jpa.entity.Product;
 
 /**
@@ -162,21 +163,28 @@ public class TopLinkEntityDescTest extends S2TestCase {
      * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getServerSession()} のためのテスト・メソッド。
      */
     public void testGetServerSession() {
-//        fail("まだ実装されていません。");
+        TopLinkEntityDesc desc = TopLinkEntityDesc.class.cast(EntityDescFactory.getEntityDesc(Customer.class));
+        assertNotNull(desc.getServerSession());
     }
 
     /**
      * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#hasDiscriminatorColumn()} のためのテスト・メソッド。
      */
     public void testHasDiscriminatorColumn() {
-//        fail("まだ実装されていません。");
+        TopLinkEntityDesc desc = TopLinkEntityDesc.class.cast(EntityDescFactory.getEntityDesc(Product.class));
+        assertFalse(desc.hasDiscriminatorColumn());
+        desc = TopLinkEntityDesc.class.cast(EntityDescFactory.getEntityDesc(Enemy.class));
+        assertTrue(desc.hasDiscriminatorColumn());
     }
 
     /**
      * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#getInheritancePolicy()} のためのテスト・メソッド。
      */
     public void testGetInheritancePolicy() {
-//        fail("まだ実装されていません。");
+        TopLinkEntityDesc desc = TopLinkEntityDesc.class.cast(EntityDescFactory.getEntityDesc(Product.class));
+        assertNull(desc.getInheritancePolicy());
+        desc = TopLinkEntityDesc.class.cast(EntityDescFactory.getEntityDesc(Enemy.class));
+        assertNotNull(desc.getInheritancePolicy());
     }
 
 }

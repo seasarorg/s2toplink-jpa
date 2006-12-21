@@ -18,9 +18,12 @@ package org.seasar.toplink.jpa.entity;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,6 +34,9 @@ import javax.persistence.Version;
  *
  */
 @Entity
+@Inheritance
+@DiscriminatorColumn
+@DiscriminatorValue("C")
 public class Customer {
     
     @Id
