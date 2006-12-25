@@ -15,6 +15,7 @@
  */
 package org.seasar.toplink.jpa.metadata;
 
+import java.sql.Types;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -90,7 +91,7 @@ public class TopLinkAttributeDesc implements AttributeDesc {
             DatabasePlatform platform = serverSession.getPlatform();
             sqlType = platform.getJDBCType(field);
         } else {
-            // TODO
+            sqlType = Types.OTHER;
         }
         this.component = mapping.isAggregateMapping();
         if (type == Date.class || type == Calendar.class) {
@@ -146,43 +147,43 @@ public class TopLinkAttributeDesc implements AttributeDesc {
         mapping.setAttributeValueInObject(entity, value);
     }
 
-    public void setTemporalType(TemporalType temporalType) {
+    protected void setTemporalType(TemporalType temporalType) {
         this.temporalType = temporalType;
     }
 
-    public void setAssociation(boolean association) {
+    protected void setAssociation(boolean association) {
         this.association = association;
     }
 
-    public void setCollection(boolean collection) {
+    protected void setCollection(boolean collection) {
         this.collection = collection;
     }
 
-    public void setComponent(boolean component) {
+    protected void setComponent(boolean component) {
         this.component = component;
     }
 
-    public void setElementType(Class<?> elementType) {
+    protected void setElementType(Class<?> elementType) {
         this.elementType = elementType;
     }
 
-    public void setId(boolean id) {
+    protected void setId(boolean id) {
         this.id = id;
     }
 
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 
-    public void setSqlType(int sqlType) {
+    protected void setSqlType(int sqlType) {
         this.sqlType = sqlType;
     }
 
-    public void setType(Class<?> type) {
+    protected void setType(Class<?> type) {
         this.type = type;
     }
 
-    public void setVersion(boolean version) {
+    protected void setVersion(boolean version) {
         this.version = version;
     }
 
