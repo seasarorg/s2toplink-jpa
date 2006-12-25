@@ -16,6 +16,7 @@
 package org.seasar.toplink.jpa.entity;
 
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
 /**
@@ -26,19 +27,20 @@ import javax.persistence.Entity;
 @DiscriminatorValue("E")
 public class Enemy extends Customer {
     
-    private String dangeon;
+    @Embedded
+    private Dangeon dangeon;
 
     /**
      * @return dangeon
      */
-    public String getDangeon() {
+    public Dangeon getDangeon() {
         return dangeon;
     }
 
     /**
      * @param dangeon 設定する dangeon
      */
-    public void setDangeon(String dangeon) {
+    public void setDangeon(Dangeon dangeon) {
         this.dangeon = dangeon;
     }
 

@@ -78,7 +78,7 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
         assertTrue(filelist.contains(MAPPING_FILE_NAME));
         assertNotNull(info.getPersistenceUnitRootUrl());
         List<String> classList = info.getManagedClassNames();
-        assertEquals(3, classList.size());
+        assertEquals(4, classList.size());
         assertEquals(CLASS_NAME, classList.get(0));
         assertTrue(info.excludeUnlistedClasses());
         Properties prop = info.getProperties();
