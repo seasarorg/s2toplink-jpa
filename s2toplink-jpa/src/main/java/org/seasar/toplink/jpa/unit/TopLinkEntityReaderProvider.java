@@ -22,7 +22,6 @@ import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
-import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderFactory;
 import org.seasar.framework.jpa.unit.EntityReaderProvider;
 import org.seasar.framework.util.tiger.CollectionsUtil;
@@ -56,7 +55,7 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
         return new TopLinkEntityReader(entity, entityDesc);
     }
 
-    public EntityReader createEntityReader(final Collection<?> entities) {
+    public TopLinkEntityCollectionReader createEntityReader(final Collection<?> entities) {
         if (entities == null) {
             return null;
         }

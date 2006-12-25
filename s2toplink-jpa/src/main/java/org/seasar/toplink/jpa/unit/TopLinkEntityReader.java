@@ -60,7 +60,7 @@ public class TopLinkEntityReader implements EntityReader {
     }
     
     protected void setupColumns() {
-        for (String tableName : entityDesc.getTableNames()) {
+        for (String tableName : getEntityDesc().getTableNames()) {
             if (!dataSet.hasTable(tableName)) {
                 dataSet.addTable(tableName);
             }
@@ -71,10 +71,10 @@ public class TopLinkEntityReader implements EntityReader {
 
     @SuppressWarnings("unchecked")
     protected void setupAttributeColumns() {
-        ServerSession serverSession = entityDesc.getServerSession();
+        ServerSession serverSession = getEntityDesc().getServerSession();
         DatabasePlatform platform = serverSession.getPlatform();
         
-        for (TopLinkAttributeDesc attribute : entityDesc.getAttributeDescs()) { 
+        for (TopLinkAttributeDesc attribute : getEntityDesc().getAttributeDescs()) { 
             DatabaseMapping mapping = attribute.getMapping();
             List<DatabaseField> fields = mapping.getFields();
             for (DatabaseField field : fields) {
@@ -94,7 +94,7 @@ public class TopLinkEntityReader implements EntityReader {
         DatabaseField field = inheritancePolicy.getClassIndicatorField();
         DataTable table = dataSet.getTable(field.getTableName());
         
-        ServerSession serverSession = entityDesc.getServerSession();
+        ServerSession serverSession = getEntityDesc().getServerSession();
         DatabasePlatform platform = serverSession.getPlatform();
         
         int sqlType = platform.getJDBCType(field);
@@ -104,7 +104,7 @@ public class TopLinkEntityReader implements EntityReader {
     @SuppressWarnings("unchecked")
     protected void setupRow(final Object entity) {
         Map<String, DataRow> rowMap = CollectionsUtil.newHashMap();
-        for (TopLinkAttributeDesc attribute : entityDesc.getAttributeDescs()) { 
+        for (TopLinkAttributeDesc attribute : getEntityDesc().getAttributeDescs()) { 
             DatabaseMapping mapping = attribute.getMapping();
             List<DatabaseField> fields = mapping.getFields();
             for (DatabaseField field : fields) {
