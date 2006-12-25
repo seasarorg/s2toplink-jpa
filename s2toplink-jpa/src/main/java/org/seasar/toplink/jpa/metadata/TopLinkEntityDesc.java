@@ -50,7 +50,7 @@ public class TopLinkEntityDesc implements EntityDesc {
     public TopLinkEntityDesc(Class<?> entityClass, ServerSession serverSession) {
         this.serverSession = serverSession;
         this.classDescriptor = serverSession.getClassDescriptor(entityClass);
-        List<DatabaseMapping> mappings = (List<DatabaseMapping>) classDescriptor.getMappings();
+        List<DatabaseMapping> mappings = classDescriptor.getMappings();
         int size = mappings.size();
         attributeDescs = new TopLinkAttributeDesc[size];
         attributeNames = new String[size];
