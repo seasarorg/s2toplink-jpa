@@ -42,9 +42,9 @@ public class TopLinkEntityDesc implements EntityDesc {
     
     protected String[] attributeNames;
     
-    private TopLinkAttributeDesc idAttributeDesc;
+    protected TopLinkAttributeDesc idAttributeDesc;
     
-    private List<String> tableNames;
+    protected List<String> tableNames;
     
     @SuppressWarnings("unchecked")
     public TopLinkEntityDesc(Class<?> entityClass, ServerSession serverSession) {

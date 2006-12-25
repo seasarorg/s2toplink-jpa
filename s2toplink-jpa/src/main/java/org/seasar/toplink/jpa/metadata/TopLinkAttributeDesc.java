@@ -42,25 +42,25 @@ public class TopLinkAttributeDesc implements AttributeDesc {
 
     protected DatabaseMapping mapping;
 
-    private Class<?> elementType;
+    protected Class<?> elementType;
 
-    private String name;
+    protected String name;
 
-    private int sqlType;
+    protected int sqlType;
 
-    private TemporalType temporalType;
+    protected TemporalType temporalType;
 
-    private Class<?> type;
+    protected Class<?> type;
 
-    private boolean association;
+    protected boolean association;
 
-    private boolean collection;
+    protected boolean collection;
 
-    private boolean component;
+    protected boolean component;
 
-    private boolean id;
+    protected boolean id;
 
-    private boolean version;
+    protected boolean version;
 
     public TopLinkAttributeDesc(DatabaseMapping mapping,
             ServerSession serverSession) {
@@ -145,46 +145,6 @@ public class TopLinkAttributeDesc implements AttributeDesc {
 
     public void setValue(Object entity, Object value) {
         mapping.setAttributeValueInObject(entity, value);
-    }
-
-    protected void setTemporalType(TemporalType temporalType) {
-        this.temporalType = temporalType;
-    }
-
-    protected void setAssociation(boolean association) {
-        this.association = association;
-    }
-
-    protected void setCollection(boolean collection) {
-        this.collection = collection;
-    }
-
-    protected void setComponent(boolean component) {
-        this.component = component;
-    }
-
-    protected void setElementType(Class<?> elementType) {
-        this.elementType = elementType;
-    }
-
-    protected void setId(boolean id) {
-        this.id = id;
-    }
-
-    protected void setName(String name) {
-        this.name = name;
-    }
-
-    protected void setSqlType(int sqlType) {
-        this.sqlType = sqlType;
-    }
-
-    protected void setType(Class<?> type) {
-        this.type = type;
-    }
-
-    protected void setVersion(boolean version) {
-        this.version = version;
     }
 
     public DatabaseMapping getMapping() {
