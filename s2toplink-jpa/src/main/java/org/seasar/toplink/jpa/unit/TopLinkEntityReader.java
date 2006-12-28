@@ -18,8 +18,6 @@ package org.seasar.toplink.jpa.unit;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Embeddable;
-
 import oracle.toplink.essentials.descriptors.InheritancePolicy;
 import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
 import oracle.toplink.essentials.internal.helper.DatabaseField;
