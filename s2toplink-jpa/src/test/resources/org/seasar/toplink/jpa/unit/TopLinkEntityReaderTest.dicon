@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+	<include path="j2ee.dicon" />
+	<component class="org.seasar.extension.dataset.impl.SqlReader">
+		<initMethod>#self.addTable("CUSTOMER")</initMethod>
+	</component>
+	<component class="org.seasar.extension.dataset.impl.XlsWriter"
+		instance="prototype">
+		<arg>"../../src/test/resources/org/seasar/toplink/jpa/unit/TopLinkEntityReaderTest_testReadTx_Expected2.xls"</arg>
+	</component>
+</components>

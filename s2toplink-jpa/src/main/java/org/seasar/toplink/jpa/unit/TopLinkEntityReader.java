@@ -18,17 +18,22 @@ package org.seasar.toplink.jpa.unit;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Embeddable;
+
 import oracle.toplink.essentials.descriptors.InheritancePolicy;
 import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
 import oracle.toplink.essentials.internal.helper.DatabaseField;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.threetier.ServerSession;
 
+import org.seasar.extension.dataset.ColumnType;
+import org.seasar.extension.dataset.DataColumn;
 import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
 import org.seasar.extension.dataset.impl.DataSetImpl;
 import org.seasar.extension.dataset.states.RowStates;
+import org.seasar.extension.dataset.types.BigDecimalType;
 import org.seasar.extension.dataset.types.ColumnTypes;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.util.tiger.CollectionsUtil;
@@ -80,7 +85,7 @@ public class TopLinkEntityReader implements EntityReader {
             for (DatabaseField field : fields) {
                 DataTable table = dataSet.getTable(field.getTableName());
                 int sqlType = platform.getJDBCType(field);
-                table.addColumn(field.getQualifiedName(), ColumnTypes.getColumnType(sqlType));
+                table.addColumn(field.getName(), ColumnTypes.getColumnType(sqlType));
             }
             
         }
@@ -98,7 +103,7 @@ public class TopLinkEntityReader implements EntityReader {
         DatabasePlatform platform = serverSession.getPlatform();
         
         int sqlType = platform.getJDBCType(field);
-        table.addColumn(field.getQualifiedName(), ColumnTypes.getColumnType(sqlType));
+        table.addColumn(field.getName(), ColumnTypes.getColumnType(sqlType));
     }
     
     @SuppressWarnings("unchecked")
@@ -114,7 +119,15 @@ public class TopLinkEntityReader implements EntityReader {
                     row = table.addRow();
                     rowMap.put(table.getTableName(), row);
                 }
-                row.setValue(field.getQualifiedName(), mapping.getAttributeValueFromObject(entity));
+                Object value = mapping.getAttributeValueFromObject(entity);
+                if (value instanceof Enum) {
+                    DataColumn column = table.getColumn(field.getName());
+                    ColumnType type = column.getColumnType();
+                    if (type instanceof BigDecimalType) {
+                        value = Enum.class.cast(value).ordinal();
+                    }
+                }
+                row.setValue(field.getName(), value);
             }
             
         }
@@ -128,7 +141,7 @@ public class TopLinkEntityReader implements EntityReader {
                 rowMap.put(table.getTableName(), row);
             }
             Object value = inheritancePolicy.getClassIndicatorMapping().get(getEntityDesc().getEntityClass());
-            row.setValue(field.getQualifiedName(), value);
+            row.setValue(field.getName(), value);
         }
         for (String key : rowMap.keySet()) {
             rowMap.get(key).setState(RowStates.UNCHANGED);
