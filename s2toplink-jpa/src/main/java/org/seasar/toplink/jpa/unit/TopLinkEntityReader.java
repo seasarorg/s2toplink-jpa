@@ -72,7 +72,6 @@ public class TopLinkEntityReader implements EntityReader {
         setupDiscriminatorColumn();
     }
 
-    @SuppressWarnings("unchecked")
     protected void setupAttributeColumns() {
         ServerSession serverSession = getEntityDesc().getServerSession();
         DatabasePlatform platform = serverSession.getPlatform();
@@ -104,7 +103,6 @@ public class TopLinkEntityReader implements EntityReader {
         table.addColumn(field.getName(), ColumnTypes.getColumnType(sqlType));
     }
     
-    @SuppressWarnings("unchecked")
     protected void setupRow(final Object entity) {
         Map<String, DataRow> rowMap = CollectionsUtil.newHashMap();
         for (TopLinkAttributeDesc attribute : getEntityDesc().getAttributeDescs()) { 
