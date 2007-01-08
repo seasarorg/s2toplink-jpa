@@ -115,7 +115,7 @@ public class TopLinkEntityReader implements EntityReader {
                     row = table.addRow();
                     rowMap.put(table.getTableName(), row);
                 }
-                Object value = mapping.getAttributeValueFromObject(entity);
+                Object value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
                 if (value instanceof Enum) {
                     DataColumn column = table.getColumn(field.getName());
                     ColumnType type = column.getColumnType();
