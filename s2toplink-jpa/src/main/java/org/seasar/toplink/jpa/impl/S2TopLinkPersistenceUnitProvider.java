@@ -18,7 +18,6 @@ package org.seasar.toplink.jpa.impl;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
 
-import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerSetupImpl;
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
@@ -64,10 +63,6 @@ public class S2TopLinkPersistenceUnitProvider implements
     }
     
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
-        EntityManagerSetupImpl setUp = javaSECMPInitializer.getEntityManagerSetupImpl(unitName);
-        if (setUp == null) {
-            return null;
-        }
         return persistenceProvider.createEntityManagerFactory(unitName, null);
     }
 }
