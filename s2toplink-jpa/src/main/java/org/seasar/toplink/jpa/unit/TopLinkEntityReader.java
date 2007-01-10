@@ -115,12 +115,17 @@ public class TopLinkEntityReader implements EntityReader {
                     row = table.addRow();
                     rowMap.put(table.getTableName(), row);
                 }
-                Object value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
-                if (value instanceof Enum) {
-                    DataColumn column = table.getColumn(field.getName());
-                    ColumnType type = column.getColumnType();
-                    if (type instanceof BigDecimalType) {
-                        value = Enum.class.cast(value).ordinal();
+                Object value = mapping.getAttributeValueFromObject(entity);
+                if (value != null) {
+                    if (attribute.isComponent()) {
+                        value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
+                    }
+                    if (value instanceof Enum) {
+                        DataColumn column = table.getColumn(field.getName());
+                        ColumnType type = column.getColumnType();
+                        if (type instanceof BigDecimalType) {
+                            value = Enum.class.cast(value).ordinal();
+                        }
                     }
                 }
                 row.setValue(field.getName(), value);
