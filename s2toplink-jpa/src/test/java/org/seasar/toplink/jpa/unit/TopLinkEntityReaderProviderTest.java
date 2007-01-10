@@ -108,18 +108,4 @@ public class TopLinkEntityReaderProviderTest extends S2TestCase {
         S2Assert.assertEqualsIgnoreTableOrder(null, expected, reader.read());
     }
 
-    /**
-     * {@link org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider#flatten(java.util.Collection)} のためのテスト・メソッド。
-     */
-    public void testFlatten() {
-        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider#getEntityDesc(java.lang.Class)} のためのテスト・メソッド。
-     */
-    public void testGetEntityDesc() {
-        fail("まだ実装されていません。");
-    }
-
 }

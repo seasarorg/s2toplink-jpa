@@ -74,39 +74,4 @@ public class TopLinkEntityReaderTest extends S2TestCase {
         S2Assert.assertEqualsIgnoreTableOrder(expected, reader.read());
     }
 
-    /**
-     * {@link org.seasar.toplink.jpa.unit.TopLinkEntityReader#setupColumns()} のためのテスト・メソッド。
-     */
-    public void testSetupColumns() {
-        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.toplink.jpa.unit.TopLinkEntityReader#setupAttributeColumns()} のためのテスト・メソッド。
-     */
-    public void testSetupAttributeColumns() {
-        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.toplink.jpa.unit.TopLinkEntityReader#setupDiscriminatorColumn()} のためのテスト・メソッド。
-     */
-    public void testSetupDiscriminatorColumn() {
-        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.toplink.jpa.unit.TopLinkEntityReader#setupRow(java.lang.Object)} のためのテスト・メソッド。
-     */
-    public void testSetupRow() {
-        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.toplink.jpa.unit.TopLinkEntityReader#getEntityDesc()} のためのテスト・メソッド。
-     */
-    public void testGetEntityDesc() {
-        fail("まだ実装されていません。");
-    }
-
 }
