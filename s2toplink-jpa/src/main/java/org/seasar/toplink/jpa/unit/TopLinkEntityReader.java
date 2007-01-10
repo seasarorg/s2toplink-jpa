@@ -82,7 +82,10 @@ public class TopLinkEntityReader implements EntityReader {
             for (DatabaseField field : fields) {
                 DataTable table = dataSet.getTable(field.getTableName());
                 int sqlType = platform.getJDBCType(field);
-                table.addColumn(field.getName(), ColumnTypes.getColumnType(sqlType));
+                String columnName = field.getName();
+                if (!table.hasColumn(columnName)) {
+                    table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
+                }
             }
             
         }
@@ -100,7 +103,10 @@ public class TopLinkEntityReader implements EntityReader {
         DatabasePlatform platform = serverSession.getPlatform();
         
         int sqlType = platform.getJDBCType(field);
-        table.addColumn(field.getName(), ColumnTypes.getColumnType(sqlType));
+        String columnName = field.getName();
+        if (!table.hasColumn(columnName)) {
+            table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
+        }
     }
     
     protected void setupRow(final Object entity) {
