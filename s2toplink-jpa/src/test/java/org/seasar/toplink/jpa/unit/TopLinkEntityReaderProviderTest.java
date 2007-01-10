@@ -15,12 +15,17 @@
  */
 package org.seasar.toplink.jpa.unit;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
+import org.seasar.framework.unit.S2Assert;
 import org.seasar.framework.util.tiger.CollectionsUtil;
+import org.seasar.toplink.jpa.entity.Dangeon;
 import org.seasar.toplink.jpa.entity.Enemy;
+import org.seasar.toplink.jpa.entity.Sex;
 
 /**
  * @author Hidenoshin Yoshida
@@ -47,8 +52,22 @@ public class TopLinkEntityReaderProviderTest extends S2TestCase {
      */
     public void testCreateEntityReaderObject() {
         Enemy enemy = new Enemy();
+        enemy.setId(3);
+        enemy.setName("Ganon");
+        enemy.setAddress("Darkness");
+        enemy.setPhone("000-0000-0000");
+        enemy.setAge(15);
+        enemy.setBirthday(new GregorianCalendar(1998, 0, 1).getTime());
+        enemy.setSex(Sex.MAN);
+        enemy.setVersion(0);
+        Dangeon dangeon = new Dangeon();
+        dangeon.setDangeonName("Pyramid of Power");
+        dangeon.setDangeonLevel(10);
+        enemy.setDangeon(dangeon);
         TopLinkEntityReader reader = topLinkEntityReaderProvider.createEntityReader(enemy);
         assertEquals(EntityDescFactory.getEntityDesc(Enemy.class), reader.getEntityDesc());
+        DataSet expected = readXls(TopLinkEntityReaderProviderTest.class.getSimpleName() + "_testCreateEntityReaderObject_Expected.xls");
+        S2Assert.assertEqualsIgnoreTableOrder(null, expected, reader.read());
     }
 
     /**
@@ -56,9 +75,37 @@ public class TopLinkEntityReaderProviderTest extends S2TestCase {
      */
     public void testCreateEntityReaderCollectionOfQ() {
         List<Enemy> list = CollectionsUtil.newArrayList();
-        list.add(new Enemy());
-        list.add(new Enemy());
+        Enemy enemy = new Enemy();
+        enemy.setId(3);
+        enemy.setName("Ganon");
+        enemy.setAddress("Darkness");
+        enemy.setPhone("000-0000-0000");
+        enemy.setAge(15);
+        enemy.setBirthday(new GregorianCalendar(1998, 0, 1).getTime());
+        enemy.setSex(Sex.MAN);
+        enemy.setVersion(0);
+        Dangeon dangeon = new Dangeon();
+        dangeon.setDangeonName("Pyramid of Power");
+        dangeon.setDangeonLevel(10);
+        enemy.setDangeon(dangeon);
+        list.add(enemy);
+        Enemy enemy2 = new Enemy();
+        enemy2.setId(4);
+        enemy2.setName("Agahnim");
+        enemy2.setAddress("Darkness");
+        enemy2.setPhone("000-0000-0000");
+        enemy2.setAge(70);
+        enemy2.setBirthday(new GregorianCalendar(1920, 0, 1).getTime());
+        enemy2.setSex(Sex.MAN);
+        enemy2.setVersion(0);
+        Dangeon dangeon2 = new Dangeon();
+        dangeon2.setDangeonName("Ganon's Tower");
+        dangeon2.setDangeonLevel(10);
+        enemy2.setDangeon(dangeon2);
+        list.add(enemy2);
         TopLinkEntityCollectionReader reader = topLinkEntityReaderProvider.createEntityReader(list);
+        DataSet expected = readXls(TopLinkEntityReaderProviderTest.class.getSimpleName() + "_testCreateEntityReaderCollectionOfQ_Expected.xls");
+        S2Assert.assertEqualsIgnoreTableOrder(null, expected, reader.read());
     }
 
     /**
