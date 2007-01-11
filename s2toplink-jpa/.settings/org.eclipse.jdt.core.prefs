@@ -1,4 +1,4 @@
-#Sat Nov 25 12:47:25 JST 2006
+#Thu Jan 11 17:48:37 JST 2007
 eclipse.preferences.version=1
 org.eclipse.jdt.core.codeComplete.argumentPrefixes=
 org.eclipse.jdt.core.codeComplete.argumentSuffixes=
@@ -42,7 +42,7 @@ org.eclipse.jdt.core.formatter.alignment_for_throws_clause_in_method_declaration
 org.eclipse.jdt.core.formatter.blank_lines_after_imports=1
 org.eclipse.jdt.core.formatter.blank_lines_after_package=1
 org.eclipse.jdt.core.formatter.blank_lines_before_field=1
-org.eclipse.jdt.core.formatter.blank_lines_before_first_class_body_declaration=0
+org.eclipse.jdt.core.formatter.blank_lines_before_first_class_body_declaration=1
 org.eclipse.jdt.core.formatter.blank_lines_before_imports=1
 org.eclipse.jdt.core.formatter.blank_lines_before_member_type=1
 org.eclipse.jdt.core.formatter.blank_lines_before_method=1
