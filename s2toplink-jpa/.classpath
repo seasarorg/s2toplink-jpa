@@ -7,11 +7,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
-	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials-agent.jar" sourcepath="libsrc/glassfish-persistence-v2-b31-src.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/toplink-essentials.jar" sourcepath="libsrc/glassfish-persistence-v2-b31-src.zip"/>
-	<classpathentry kind="lib" path="lib/derby.jar"/>
-	<classpathentry kind="lib" path="lib/derbyLocale_ja_JP.jar"/>
-	<classpathentry kind="lib" path="lib/derbytools.jar"/>
-	<classpathentry kind="lib" path="lib/derbyrun.jar"/>
+	<classpathentry kind="lib" path="lib/derby-10.2.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/derbyLocale_ja_JP-10.2.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/derbyrun-10.2.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/derbytools-10.2.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/toplink-essentials-2.0.b31.jar"/>
+	<classpathentry kind="lib" path="lib/toplink-essentials-agent-2.0.b31.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
