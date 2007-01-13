@@ -37,6 +37,7 @@ public class S2ServerPlatformForTest extends ServerPlatformBase {
      * @see oracle.toplink.essentials.platform.server.ServerPlatformBase#getExternalTransactionControllerClass()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Class getExternalTransactionControllerClass() {
         if (externalTransactionControllerClass == null){
             externalTransactionControllerClass = S2TransactionControllerForTest.class;

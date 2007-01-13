@@ -79,7 +79,7 @@ public class S2TopLinkContainerPersistenceUnitProvider implements
             || providerClassName.equals(EntityManagerFactoryProvider.class.getName())
             || providerClassName.equals(oracle.toplink.essentials.PersistenceProvider.class.getName())){
         
-            return persistenceProvider.createContainerEntityManagerFactory(unitInfo, new HashMap());
+            return persistenceProvider.createContainerEntityManagerFactory(unitInfo, new HashMap<Object, Object>());
         }
         return null;
     }

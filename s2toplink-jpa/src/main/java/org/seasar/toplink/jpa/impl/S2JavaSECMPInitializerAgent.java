@@ -36,6 +36,7 @@ public class S2JavaSECMPInitializerAgent {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static void initializeFromAgent(String agentArgs, Instrumentation instr) {
         JavaSECMPInitializer.globalInstrumentation = instr;
 

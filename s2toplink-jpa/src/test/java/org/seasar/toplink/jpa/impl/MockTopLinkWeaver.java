@@ -32,11 +32,13 @@ public class MockTopLinkWeaver extends TopLinkWeaver {
      * @param session
      * @param classDetailsMap
      */
+    @SuppressWarnings("unchecked")
     public MockTopLinkWeaver(Session session, Map classDetailsMap) {
         super(session, classDetailsMap);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public byte[] transform(ClassLoader loader, String className, Class classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         return classfileBuffer;
     }

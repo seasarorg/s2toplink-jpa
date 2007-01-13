@@ -31,6 +31,7 @@ import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
  */
 public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
     
+    @SuppressWarnings("unchecked")
     public static JavaSECMPInitializer getJavaSECMPInitializer(String configPath, Map properties) {
         if (javaSECMPInitializer == null) {
            initializeFromContainer(configPath, properties);
@@ -38,6 +39,7 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         return javaSECMPInitializer;
     }
     
+    @SuppressWarnings("unchecked")
     public static void initializeFromContainer(String configPath, Map properties) {
         if (javaSECMPInitializer != null) {
             return;
@@ -61,6 +63,7 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected boolean callPredeploy(SEPersistenceUnitInfo persistenceUnitInfo, Map m) {
         
         persistenceUnitInfoFactory.addAutoDetectResult(persistenceUnitInfo);

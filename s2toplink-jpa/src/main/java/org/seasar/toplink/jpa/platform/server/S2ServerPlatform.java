@@ -30,7 +30,8 @@ public class S2ServerPlatform extends ServerPlatformBase {
 		super(newDatabaseSession);
 	}
 
-	@Override
+    @Override
+    @SuppressWarnings("unchecked")
 	public Class getExternalTransactionControllerClass() {
     	if (externalTransactionControllerClass == null){
     		externalTransactionControllerClass = S2TransactionController.class;

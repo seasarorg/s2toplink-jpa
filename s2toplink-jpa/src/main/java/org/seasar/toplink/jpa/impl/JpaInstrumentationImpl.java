@@ -78,7 +78,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
                         byte[].class, int.class, int.class,
                         ProtectionDomain.class };
                 try {
-                    final Class loader = ClassUtil.forName(ClassLoader.class
+                    final Class<?> loader = ClassUtil.forName(ClassLoader.class
                             .getName());
                     defineClassMethod = loader.getDeclaredMethod(
                             DEFINE_CLASS_METHOD_NAME, paramTypes);
@@ -95,7 +95,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
             public Object run() {
                 final Class[] paramTypes = new Class[] {String.class};
                 try {
-                    final Class loader = ClassUtil.forName(ClassLoader.class
+                    final Class<?> loader = ClassUtil.forName(ClassLoader.class
                             .getName());
                     findResourceMethod = loader.getDeclaredMethod(
                             FIND_RESOURCE_METHOD_NAME, paramTypes);
