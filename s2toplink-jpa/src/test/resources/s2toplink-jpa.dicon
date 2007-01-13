@@ -12,6 +12,11 @@
 	
 	<component class="org.seasar.toplink.jpa.impl.AutoDetectorFactoryImpl"/>
 
+	<component class="org.seasar.toplink.jpa.impl.JpaInstrumentationImpl"/>
+	
+
+	<!-- SMART deployを利用しない時は以下の２つのComponentはコメントアウトしてください -->
+
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
 	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector">
@@ -20,6 +25,4 @@
 		</property>
 	</component>
 
-	<component class="org.seasar.toplink.jpa.impl.JpaInstrumentationImpl"/>
-	
 </components>
