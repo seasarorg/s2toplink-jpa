@@ -10,6 +10,8 @@
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/lib" dir="target">
 				<include name="s2toplink-jpa-${ver}.jar"/>
+			</zipfileset>
+			<zipfileset prefix="s2toplink-jpa/libsrc" dir="target">
 				<include name="s2toplink-jpa-${ver}-sources.jar"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/resources" dir="src/test/resources">
