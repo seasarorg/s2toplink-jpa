@@ -1,5 +1,5 @@
 <project name="s2toplink-jpa" default="dist" basedir=".">
-	<property name="ver" value="1.0.0-beta-1"/>
+	<property name="ver" value="1.0.0-RC1-SNAPSHOT"/>
 
 	<target name="dist">
 		<zip zipfile="target/S2TopLink-JPA-${ver}.zip">
@@ -12,7 +12,9 @@
 				<include name="s2toplink-jpa-${ver}-sources.jar"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/resources" dir="src/test/resources">
+				<!--
 				<include name="convention.dicon"/>
+				-->
 				<include name="env.txt"/>
 				<include name="jdbc.dicon"/>
 				<include name="jndi.properties"/>
@@ -20,7 +22,7 @@
 				<include name="log4j.properties"/>
 				<include name="s2toplink-jpa.dicon"/>
 			</zipfileset>
-			<zipfileset prefix="s2toplink-jpa/resources/META-INF" dir="src/test/resources/META-INF">
+			<zipfileset prefix="s2toplink-jpa/resources/META-INF" dir="src/test/dist/resources/META-INF">
 				<include name="persistence.xml"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/doc" dir="../s2toplink-www">
