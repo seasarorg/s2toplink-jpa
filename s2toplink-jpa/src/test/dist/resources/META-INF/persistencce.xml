@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+	http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	<persistence-unit name="persistenceUnit" transaction-type="JTA">
+		<provider>oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider</provider>
+
+		<!-- for test -->
+		<jta-data-source>java:comp/env/dataSourceProxy</jta-data-source>
+		<!-- for production -->
+		<!-- 
+		<jta-data-source>java:comp/env/jdbc/dataSource</jta-data-source>
+		 -->
+
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			
+			<!-- for test -->
+			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatformForTest"/>
+			<!-- for production -->
+			<!-- 
+			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatform"/>
+			 -->
+
+			<property name="toplink.logging.level" value="FINE"/>
+
+        	<!-- for test -->
+        	<property name="toplink.cache.shared.default" value="false"/>
+
+ 		</properties>
+	</persistence-unit>
+</persistence>
