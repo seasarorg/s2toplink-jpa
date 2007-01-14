@@ -205,7 +205,7 @@
     		<uniqueVersion>false</uniqueVersion>
       		<id>maven.seasar.org</id>
       		<name>The Seasar Foundation Maven2 Repository</name>
-      		<url>scp://www.seasar.org/home/groups/s2toplink/maven/maven2</url>
+      		<url>scp://www.seasar.org/home/groups/sandbox/s2toplink/maven/maven2</url>
     	</repository>
 	<snapshotRepository>
 		<uniqueVersion>true</uniqueVersion>
