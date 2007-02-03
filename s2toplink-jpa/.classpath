@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
 	<classpathentry kind="lib" path="lib/toplink-essentials-2.0.b34.jar" sourcepath="libsrc/glassfish-persistence-v2-b34-src.zip"/>
+	<classpathentry kind="lib" path="lib/h2-1.0.20070130.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
