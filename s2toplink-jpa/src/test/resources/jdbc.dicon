@@ -20,21 +20,21 @@
 	<component class="org.seasar.extension.jdbc.impl.BooleanToIntStatementFactory"/>
 	-->
 
-	<!-- for Derby -->
+	<!-- for H2 -->
 	<component name="xaDataSource"
 		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
 		<property name="driverClassName">
-			"org.apache.derby.jdbc.EmbeddedDriver"
+			"org.h2.Driver"
 		</property>
 		<property name="URL">
-			"jdbc:derby:"
-				+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProviderTest@class).getCanonicalPath()
-				+ "/derby"
+			"jdbc:h2:"
+			+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProviderTest@class).getCanonicalPath()
+			+ "/data/demo"
 		</property>
-		<property name="user">""</property>
+		<property name="user">"sa"</property>
 		<property name="password">""</property>
 	</component>
-	
+
 	<!-- for HSQLDB -->
 	<!-- 
 	<component name="xaDataSource"
@@ -43,14 +43,27 @@
 			"org.hsqldb.jdbcDriver"
 		</property>
 		<property name="URL">
-			"jdbc:hsqldb:file:"
-				+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.entity.Customer@class).getCanonicalPath()
-				+ "/data/demo"
+			"jdbc:hsqldb:hsql://localhost:9001"
 		</property>
 		<property name="user">"sa"</property>
 		<property name="password">""</property>
 	</component>
 	 -->
+
+	<!-- for Derby -->
+	<!--
+	<component name="xaDataSource"
+		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
+		<property name="driverClassName">
+			"org.apache.derby.jdbc.EmbeddedDriver"
+		</property>
+		<property name="URL">
+			"jdbc:derby:demo"
+		</property>
+		<property name="user">""</property>
+		<property name="password">""</property>
+	</component>
+	-->
 
 	<!-- for Oracle -->
 	<!--
@@ -112,6 +125,8 @@
 	- 上記以外の場合は，my.cnfでdefault-character-setの設定を適切に
 		(cp932やutf8など．デフォルトのlatin1は不可)行なっていれば，
 		文字化けは防げます．
+	-->
+	<!--
 	<component name="xaDataSource"
 		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
 		<property name="driverClassName">

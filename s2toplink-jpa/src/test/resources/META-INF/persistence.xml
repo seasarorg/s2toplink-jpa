@@ -24,6 +24,7 @@
 			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatform"/>
 			 -->
 
+			<property name="toplink.target-database" value="oracle.toplink.essentials.platform.database.H2Platform"/>
 			<property name="toplink.logging.level" value="FINE"/>
 
         	<!-- for test -->
