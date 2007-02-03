@@ -1,12 +1,11 @@
 <project name="s2toplink-jpa" default="dist" basedir=".">
-	<property name="ver" value="1.0.0-rc1"/>
+	<property name="ver" value="1.0.0-rc2-SNAPSHOT"/>
 
 	<target name="dist">
 		<zip zipfile="target/S2TopLink-JPA-${ver}.zip">
 			<zipfileset prefix="s2toplink-jpa" dir=".">
 				<exclude name="**/build/**"/>
 				<exclude name="**/target/**"/>
-				<exclude name="derby.log"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/lib" dir="target">
 				<include name="s2toplink-jpa-${ver}.jar"/>
