@@ -168,9 +168,10 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>org.h2</groupId>
+			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.0.20061103</version>
+			<version>1.0.20061217</version>
+			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
