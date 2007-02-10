@@ -28,21 +28,30 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.toplink.jpa.metadata.TopLinkEntityDesc;
 
 /**
+ * TopLink Essentials用のEntityReaderProvider実装です。
  * @author Hidenoshin Yoshida
- *
  */
 public class TopLinkEntityReaderProvider implements EntityReaderProvider {
 
+    /**
+     * EntityReaderFactoryにこのオブジェクトを登録します。
+     */
     @InitMethod
     public void register() {
         EntityReaderFactory.addProvider(this);
     }
 
+    /**
+     * EntityReaderFactoryからこのオブジェクトを削除します。
+     */
     @DestroyMethod
     public void unregister() {
         EntityReaderFactory.removeProvider(this);
     }
 
+    /**
+     * @see org.seasar.framework.jpa.unit.EntityReaderProvider#createEntityReader(java.lang.Object)
+     */
     public TopLinkEntityReader createEntityReader(final Object entity) {
         if (entity == null) {
             return null;
@@ -55,6 +64,9 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
         return new TopLinkEntityReader(entity, entityDesc);
     }
 
+    /**
+     * @see org.seasar.framework.jpa.unit.EntityReaderProvider#createEntityReader(java.util.Collection)
+     */
     public TopLinkEntityCollectionReader createEntityReader(final Collection<?> entities) {
         if (entities == null) {
             return null;
@@ -81,6 +93,11 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
         return new TopLinkEntityCollectionReader(newEntities, entityDescs);
     }
 
+    /**
+     * entitiesの中にObject配列が含まれていた場合、配列の要素をCollectionに追加して、新たなCollectionを生成します。
+     * @param entities 対象Collection
+     * @return 新規作成したCollection
+     */
     protected Collection<Object> flatten(final Collection<?> entities) {
         Collection<Object> newEntities = CollectionsUtil.newArrayList(entities
                 .size());
@@ -96,6 +113,11 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
         return newEntities;
     }
 
+    /**
+     * 指定したentityClassに対応するTopLinkEntityDescオブジェクトを返します。
+     * @param entityClass Entityクラス
+     * @return entityClassに対応するTopLinkEntityDesc
+     */
     protected TopLinkEntityDesc getEntityDesc(final Class<?> entityClass) {
         final EntityDesc entityDesc = EntityDescFactory
                 .getEntityDesc(entityClass);

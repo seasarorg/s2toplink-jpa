@@ -30,42 +30,74 @@ import org.seasar.framework.jpa.PersistenceUnitProvider;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
 
 /**
+ * TopLink Essentials用のPersistenceUnitProvier実装です。 
+ * PersistenceProviderのcreateContainerEntityManagerFactoryメソッドを利用して、EntityManagerFactoryを作成します。 
+ * javaagentは利用せず、EntityManagerFactory生成処理の中でEntityクラスのエンハンス処理を実行します。
  * @author Hidenoshin Yoshida
- *
  */
 public class S2TopLinkContainerPersistenceUnitProvider implements
         PersistenceUnitProvider {
     
+    /**
+     * PersistenceUnitManagerオブジェクト
+     */
     protected PersistenceUnitManager persistenceUnitManager;
     
+    /**
+     * PersistenceProviderオブジェクト
+     */
     protected PersistenceProvider persistenceProvider;
     
+    /**
+     * PersistenceUnitInfoのファクトリオブジェクト
+     */
     protected PersistenceUnitInfoFactory persistenceUnitInfoFactory;
     
+    /**
+     * PersistenceUnitManagerを設定します。
+     * @param persistenceUnitManager 設定するPersistenceUnitManager
+     */
     public void setPersistenceUnitManager(
             PersistenceUnitManager persistenceUnitManager) {
         this.persistenceUnitManager = persistenceUnitManager;
     }
 
+    /**
+     * PersistenceProviderを設定します。
+     * @param persistenceProvider 設定するPersistenceProvider
+     */
     public void setPersistenceProvider(PersistenceProvider persistenceProvider) {
         this.persistenceProvider = persistenceProvider;
     }
 
+    /**
+     * PersistenceUnitFactoryを設定します。
+     * @param persistenceUnitInfoFactory 設定するPersistenceUnitInfoFactory
+     */
     public void setPersistenceUnitInfoFactory(
             PersistenceUnitInfoFactory persistenceUnitInfoFactory) {
         this.persistenceUnitInfoFactory = persistenceUnitInfoFactory;
     }
 
+    /**
+     * PersistenceUnitManagerにこのオブジェクトを登録します。
+     */
     @InitMethod
     public void register() {
         persistenceUnitManager.addProvider(this);
     }
 
+    /**
+     * PersistenceUnitManagerからこのオブジェクトを削除します。
+     */
     @DestroyMethod
     public void unregister() {
         persistenceUnitManager.removeProvider(this);
     }
 
+    /**
+     * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String)
+     */
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
         
         PersistenceUnitInfo unitInfo = persistenceUnitInfoFactory.getPersistenceUnitInfo(unitName);

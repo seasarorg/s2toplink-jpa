@@ -23,11 +23,15 @@ import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 import oracle.toplink.essentials.transaction.JTATransactionController;
 
 /**
+ * Seasar2用のJTATransactionController実装です。
  * @author Hidenoshin Yoshida
  *
  */
 public class S2TransactionController extends JTATransactionController {
     
+    /**
+     * @see oracle.toplink.essentials.transaction.JTATransactionController#acquireTransactionManager()
+     */
     @Override
     protected TransactionManager acquireTransactionManager() throws Exception {
         S2Container container = SingletonS2ContainerFactory.getContainer();

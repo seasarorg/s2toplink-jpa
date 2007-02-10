@@ -28,24 +28,36 @@ import org.seasar.framework.jpa.Dialect;
 import org.seasar.framework.jpa.DialectManager;
 
 /**
+ * TopLink Essentials用のDialect実装です。
  * @author Hidenoshin Yoshida
- *
  */
 public class S2TopLinkDialect implements Dialect {
 
+    /**
+     * DialectManagerオブジェクト
+     */
     @Binding(bindingType = BindingType.MUST)
     protected DialectManager dialectManager;
 
+    /**
+     * dialectManagerにこのオブジェクトを登録します。
+     */
     @InitMethod
     public void initialize() {
         dialectManager.addDialect(oracle.toplink.essentials.ejb.cmp3.EntityManager.class, this);
     }
 
+    /**
+     * dialectManagerからこのオブジェクトを削除します。
+     */
     @DestroyMethod
     public void destroy() {
         dialectManager.removeDialect(oracle.toplink.essentials.ejb.cmp3.EntityManager.class);
     }
 
+    /**
+     * @see org.seasar.framework.jpa.Dialect#getConnection(javax.persistence.EntityManager)
+     */
     public Connection getConnection(EntityManager em) {
         Object delegate = em.getDelegate();
         if (delegate instanceof oracle.toplink.essentials.ejb.cmp3.EntityManager) {

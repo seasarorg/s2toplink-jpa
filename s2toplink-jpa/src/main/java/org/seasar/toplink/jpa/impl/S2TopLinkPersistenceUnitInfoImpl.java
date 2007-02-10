@@ -33,25 +33,45 @@ import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 
 /**
  * @author Hidenoshin Yoshida
- * 
  */
 public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         implements S2TopLinkPersistenceUnitInfo {
 
+    /**
+     * エンハンス対象Entityクラス名のSet
+     */
     protected Set<String> tempClassNameSet;
 
+    /**
+     * Jpainstrumentationオブジェクト
+     */
     protected JpaInstrumentation jpaInstrumentation;
-    
+
+    /**
+     * NamingConventionオブジェクト
+     */
     protected NamingConvention namingConvention;
 
+    /**
+     * JpaInstrumentationを設定します。
+     * @param jpaInstrumentation 設定するJpaInstrumentation
+     */
     public void setJpaInstrumentation(JpaInstrumentation jpaInstrumentation) {
         this.jpaInstrumentation = jpaInstrumentation;
     }
 
+    /**
+     * NamingConventionを設定します。
+     * @param namingConvention 設定するNamingConvention
+     */
     public void setNamingConvention(NamingConvention namingConvention) {
         this.namingConvention = namingConvention;
     }
 
+    /**
+     * 引数のClassTransformerをJpaInstrumentationに設定して、Entityクラスのエンハンス処理を行います。
+     * @see oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo#addTransformer(javax.persistence.spi.ClassTransformer)
+     */
     @Override
     public void addTransformer(ClassTransformer transformer) {
         if (jpaInstrumentation != null) {
@@ -59,6 +79,10 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         }
     }
 
+    /**
+     * classLoaderが設定されてない場合、Thread.currentThread().getContextClassLoader()で取得したClassLoaderを設定して返します。
+     * @see oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo#getClassLoader()
+     */
     @Override
     public ClassLoader getClassLoader() {
         if (super.getClassLoader() == null) {
@@ -67,6 +91,10 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         return super.getClassLoader();
     }
 
+    /**
+     * newTempClassLoaderが設定されてない場合、S2TopLinkTempClassLoaderを生成し、設定して返します。
+     * @see oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo#getNewTempClassLoader()
+     */
     @Override
     public ClassLoader getNewTempClassLoader() {
         if (super.getNewTempClassLoader() == null) {
@@ -81,6 +109,10 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         return super.getNewTempClassLoader();
     }
 
+    /**
+     * 設定されたjtaDataSourceがDataSourceImplオブジェクトだった場合、dataSource名を取得して新規にDataSourceを作成します。
+     * @see oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo#setJtaDataSource(javax.sql.DataSource)
+     */
     @Override
     @Binding(bindingType = BindingType.NONE)
     public void setJtaDataSource(DataSource jtaDataSource) {
@@ -92,6 +124,10 @@ public class S2TopLinkPersistenceUnitInfoImpl extends SEPersistenceUnitInfo
         super.setJtaDataSource(jtaDataSource);
     }
 
+    /**
+     * 設定されたnonJtaDataSourceがDataSourceImplオブジェクトだった場合、dataSource名を取得して新規にDataSourceを作成します。
+     * @see oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo#setNonJtaDataSource(javax.sql.DataSource)
+     */
     @Override
     @Binding(bindingType = BindingType.NONE)
     public void setNonJtaDataSource(DataSource nonJtaDataSource) {

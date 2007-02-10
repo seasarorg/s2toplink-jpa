@@ -19,8 +19,8 @@ import oracle.toplink.essentials.platform.database.HSQLPlatform;
 import oracle.toplink.essentials.queryframework.ValueReadQuery;
 
 /**
+ * HSQLDB用DatabasePlatformクラス
  * @author Hidenoshin Yoshida
- *
  */
 public class HSQLDBPlatform extends HSQLPlatform {
 
@@ -29,19 +29,33 @@ public class HSQLDBPlatform extends HSQLPlatform {
      */
     private static final long serialVersionUID = -8108622378935028872L;
 
+    /**
+     * @see oracle.toplink.essentials.platform.database.HSQLPlatform#supportsForeignKeyConstraints()
+     */
     public boolean supportsForeignKeyConstraints() {
         return true;
     }
     
+    /**
+     * @see oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform#supportsNativeSequenceNumbers()
+     */
     public boolean supportsNativeSequenceNumbers() {
         return true;
     }
     
+    /**
+     * @see oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform#buildSelectQueryForNativeSequence(java.lang.String, java.lang.Integer)
+     */
     public ValueReadQuery buildSelectQueryForNativeSequence(String seqName, Integer size) {
         String sequenceName = getQualifiedSequenceName(seqName);
         return new ValueReadQuery("SELECT NEXT VALUE FOR "  + sequenceName + " FROM DUAL_" + sequenceName);
     }
 
+    /**
+     * SEQUENCE名を生成して返します。
+     * @param seqName 加工前のSEQUENCE名
+     * @return SEQUENCE名
+     */
     protected String getQualifiedSequenceName(String seqName) {
         if (getTableQualifier().equals("")) {
             return seqName;

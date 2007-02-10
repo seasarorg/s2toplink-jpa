@@ -50,19 +50,17 @@ import org.seasar.toplink.jpa.JpaInstrumentation;
  *
  */
 public class JpaInstrumentationImpl implements JpaInstrumentation {
-    
-    public static final String DEFINE_CLASS_METHOD_NAME = "defineClass";
-    
-    public static final String FIND_RESOURCE_METHOD_NAME = "findResource";
+        
+    private static final String DEFINE_CLASS_METHOD_NAME = "defineClass";
 
-    // static fields
-    protected static final ProtectionDomain protectionDomain;
+    private static final String FIND_RESOURCE_METHOD_NAME = "findResource";
 
-    protected static Method defineClassMethod;
+    private static final ProtectionDomain protectionDomain;
+
+    private static Method defineClassMethod;
     
-    protected static Method findResourceMethod;
+    private static Method findResourceMethod;
 
-    // static initializer
     static {
         protectionDomain = AccessController
                 .doPrivileged(new PrivilegedAction<ProtectionDomain>() {
@@ -109,6 +107,9 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         });
     }
 
+    /**
+     * @see org.seasar.toplink.jpa.JpaInstrumentation#addTransformer(javax.persistence.spi.ClassTransformer, java.lang.ClassLoader)
+     */
     @SuppressWarnings("unchecked")
     public void addTransformer(ClassTransformer classTransformer,
             ClassLoader classLoader) {
@@ -155,7 +156,14 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         }
     }
 
-    private byte[] getClassBytes(ResourceData data)
+    
+    /**
+     * ResourceDataオブジェクトが持つInputStreamをbyte配列に変換します。
+     * @param data ResourceDataオブジェクト
+     * @return ResourceDataが持つInputStreamを変換したbyte配列
+     * @throws IOException InputStreamの読み込み、closeに失敗した場合
+     */
+    protected byte[] getClassBytes(ResourceData data)
             throws IOException {
         ByteArrayOutputStream out = null;
         InputStream in = null;
@@ -184,7 +192,13 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         }
     }
     
-    private ResourceData getResourceData(ClassLoader loader, String className) {
+    /**
+     * クラス名のStringとClassLoaderを渡して、ClassをロードできるClassLoaderとClassオブジェクトのInputStreamを取得します。
+     * @param loader ClassLoaderオブジェクト
+     * @param className クラス名
+     * @return 指定したクラスをロードできるClassLoaderと、指定したクラスのInputStreamを持つResourceData
+     */
+    protected ResourceData getResourceData(ClassLoader loader, String className) {
         Object ret = null;
         className = className + ".class";
         for (ClassLoader cl : getClassLoaderList(loader)) {
@@ -210,7 +224,13 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         return null;
     }
     
-    private List<ClassLoader> getClassLoaderList(ClassLoader loader) {
+    
+    /**
+     * ClassLoaderを受け取り、引数のClassLoaderから親ClassLoaderを検索し、取得できた全てのClassLoaderをListで返します。
+     * @param loader ClassLoaderオブジェクト
+     * @return 引数のClassLoaderを含み、取得出来る全ての親ClassLoaderを含むList。 親が子の前に来るように順番付けしている。
+     */
+    protected List<ClassLoader> getClassLoaderList(ClassLoader loader) {
         LinkedList<ClassLoader> list = CollectionsUtil.newLinkedList();
         list.add(loader);
         while (loader.getParent() != null && loader.getParent() != loader) {
@@ -220,35 +240,44 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
         return list;
     }
     
-    private class ResourceData {
+    /**
+     * InputStremとClassLoaderをセットで保持するクラス
+     * @author Hidenoshin Yoshida
+     *
+     */
+    protected class ResourceData {
         
         private InputStream in;
         
         private ClassLoader loader;
 
         /**
-         * @return in
+         * InputStreamオブジェクトを返します。
+         * @return in InputStreamオブジェクト
          */
         public InputStream getIn() {
             return in;
         }
 
         /**
-         * @param in 設定する in
+         * InputStreamオブジェクトを設定します。
+         * @param in 設定するInputStreamオブジェクト
          */
         public void setIn(InputStream in) {
             this.in = in;
         }
 
         /**
-         * @return loader
+         * ClassLoaderオブジェクトを返します。
+         * @return loader ClassLoaderオブジェクト
          */
         public ClassLoader getLoader() {
             return loader;
         }
 
         /**
-         * @param loader 設定する loader
+         * ClassLoaderオブジェクトを設定します。
+         * @param loader 設定するClassLoaderオブジェクト
          */
         public void setLoader(ClassLoader loader) {
             this.loader = loader;

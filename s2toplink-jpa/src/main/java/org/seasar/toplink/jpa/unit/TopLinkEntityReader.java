@@ -39,18 +39,29 @@ import org.seasar.toplink.jpa.metadata.TopLinkAttributeDesc;
 import org.seasar.toplink.jpa.metadata.TopLinkEntityDesc;
 
 /**
+ * TopLink Essentials用のEntityReader実装です。
  * @author Hidenoshin Yoshida
- *
  */
 public class TopLinkEntityReader implements EntityReader {
 
+    /**
+     * DataSetオブジェクト
+     */
     protected final DataSet dataSet = new DataSetImpl();
     
     private TopLinkEntityDesc entityDesc;
 
+    /**
+     * コンストラクタ
+     */
     protected TopLinkEntityReader() {
     }
     
+    /**
+     * コンストラクタ
+     * @param entity 対象Entityオブジェクト
+     * @param topLinkEntityDesc entityに対応するTopLinkEntityDesc
+     */
     public TopLinkEntityReader(Object entity, TopLinkEntityDesc topLinkEntityDesc) {
         this.entityDesc = topLinkEntityDesc;
         setupColumns();
@@ -58,10 +69,16 @@ public class TopLinkEntityReader implements EntityReader {
         
     }
 
+    /**
+     * @see org.seasar.extension.dataset.DataReader#read()
+     */
     public DataSet read() {
         return dataSet;
     }
     
+    /**
+     * dataSetのカラム定義を生成します。
+     */
     protected void setupColumns() {
         for (String tableName : getEntityDesc().getTableNames()) {
             if (!dataSet.hasTable(tableName)) {
@@ -72,6 +89,9 @@ public class TopLinkEntityReader implements EntityReader {
         setupDiscriminatorColumn();
     }
 
+    /**
+     * entityDescからdataSetのカラム定義を生成します。
+     */
     protected void setupAttributeColumns() {
         ServerSession serverSession = getEntityDesc().getServerSession();
         DatabasePlatform platform = serverSession.getPlatform();
@@ -91,6 +111,9 @@ public class TopLinkEntityReader implements EntityReader {
         }
     }
     
+    /**
+     * entityDescからInheritancePolicyを取得し、継承関連のカラムをdataSetに定義します。
+     */
     protected void setupDiscriminatorColumn() {
         if (!getEntityDesc().hasDiscriminatorColumn()) {
             return;
@@ -109,6 +132,10 @@ public class TopLinkEntityReader implements EntityReader {
         }
     }
     
+    /**
+     * dataSetの行データを生成します。
+     * @param entity 対象Entityオブジェクト
+     */
     protected void setupRow(final Object entity) {
         Map<String, DataRow> rowMap = CollectionsUtil.newHashMap();
         for (TopLinkAttributeDesc attribute : getEntityDesc().getAttributeDescs()) { 
@@ -156,6 +183,10 @@ public class TopLinkEntityReader implements EntityReader {
     }
 
     
+    /**
+     * entityDescを返します。
+     * @return entityDesc
+     */
     protected TopLinkEntityDesc getEntityDesc() {
         return entityDesc;
     }

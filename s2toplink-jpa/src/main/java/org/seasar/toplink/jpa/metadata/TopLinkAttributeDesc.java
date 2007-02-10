@@ -33,13 +33,19 @@ import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.util.TemporalTypeUtil;
 
 /**
+ * TopLink Essentials用のAttributeDesc実装です。
  * @author Hidenoshin Yoshida
- * 
  */
 public class TopLinkAttributeDesc implements AttributeDesc {
 
+    /**
+     * ServerSessionオブジェクト
+     */
     protected ServerSession serverSession;
 
+    /**
+     * DatabaseMappingオブジェクト
+     */
     protected DatabaseMapping mapping;
 
     protected Class<?> elementType;
@@ -62,6 +68,11 @@ public class TopLinkAttributeDesc implements AttributeDesc {
 
     protected boolean version;
 
+    /**
+     * コンストラクタ
+     * @param mapping DatabaseMappingオブジェクト
+     * @param serverSession ServerSessionオブジェクト
+     */
     public TopLinkAttributeDesc(DatabaseMapping mapping,
             ServerSession serverSession) {
         this.mapping = mapping;
@@ -99,54 +110,94 @@ public class TopLinkAttributeDesc implements AttributeDesc {
         }
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getElementType()
+     */
     public Class<?> getElementType() {
         return elementType;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getName()
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getSqlType()
+     */
     public int getSqlType() {
         return sqlType;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getTemporalType()
+     */
     public TemporalType getTemporalType() {
         return temporalType;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getType()
+     */
     public Class<?> getType() {
         return type;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getValue(java.lang.Object)
+     */
     public Object getValue(Object entity) {
         return mapping.getAttributeValueFromObject(entity);
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#isAssociation()
+     */
     public boolean isAssociation() {
         return association;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#isCollection()
+     */
     public boolean isCollection() {
         return collection;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#isComponent()
+     */
     public boolean isComponent() {
         return component;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#isId()
+     */
     public boolean isId() {
         return id;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#isVersion()
+     */
     public boolean isVersion() {
         return version;
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#setValue(java.lang.Object, java.lang.Object)
+     */
     public void setValue(Object entity, Object value) {
         mapping.setAttributeValueInObject(entity, value);
     }
 
+    /**
+     * DatabaseMappingを返します。
+     * @return DatabaseMapping
+     */
     public DatabaseMapping getMapping() {
         return mapping;
     }

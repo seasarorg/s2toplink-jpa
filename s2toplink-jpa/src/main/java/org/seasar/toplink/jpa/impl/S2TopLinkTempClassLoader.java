@@ -21,30 +21,46 @@ import org.seasar.framework.container.hotdeploy.HotdeployClassLoader;
 import org.seasar.framework.convention.NamingConvention;
 
 /**
+ * HotdeployClassLoaderを継承した、エンハンス対象Entityクラス情報を取得する為のClassLoaderです。
  * @author Hidenoshin Yoshida
- *
  */
 public class S2TopLinkTempClassLoader extends HotdeployClassLoader {
     
+    /**
+     * エンハンス対象Entityクラス名のSet
+     */
     protected Set<String> tempClassNameSet;
     
+    /**
+     * コンストラクタ
+     * @param namingConvention 設定するNamingConvention
+     */
     public S2TopLinkTempClassLoader(NamingConvention namingConvention) {
         super(Thread.currentThread().getContextClassLoader(), namingConvention);
     }
 
     /**
-     * @param classLoader
-     * @param namingConvention
+     * コンストラクタ
+     * @param classLoader 設定するClassLoader
+     * @param namingConvention 設定するNamingConvention
      */
     public S2TopLinkTempClassLoader(ClassLoader classLoader,
             NamingConvention namingConvention) {
         super(classLoader, namingConvention);
     }
 
+    /**
+     * エンハンス対象Entityクラス名のSetを設定します。
+     * @param tempClassNameSet 設定するSet
+     */
     public void setTempClassNameSet(Set<String> tempClassNameSet) {
         this.tempClassNameSet = tempClassNameSet;
     }
 
+    /**
+     * NamingConventionによる判定に加え、tempClassNameSetにクラス名が存在した場合もtrueを返します。
+     * @see org.seasar.framework.container.hotdeploy.HotdeployClassLoader#isTargetClass(java.lang.String)
+     */
     @Override
     protected boolean isTargetClass(String className) {
         boolean ret = super.isTargetClass(className);

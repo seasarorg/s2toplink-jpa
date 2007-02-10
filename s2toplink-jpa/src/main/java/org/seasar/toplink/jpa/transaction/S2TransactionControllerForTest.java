@@ -22,11 +22,15 @@ import oracle.toplink.essentials.transaction.JTATransactionController;
 import org.seasar.extension.jta.SingletonTransactionManagerProxy;
 
 /**
+ * Seasar2用のJTATransactionController実装です（単体テスト用）。
  * @author Hidenoshin Yoshida
  * 
  */
 public class S2TransactionControllerForTest extends JTATransactionController {
 
+    /**
+     * @see oracle.toplink.essentials.transaction.JTATransactionController#acquireTransactionManager()
+     */
     @Override
     protected TransactionManager acquireTransactionManager() throws Exception {
         return new SingletonTransactionManagerProxy();

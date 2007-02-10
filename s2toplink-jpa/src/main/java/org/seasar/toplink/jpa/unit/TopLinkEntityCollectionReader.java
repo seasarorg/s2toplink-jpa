@@ -21,15 +21,26 @@ import java.util.Map;
 import org.seasar.toplink.jpa.metadata.TopLinkEntityDesc;
 
 /**
+ * TopLink Essentials用のEntityReader実装です（Collection用）。
  * @author Hidenoshin Yoshida
- * 
  */
 public class TopLinkEntityCollectionReader extends TopLinkEntityReader {
 
+    /**
+     * Entityクラスと対応するEntityDescのMap
+     */
     protected Map<Class<?>, TopLinkEntityDesc> entityDescs;
 
+    /**
+     * EntityReader生成時に一時的にEntityClassを保持するフィールド
+     */
     protected Class<?> processingClass;
 
+    /**
+     * コンストラクタ
+     * @param entities 対象となるEntityのList
+     * @param entityDescs Entityクラスと対応するEntityDescのMap
+     */
     public TopLinkEntityCollectionReader(final Collection<?> entities,
             final Map<Class<?>, TopLinkEntityDesc> entityDescs) {
 
@@ -43,6 +54,9 @@ public class TopLinkEntityCollectionReader extends TopLinkEntityReader {
         }
     }
 
+    /**
+     * @see org.seasar.toplink.jpa.unit.TopLinkEntityReader#getEntityDesc()
+     */
     @Override
     protected TopLinkEntityDesc getEntityDesc() {
         return entityDescs.get(processingClass);

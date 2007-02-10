@@ -27,32 +27,51 @@ import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 
 /**
+ * TopLink Essentials用のEntityDescProvider実装です。
  * @author Hidenoshin Yoshida
- *
  */
 public class TopLinkEntityDescProvider implements EntityDescProvider {
     
+    /**
+     * EntityManagerFactoryImplオブジェクト
+     */
     protected EntityManagerFactoryImpl emf;
     
+    /**
+     * ServerSessionオブジェクト
+     */
     protected ServerSession serverSession;
     
     
     
+    /**
+     * コンストラクタ
+     * @param entityManagerFactory EntityManagerFactoryオブジェクト
+     */
     @SuppressWarnings("unchecked")
     public TopLinkEntityDescProvider(EntityManagerFactory entityManagerFactory) {
         this.emf = EntityManagerFactoryImpl.class.cast(entityManagerFactory);
     }
 
+    /**
+     * EntityDescFactoryにこのオブジェクトを追加します。
+     */
     @InitMethod
     public void register() {
         EntityDescFactory.addProvider(this);
     }
 
+    /**
+     * EntityDescFactoryからこのオブジェクトを削除します。
+     */
     @DestroyMethod
     public void unregister() {
         EntityDescFactory.removeProvider(this);
     }
 
+    /**
+     * @see org.seasar.framework.jpa.metadata.EntityDescProvider#createEntityDesc(java.lang.Class)
+     */
     public EntityDesc createEntityDesc(Class<?> entityClass) {
         if (serverSession == null) {
             serverSession = emf.getServerSession();

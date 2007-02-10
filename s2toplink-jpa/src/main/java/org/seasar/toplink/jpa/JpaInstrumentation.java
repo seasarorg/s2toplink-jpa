@@ -18,10 +18,16 @@ package org.seasar.toplink.jpa;
 import javax.persistence.spi.ClassTransformer;
 
 /**
+ * JPAプロバイダから提供されるClassTransformerオブジェクトを使用して、エンハンスされたクラスをClassLoaderに登録します。
  * @author Hidenoshin Yoshida
  *
  */
 public interface JpaInstrumentation {
 
+    /**
+     * ClassTransformerオブジェクトを受け取り、ClassLoaderにエンハンスされたクラスを登録します。
+     * @param classTransformer ClassTransformerオブジェクト
+     * @param classLoader エンハンスされたクラスを登録するClassLoader
+     */
     void addTransformer(ClassTransformer classTransformer, ClassLoader classLoader);
 }

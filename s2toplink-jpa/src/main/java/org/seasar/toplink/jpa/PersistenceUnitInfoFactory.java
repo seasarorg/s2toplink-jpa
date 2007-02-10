@@ -19,12 +19,23 @@ import javax.persistence.spi.PersistenceUnitInfo;
 
 
 /**
+ * PersistenceUnitInfoの生成、既存のPersitenceUnitInfoオブジェクトへのデータ追加機能を提供します。
  * @author Hidenoshin Yoshida
  *
  */
 public interface PersistenceUnitInfoFactory {
 
+    /**
+     * 指定されたPersistenceUnit名をキーにクラスパス内のpersistence.xmlを検索し、PersistenceUnitInfoオブジェクトを生成します。 
+     * 生成したオブジェクトには、自動登録対象のEntityクラスやマッピングファイル情報が反映されています。
+     * @param unitName PersistenceUnit名
+     * @return 指定したPersistenceUnit名に対応するPersistenceUnitInfoオブジェクト
+     */
     PersistenceUnitInfo getPersistenceUnitInfo(String unitName);
     
+    /**
+     * PersistenceUnitInfoオブジェクトを渡して、自動登録対象のEntityクラスやマッピングファイル情報を追加します。 
+     * @param persistenceUnitInfo PersistenceUnitInfoオブジェクト
+     */
     void addAutoDetectResult(PersistenceUnitInfo persistenceUnitInfo);
 }

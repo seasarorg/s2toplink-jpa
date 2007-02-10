@@ -21,12 +21,24 @@ import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
 
 /**
+ * Entityクラスを自動登録するClassAutoDetectorや、マッピングファイルを自動登録するResourceAutoDetectorを生成します。
  * @author Hidenoshin Yoshida
  *
  */
 public interface AutoDetectorFactory {
     
+    /**
+     * 指定されたPersistenceUnit名に対応するResourceAutoDetectorオブジェクトのListを返します。
+     * @param unitName PersistenceUnit名
+     * @return unitNameで登録されているResourceAutoDetectorのListを返します。 nullを指定したときは、null値で登録されたResourceAutoDetectorのListを返します。 
+     * 
+     */
     List<ResourceAutoDetector> getResourceAutoDetectorList(String unitName);
     
+    /**
+     * 指定されたPersistenceUnit名に対応するClassAutoDetectorオブジェクトのListを返します。
+     * @param unitName PersistenceUnit名
+     * @return unitNameで登録されているClassAutoDetectorのListを返します。 nullを指定したときは、null値で登録されたClassAutoDetectorのListを返します。 
+     */
     List<ClassAutoDetector> getClassAutoDetectorList(String unitName);
 }

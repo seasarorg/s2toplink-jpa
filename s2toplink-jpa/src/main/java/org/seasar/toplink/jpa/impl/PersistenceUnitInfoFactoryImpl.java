@@ -45,12 +45,25 @@ import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 public class PersistenceUnitInfoFactoryImpl implements
         PersistenceUnitInfoFactory {
 
+    /**
+     * PersistenceUnit名をキー、SEPersistenceUnitInfoを値に持つMap
+     */
     protected Map<String, SEPersistenceUnitInfo> sePersistenceUnitInfoMap;
 
+    /**
+     * S2コンテナ
+     */
     protected S2Container container;
     
-    private AutoDetectorFactory autoDetectorFactory;
+    /**
+     * Entityクラス、Mappingファイルの自動登録AutoDetectorのファクトリ
+     */
+    protected AutoDetectorFactory autoDetectorFactory;
     
+    /**
+     * 初期化処理を行います。
+     * クラスパス上のpersistence.xmlを検索し、設定データをsePersistenceUnitInfoMapに保持します。
+     */
     protected void init() {
         sePersistenceUnitInfoMap = new HashMap<String, SEPersistenceUnitInfo>();
         Set<Archive> archives = PersistenceUnitProcessor.findPersistenceArchives();
@@ -63,14 +76,25 @@ public class PersistenceUnitInfoFactoryImpl implements
         }
     }
     
+    /**
+     * S2コンテナを設定します。
+     * @param container 設定するS2コンテナ
+     */
     public void setContainer(S2Container container) {
         this.container = container;
     }
 
+    /**
+     * AutoDetectorFactoryを設定します。
+     * @param autoDetectorFactory 設定するAutoDetectorFactory
+     */
     public void setAutoDetectorFactory(AutoDetectorFactory autoDetectorFactory) {
         this.autoDetectorFactory = autoDetectorFactory;
     }
 
+    /**
+     * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#getPersistenceUnitInfo(java.lang.String)
+     */
     public PersistenceUnitInfo getPersistenceUnitInfo(String unitName) {
         if (sePersistenceUnitInfoMap == null) {
             init();
@@ -98,14 +122,24 @@ public class PersistenceUnitInfoFactoryImpl implements
         return s2UnitInfo;
     }
 
-    private void setMappingFiles(PersistenceUnitInfo unitInfo) {
-        setMappingFiles(unitInfo, autoDetectorFactory.getResourceAutoDetectorList(null));
+    /**
+     * 指定されたPersistenceUnitInfoオブジェクトに自動登録対象のMappingファイル情報を追加します。
+     * @param unitInfo PersistenceUnitInfoオブジェクト
+     */
+    protected void setMappingFiles(PersistenceUnitInfo unitInfo) {
+        setMappingFiles(unitInfo, null);
         if (!StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
-            setMappingFiles(unitInfo, autoDetectorFactory.getResourceAutoDetectorList(unitInfo.getPersistenceUnitName()));            
+            setMappingFiles(unitInfo, unitInfo.getPersistenceUnitName());            
         }
     }
     
-    private void setMappingFiles(final PersistenceUnitInfo unitInfo, List<ResourceAutoDetector> autoDetectList) {
+    /**
+     * 指定されたPersistenceUnitInfoオブジェクトに対して、unitNameで登録されている、自動登録対象のMappingファイル情報を追加します。
+     * @param unitInfo PersistenceUnitInfoオブジェクト
+     * @param unitName PersistenceUnit名
+     */
+    protected void setMappingFiles(final PersistenceUnitInfo unitInfo, String unitName) {
+        List<ResourceAutoDetector> autoDetectList = autoDetectorFactory.getResourceAutoDetectorList(unitName);
         if (autoDetectList != null) {
             for (ResourceAutoDetector rad : autoDetectList) {
                 rad.detect(new ResourceTraversal.ResourceHandler() {
@@ -118,14 +152,25 @@ public class PersistenceUnitInfoFactoryImpl implements
             }
         }
     }
-    private void setPersistenceClasses(PersistenceUnitInfo unitInfo) {
-        setPersistenceClasses(unitInfo, autoDetectorFactory.getClassAutoDetectorList(null));
+    
+    /**
+     * 指定されたPersistenceUnitInfoオブジェクトに自動登録対象のEntityクラス情報を追加します。
+     * @param unitInfo PersistenceUnitInfoオブジェクト
+     */
+    protected void setPersistenceClasses(PersistenceUnitInfo unitInfo) {
+        setPersistenceClasses(unitInfo, null);
         if (!StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
-            setPersistenceClasses(unitInfo, autoDetectorFactory.getClassAutoDetectorList(unitInfo.getPersistenceUnitName()));
+            setPersistenceClasses(unitInfo, unitInfo.getPersistenceUnitName());
         }
     }
     
-    private void setPersistenceClasses(final PersistenceUnitInfo unitInfo, List<ClassAutoDetector> autoDetectList) {
+    /**
+     * 指定されたPersistenceUnitInfoオブジェクトに対して、unitNameで登録されている、自動登録対象のEntityクラス情報を追加します。
+     * @param unitInfo PersistenceUnitInfoオブジェクト
+     * @param unitName PersistenceUnit名
+     */
+    protected void setPersistenceClasses(final PersistenceUnitInfo unitInfo, String unitName) {
+        List<ClassAutoDetector> autoDetectList = autoDetectorFactory.getClassAutoDetectorList(unitName);
         if (autoDetectList != null) {
             for (ClassAutoDetector cad : autoDetectList) {
                 cad.detect(new ClassTraversal.ClassHandler() {
@@ -140,6 +185,9 @@ public class PersistenceUnitInfoFactoryImpl implements
         }
     }
 
+    /**
+     * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#addAutoDetectResult(javax.persistence.spi.PersistenceUnitInfo)
+     */
     public void addAutoDetectResult(PersistenceUnitInfo unitInfo) {
         setMappingFiles(unitInfo);
         setPersistenceClasses(unitInfo);

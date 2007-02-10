@@ -21,6 +21,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.seasar.framework.aop.interceptors.AbstractInterceptor;
 
 /**
+ * TopLink EssentialsのQuery実装が、createNamedQuery実行時にNamedQueryの存在チェックを行わない問題の対処を行うInterceptor
  * @author Hidenoshin Yoshida
  *
  */
@@ -32,6 +33,10 @@ public class S2TopLinkEntityManagerInterceptor extends AbstractInterceptor {
     private static final long serialVersionUID = -4065883918496694771L;
 
 
+    /**
+     * 実行結果がEJBQueryだった場合、getDatabaseQueryメソッドを実行してNamedQueryの存在チェックを行います。
+     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
+     */
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Object ret = invocation.proceed();
         if (ret instanceof EJBQuery) {

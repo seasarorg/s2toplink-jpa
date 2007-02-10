@@ -30,12 +30,22 @@ import org.seasar.toplink.jpa.AutoDetectorFactory;
  */
 public class AutoDetectorFactoryImpl implements AutoDetectorFactory {
 
+    /**
+     * PersistenceUnit名をキー、対応するResourceAutoDetectorのListを値に持つMap
+     */
     protected Map<String, List<ResourceAutoDetector>> mappingFileAutoDetectors = CollectionsUtil
             .newHashMap();
 
+    /**
+     * PersistenceUnit名をキー、対応するClassAutoDetectorのListを値に持つMap
+     */
     protected Map<String, List<ClassAutoDetector>> persistenceClassAutoDetectors = CollectionsUtil
             .newHashMap();
 
+    /**
+     * ResourceAutoDetectorの配列を受け取り、キー値nullで登録します。
+     * @param resourceAutoDetectors ResourceAutoDetectorの配列
+     */
     public void setMappingFileAutoDetector(
             final ResourceAutoDetector[] resourceAutoDetectors) {
         for (final ResourceAutoDetector detector : resourceAutoDetectors) {
@@ -43,10 +53,19 @@ public class AutoDetectorFactoryImpl implements AutoDetectorFactory {
         }
     }
 
+    /**
+     * ResourceAutoDetectorオブジェクトを受け取り、キー値nullで登録します。
+     * @param detector ResourceAutoDetectorオブジェクト
+     */
     public void addMappingFileAutoDetector(final ResourceAutoDetector detector) {
         addMappingFileAutoDetector(null, detector);
     }
 
+    /**
+     * ResourceAutoDetectorオブジェクトを、指定されたPersistenceUnit名で登録します。
+     * @param unitName PersistenceUnit名。null値可。
+     * @param detector ResourceAutoDetectorオブジェクト
+     */
     public void addMappingFileAutoDetector(final String unitName,
             final ResourceAutoDetector detector) {
         if (!mappingFileAutoDetectors.containsKey(unitName)) {
@@ -56,22 +75,38 @@ public class AutoDetectorFactoryImpl implements AutoDetectorFactory {
         mappingFileAutoDetectors.get(unitName).add(detector);
     }
 
+    /**
+     * @see org.seasar.toplink.jpa.AutoDetectorFactory#getResourceAutoDetectorList(java.lang.String)
+     */
     public List<ResourceAutoDetector> getResourceAutoDetectorList(
             String unitName) {
         return mappingFileAutoDetectors.get(unitName);
     }
 
+    /**
+     * ClassAutoDetectorの配列を受け取り、キー値nullで登録します。
+     * @param classAutoDetectors ClassAutoDetectorの配列
+     */
     public void setPersistenceClassAutoDetector(
-            final ClassAutoDetector[] detectors) {
-        for (final ClassAutoDetector detector : detectors) {
+            final ClassAutoDetector[] classAutoDetectors) {
+        for (final ClassAutoDetector detector : classAutoDetectors) {
             addPersistenceClassAutoDetector(detector);
         }
     }
 
+    /**
+     * ClassAutoDetectorオブジェクトを受け取り、キー値nullで登録します。
+     * @param detector ClassAutoDetectorオブジェクト
+     */
     public void addPersistenceClassAutoDetector(final ClassAutoDetector detector) {
         addPersistenceClassAutoDetector(null, detector);
     }
 
+    /**
+     * ClassAutoDetectorオブジェクトを、指定されたPersistenceUnit名で登録します。
+     * @param unitName PersistenceUnit名。null値可。
+     * @param detector ClassAutoDetectorオブジェクト
+     */
     public void addPersistenceClassAutoDetector(final String unitName,
             final ClassAutoDetector detector) {
         if (!persistenceClassAutoDetectors.containsKey(unitName)) {
@@ -81,6 +116,9 @@ public class AutoDetectorFactoryImpl implements AutoDetectorFactory {
         persistenceClassAutoDetectors.get(unitName).add(detector);
     }
 
+    /**
+     * @see org.seasar.toplink.jpa.AutoDetectorFactory#getClassAutoDetectorList(java.lang.String)
+     */
     public List<ClassAutoDetector> getClassAutoDetectorList(
             String unitName) {
         return persistenceClassAutoDetectors.get(unitName);

@@ -21,19 +21,20 @@ import oracle.toplink.essentials.platform.server.ServerPlatformBase;
 import org.seasar.toplink.jpa.transaction.S2TransactionControllerForTest;
 
 /**
+ * Seasar2用のServerPlatform実装（単体テスト用）です。
  * @author Hidenoshin Yoshida
- *
  */
 public class S2ServerPlatformForTest extends ServerPlatformBase {
 
     /**
-     * @param newDatabaseSession
+     * コンストラクタ
+     * @param newDatabaseSession DatabaseSessionImplオブジェクト
      */
     public S2ServerPlatformForTest(DatabaseSessionImpl newDatabaseSession) {
         super(newDatabaseSession);
     }
 
-    /* (non-Javadoc)
+    /**
      * @see oracle.toplink.essentials.platform.server.ServerPlatformBase#getExternalTransactionControllerClass()
      */
     @Override

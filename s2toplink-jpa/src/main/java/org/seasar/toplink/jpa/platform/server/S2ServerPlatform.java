@@ -21,15 +21,22 @@ import oracle.toplink.essentials.platform.server.ServerPlatformBase;
 import org.seasar.toplink.jpa.transaction.S2TransactionController;
 
 /**
+ * Seasar2用のServerPlatform実装です。
  * @author Hidenoshin Yoshida
- *
  */
 public class S2ServerPlatform extends ServerPlatformBase {
 
+	/**
+     * コンストラクタ
+	 * @param newDatabaseSession DatabaseSessionImplオブジェクト
+	 */
 	public S2ServerPlatform(DatabaseSessionImpl newDatabaseSession) {
 		super(newDatabaseSession);
 	}
 
+    /**
+     * @see oracle.toplink.essentials.platform.server.ServerPlatformBase#getExternalTransactionControllerClass()
+     */
     @Override
     @SuppressWarnings("unchecked")
 	public Class getExternalTransactionControllerClass() {
