@@ -118,6 +118,9 @@
 						<link>
 							http://aopalliance.sourceforge.net/doc/
 						</link>
+						<link>
+							http://s2container.seasar.org/ja/s2-framework/apidocs/
+						</link>
 					</links>
 				</configuration>
 			</plugin>
