@@ -16,8 +16,12 @@
 package org.seasar.toplink.jpa.metadata;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.TemporalType;
 
@@ -25,6 +29,7 @@ import oracle.toplink.essentials.descriptors.ClassDescriptor;
 import oracle.toplink.essentials.descriptors.VersionLockingPolicy;
 import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
 import oracle.toplink.essentials.internal.helper.DatabaseField;
+import oracle.toplink.essentials.mappings.AggregateMapping;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
 import oracle.toplink.essentials.mappings.ForeignReferenceMapping;
 import oracle.toplink.essentials.threetier.ServerSession;
@@ -67,6 +72,10 @@ public class TopLinkAttributeDesc implements AttributeDesc {
     protected boolean id;
 
     protected boolean version;
+    
+    protected TopLinkAttributeDesc[] childAttributeDescs;
+    
+    protected Map<String, TopLinkAttributeDesc> childAttributeMap;
 
     /**
      * コンストラクタ
@@ -105,6 +114,19 @@ public class TopLinkAttributeDesc implements AttributeDesc {
             sqlType = Types.OTHER;
         }
         this.component = mapping.isAggregateMapping();
+        if (component) {
+            AggregateMapping aMapping = AggregateMapping.class.cast(mapping);
+            ClassDescriptor referenceDescriptor = aMapping.getReferenceDescriptor();
+            List<DatabaseMapping> childMapList = referenceDescriptor.getMappings();
+            childAttributeMap = new HashMap<String, TopLinkAttributeDesc>();
+            List<TopLinkAttributeDesc> childAttributeList = new ArrayList<TopLinkAttributeDesc>();
+            for (DatabaseMapping childMap : childMapList) {
+                TopLinkAttributeDesc childDesc = new TopLinkAttributeDesc(childMap, serverSession);
+                childAttributeMap.put(childMap.getAttributeName(), childDesc);
+                childAttributeList.add(childDesc);
+            }
+            childAttributeDescs = childAttributeList.toArray(new TopLinkAttributeDesc[childMapList.size()]);
+        }
         if (type == Date.class || type == Calendar.class) {
             temporalType = TemporalTypeUtil.fromSqlTypeToTemporalType(sqlType);
         }
@@ -192,6 +214,20 @@ public class TopLinkAttributeDesc implements AttributeDesc {
      */
     public void setValue(Object entity, Object value) {
         mapping.setAttributeValueInObject(entity, value);
+    }
+
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDesc(java.lang.String)
+     */
+    public TopLinkAttributeDesc getChildAttributeDesc(String name) {
+        return childAttributeMap.get(name);
+    }
+
+    /**
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDescs()
+     */
+    public TopLinkAttributeDesc[] getChildAttributeDescs() {
+        return childAttributeDescs;
     }
 
     /**

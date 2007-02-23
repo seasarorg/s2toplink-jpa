@@ -323,4 +323,21 @@ public class TopLinkAttributeDescTest extends S2TestCase {
         assertEquals(set, customer.getProducts());
     }
 
+    public void testGetChildAttributeDescs() {
+        EntityDesc eDesc = EntityDescFactory.getEntityDesc(Enemy.class);
+        AttributeDesc desc = eDesc.getAttributeDesc("dangeon");
+        AttributeDesc[] childDescs = desc.getChildAttributeDescs();
+        assertEquals(2, childDescs.length);
+    }
+    
+    public void testGetChildAttributeDesc() {
+        EntityDesc eDesc = EntityDescFactory.getEntityDesc(Enemy.class);
+        AttributeDesc desc = eDesc.getAttributeDesc("dangeon");
+        AttributeDesc childDesc = desc.getChildAttributeDesc("dangeonName");
+        assertNotNull(childDesc);
+        assertEquals("dangeonName", childDesc.getName());
+        childDesc = desc.getChildAttributeDesc("dangeonLevel");
+        assertNotNull(childDesc);
+        assertEquals("dangeonLevel", childDesc.getName());
+    }
 }
