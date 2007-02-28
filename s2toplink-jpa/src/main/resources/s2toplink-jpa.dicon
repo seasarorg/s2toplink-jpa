@@ -3,6 +3,9 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="convention.dicon"/>
+	<include path="jpa-support.dicon"/>
+	<include condition="@org.seasar.framework.container.util.SmartDeployUtil@isSmartdeployMode(container)"
+		path="s2toplink-jpa-smart.dicon"/>
 
 	<component name="javaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer"/>
 
@@ -10,19 +13,11 @@
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitInfoImpl" instance="prototype"/>
 	
+	<!--
 	<component class="org.seasar.toplink.jpa.impl.AutoDetectorFactoryImpl"/>
+	-->
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkConfigurationImpl"/>
 
 	<component class="org.seasar.toplink.jpa.impl.JpaInstrumentationImpl"/>
 	
-
-	<!-- SMART deployを利用しない時は以下の２つのComponentはコメントアウトしてください -->
-
-	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
-	
-	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector">
-		<property name="classLoader">
-			<component class="org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader"/>
-		</property>
-	</component>
-
 </components>
