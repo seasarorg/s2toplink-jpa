@@ -72,7 +72,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
 
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
             public Object run() {
-                final Class[] paramTypes = new Class[] { String.class,
+                final Class<?>[] paramTypes = new Class<?>[] { String.class,
                         byte[].class, int.class, int.class,
                         ProtectionDomain.class };
                 try {
@@ -91,7 +91,7 @@ public class JpaInstrumentationImpl implements JpaInstrumentation {
 
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
             public Object run() {
-                final Class[] paramTypes = new Class[] {String.class};
+                final Class<?>[] paramTypes = new Class[] {String.class};
                 try {
                     final Class<?> loader = ClassUtil.forName(ClassLoader.class
                             .getName());
