@@ -27,15 +27,15 @@ import oracle.toplink.essentials.ejb.cmp3.persistence.Archive;
 import oracle.toplink.essentials.ejb.cmp3.persistence.PersistenceUnitProcessor;
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 
-import org.seasar.framework.autodetector.ClassAutoDetector;
-import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.S2Container;
-import org.seasar.framework.util.ClassTraversal;
+import org.seasar.framework.container.annotation.tiger.Binding;
+import org.seasar.framework.container.annotation.tiger.BindingType;
+import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.ClassUtil;
-import org.seasar.framework.util.ResourceTraversal;
-import org.seasar.framework.util.StringUtil;
-import org.seasar.toplink.jpa.AutoDetectorFactory;
+import org.seasar.framework.util.ClassTraversal.ClassHandler;
+import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
+import org.seasar.toplink.jpa.S2TopLinkConfiguration;
 import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 
 /**
@@ -44,6 +44,9 @@ import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
  */
 public class PersistenceUnitInfoFactoryImpl implements
         PersistenceUnitInfoFactory {
+
+    private static final Logger logger = Logger
+        .getLogger(PersistenceUnitInfoFactoryImpl.class);
 
     /**
      * PersistenceUnit名をキー、SEPersistenceUnitInfoを値に持つMap
@@ -55,10 +58,11 @@ public class PersistenceUnitInfoFactoryImpl implements
      */
     protected S2Container container;
     
+
     /**
-     * Entityクラス、Mappingファイルの自動登録AutoDetectorのファクトリ
+     * Entity・マッピングファイル自動登録用Configuration
      */
-    protected AutoDetectorFactory autoDetectorFactory;
+    protected S2TopLinkConfiguration s2TopLinkConfiguration;
     
     /**
      * 初期化処理を行います。
@@ -84,12 +88,15 @@ public class PersistenceUnitInfoFactoryImpl implements
         this.container = container;
     }
 
+
     /**
-     * AutoDetectorFactoryを設定します。
-     * @param autoDetectorFactory 設定するAutoDetectorFactory
+     * Configurationを設定します
+     * @param topLinkConfiguration 設定するConfiguration
      */
-    public void setAutoDetectorFactory(AutoDetectorFactory autoDetectorFactory) {
-        this.autoDetectorFactory = autoDetectorFactory;
+    @Binding(bindingType = BindingType.MAY)
+    public void setS2TopLinkConfiguration(
+            S2TopLinkConfiguration topLinkConfiguration) {
+        s2TopLinkConfiguration = topLinkConfiguration;
     }
 
     /**
@@ -117,71 +124,96 @@ public class PersistenceUnitInfoFactoryImpl implements
         s2UnitInfo.setExcludeUnlistedClasses(unitInfo.excludeUnlistedClasses());
         s2UnitInfo.setProperties(unitInfo.getProperties());
         
-        setMappingFiles(s2UnitInfo);
-        setPersistenceClasses(s2UnitInfo);
+        if (s2TopLinkConfiguration != null) {
+            addMappingFiles(s2UnitInfo);
+            addAnnotatedClasses(s2UnitInfo);
+        }
         return s2UnitInfo;
     }
-
-    /**
-     * 指定されたPersistenceUnitInfoオブジェクトに自動登録対象のMappingファイル情報を追加します。
-     * @param unitInfo PersistenceUnitInfoオブジェクト
-     */
-    protected void setMappingFiles(PersistenceUnitInfo unitInfo) {
-        setMappingFiles(unitInfo, null);
-        if (!StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
-            setMappingFiles(unitInfo, unitInfo.getPersistenceUnitName());            
-        }
-    }
     
     /**
-     * 指定されたPersistenceUnitInfoオブジェクトに対して、unitNameで登録されている、自動登録対象のMappingファイル情報を追加します。
-     * @param unitInfo PersistenceUnitInfoオブジェクト
-     * @param unitName PersistenceUnit名
+     * PersistenceUnitInfoにSmart Deploy規約に適合したマッピングファイルを自動登録します
+     * @param unitInfo PersistenceUnitInfo
      */
-    protected void setMappingFiles(final PersistenceUnitInfo unitInfo, String unitName) {
-        List<ResourceAutoDetector> autoDetectList = autoDetectorFactory.getResourceAutoDetectorList(unitName);
-        if (autoDetectList != null) {
-            for (ResourceAutoDetector rad : autoDetectList) {
-                rad.detect(new ResourceTraversal.ResourceHandler() {
+    protected void addMappingFiles(final PersistenceUnitInfo unitInfo) {
+        s2TopLinkConfiguration.detectMappingFiles(
+                unitInfo.getPersistenceUnitName(),
+                new MappingFileHandler(unitInfo));
+    }
 
-                    public void processResource(String path, InputStream is) {
-                        unitInfo.getMappingFileNames().add(path);
-                    }
-                    
-                });
+    /**
+     * PersistenceUnitInfoにSmart Deploy規約に適合したEntityを自動登録します
+     * @param unitInfo PersistenceUnitInfo
+     */
+    protected void addAnnotatedClasses(final PersistenceUnitInfo unitInfo) {
+        s2TopLinkConfiguration.detectPersistenceClasses(
+                unitInfo.getPersistenceUnitName(),
+                new PersistenceClassHandler(unitInfo));
+    }
+
+    /**
+     * Mappingファイル自動登録用ResourceHandler
+     * @author Hidenoshin Yoshida
+     *
+     */
+    public class MappingFileHandler implements ResourceHandler {
+
+        /**
+         * PersistenceUnitInfo
+         */
+        protected PersistenceUnitInfo unitInfo;
+
+        /**
+         * コンストラクタ
+         * @param unitInfo PersistenceUnitInfo
+         */
+        public MappingFileHandler(final PersistenceUnitInfo unitInfo) {
+            this.unitInfo = unitInfo;
+        }
+
+        /**
+         * @see org.seasar.framework.util.ResourceTraversal.ResourceHandler#processResource(java.lang.String, java.io.InputStream)
+         */
+        public void processResource(final String path, final InputStream is) {
+            if (logger.isDebugEnabled()) {
+                logger.log("DTLJPA0002", new Object[] { path, unitInfo.getPersistenceUnitName() });
             }
+            unitInfo.getMappingFileNames().add(path);
         }
-    }
-    
-    /**
-     * 指定されたPersistenceUnitInfoオブジェクトに自動登録対象のEntityクラス情報を追加します。
-     * @param unitInfo PersistenceUnitInfoオブジェクト
-     */
-    protected void setPersistenceClasses(PersistenceUnitInfo unitInfo) {
-        setPersistenceClasses(unitInfo, null);
-        if (!StringUtil.isEmpty(unitInfo.getPersistenceUnitName())) {
-            setPersistenceClasses(unitInfo, unitInfo.getPersistenceUnitName());
-        }
-    }
-    
-    /**
-     * 指定されたPersistenceUnitInfoオブジェクトに対して、unitNameで登録されている、自動登録対象のEntityクラス情報を追加します。
-     * @param unitInfo PersistenceUnitInfoオブジェクト
-     * @param unitName PersistenceUnit名
-     */
-    protected void setPersistenceClasses(final PersistenceUnitInfo unitInfo, String unitName) {
-        List<ClassAutoDetector> autoDetectList = autoDetectorFactory.getClassAutoDetectorList(unitName);
-        if (autoDetectList != null) {
-            for (ClassAutoDetector cad : autoDetectList) {
-                cad.detect(new ClassTraversal.ClassHandler() {
 
-                    public void processClass(String packageName, String shortClassName) {
-                        unitInfo.getManagedClassNames().add(ClassUtil.concatName(packageName, shortClassName));
-                        
-                    }
-                    
-                });
+    }
+
+    /**
+     * Entity自動登録用ClassHandler
+     * @author Hidenoshin Yoshida
+     *
+     */
+    public class PersistenceClassHandler implements ClassHandler {
+
+        /**
+         * PersistenceUnitInfo
+         */
+        protected PersistenceUnitInfo unitInfo;
+
+        /**
+         * コンストラクタ
+         * @param unitInfo PersistenceUnitInfo
+         */
+        public PersistenceClassHandler(final PersistenceUnitInfo unitInfo) {
+            this.unitInfo = unitInfo;
+        }
+
+        /**
+         * @see org.seasar.framework.util.ClassTraversal.ClassHandler#processClass(java.lang.String, java.lang.String)
+         */
+        public void processClass(final String packageName,
+                final String shortClassName) {
+            final String className = ClassUtil.concatName(packageName,
+                    shortClassName);
+            if (logger.isDebugEnabled()) {
+                logger.log("DTLJPA0001", new Object[] { className, unitInfo.getPersistenceUnitName() });
             }
+            unitInfo.getManagedClassNames().add(className);
         }
     }
 
@@ -189,8 +221,11 @@ public class PersistenceUnitInfoFactoryImpl implements
      * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#addAutoDetectResult(javax.persistence.spi.PersistenceUnitInfo)
      */
     public void addAutoDetectResult(PersistenceUnitInfo unitInfo) {
-        setMappingFiles(unitInfo);
-        setPersistenceClasses(unitInfo);
+        if (s2TopLinkConfiguration != null) {
+            addMappingFiles(unitInfo);
+            addAnnotatedClasses(unitInfo);
+        }
     }
 
+    
 }

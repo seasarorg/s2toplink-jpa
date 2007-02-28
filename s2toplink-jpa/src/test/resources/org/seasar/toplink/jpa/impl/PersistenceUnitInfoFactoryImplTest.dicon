@@ -3,6 +3,7 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="convention.dicon"/>
+	<include path="jpa-support.dicon"/>
 
 	<component name="javaSECMPInitializer" class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer"/>
 
@@ -11,12 +12,16 @@
 	<component class="org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo" instance="prototype">
 		<aspect>
 			<component class="org.seasar.framework.aop.interceptors.DelegateInterceptor">
-				<property name="target"><component class="oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo"/></property>
+				<property name="target">
+					<component class="oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo">
+						<property name="persistenceUnitName">"persistenceUnit"</property>
+					</component>
+				</property>
 			</component>
 		</aspect>
 	</component>
 	
-	<component class="org.seasar.toplink.jpa.impl.AutoDetectorFactoryImpl"/>
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkConfigurationImpl"/>
 
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
