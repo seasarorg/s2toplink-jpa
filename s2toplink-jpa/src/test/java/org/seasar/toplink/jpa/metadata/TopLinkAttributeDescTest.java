@@ -28,6 +28,7 @@ import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.toplink.jpa.entity.Customer;
+import org.seasar.toplink.jpa.entity.Dangeon;
 import org.seasar.toplink.jpa.entity.Enemy;
 import org.seasar.toplink.jpa.entity.Product;
 import org.seasar.toplink.jpa.entity.Sex;
@@ -152,6 +153,7 @@ public class TopLinkAttributeDescTest extends S2TestCase {
         assertEquals(1, desc.getValue(customer));
         desc = eDesc.getAttributeDesc("products");
         assertEquals(set, desc.getValue(customer));
+        
     }
 
     /**
@@ -331,13 +333,21 @@ public class TopLinkAttributeDescTest extends S2TestCase {
     }
     
     public void testGetChildAttributeDesc() {
+        Dangeon d = new Dangeon();
+        d.setDangeonLevel(1);
+        d.setDangeonName("dangeon");
+
         EntityDesc eDesc = EntityDescFactory.getEntityDesc(Enemy.class);
         AttributeDesc desc = eDesc.getAttributeDesc("dangeon");
+
         AttributeDesc childDesc = desc.getChildAttributeDesc("dangeonName");
         assertNotNull(childDesc);
         assertEquals("dangeonName", childDesc.getName());
+        assertEquals("dangeon", childDesc.getValue(d));
+        
         childDesc = desc.getChildAttributeDesc("dangeonLevel");
         assertNotNull(childDesc);
         assertEquals("dangeonLevel", childDesc.getName());
+        assertEquals(1, childDesc.getValue(d));
     }
 }
