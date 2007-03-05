@@ -7,7 +7,8 @@
 
 <!-- 1. PersistenceUnitProviderの設定 -->
 
-	<!-- for test 単体テスト時はこちらのPersistenceUnitProviderを有効にしてください -->
+	<!-- for test 単体テスト時はこちらのPersistenceUnitProviderを有効にしてください
+	-->
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="javaSECMPInitializer">
 			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa.dicon", #{})
