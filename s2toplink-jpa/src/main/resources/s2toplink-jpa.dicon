@@ -13,11 +13,6 @@
 	
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitInfoImpl" instance="prototype"/>
 	
-	<!--
-	<component class="org.seasar.toplink.jpa.impl.AutoDetectorFactoryImpl"/>
-	-->
-	<component class="org.seasar.toplink.jpa.impl.S2TopLinkConfigurationImpl"/>
-
 	<component class="org.seasar.toplink.jpa.impl.JpaInstrumentationImpl"/>
 	
 </components>
