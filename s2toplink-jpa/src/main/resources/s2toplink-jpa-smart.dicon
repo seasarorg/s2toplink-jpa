@@ -4,12 +4,15 @@
 <components>
 	<include path="convention.dicon"/>
 
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkConfigurationImpl">
+		<property name="tempClassLoader">tempClassLoader</property>
+	</component>
+
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	
 	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector">
-		<property name="classLoader">
-			<component class="org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader"/>
-		</property>
+		<property name="classLoader">tempClassLoader</property>
 	</component>
 
+	<component name="tempClassLoader" class="org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader"/>
 </components>
