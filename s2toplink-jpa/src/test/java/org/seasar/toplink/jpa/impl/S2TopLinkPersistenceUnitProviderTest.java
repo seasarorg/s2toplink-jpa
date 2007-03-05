@@ -42,7 +42,7 @@ public class S2TopLinkPersistenceUnitProviderTest extends S2TestCase {
      * {@link org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider#createEntityManagerFactory(java.lang.String)} のためのテスト・メソッド。
      */
     public void testCreateEntityManagerFactory() {
-        assertTrue(provider instanceof S2TopLinkPersistenceUnitProvider);
+//        assertTrue(provider instanceof S2TopLinkPersistenceUnitProvider);
         EntityManagerFactory factory = provider.createEntityManagerFactory("persistenceUnit");
         assertNotNull(factory);
         assertTrue(factory instanceof EntityManagerFactoryImpl);

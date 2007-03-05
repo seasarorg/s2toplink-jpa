@@ -27,6 +27,12 @@ public class HSQLDBPlatformTest extends S2TestCase {
     
     private HSQLDBPlatform platform = new HSQLDBPlatform();
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        include("jpa.dicon");
+    }
+
     /**
      * {@link org.seasar.toplink.jpa.platform.database.HSQLDBPlatform#supportsForeignKeyConstraints()} のためのテスト・メソッド。
      */

@@ -2,6 +2,7 @@
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
+	<include path="jpa.dicon"/>
 	<component class="org.seasar.toplink.jpa.aop.interceptors.S2TopLinkEntityManagerInterceptor"/>
 	<component class="org.aopalliance.intercept.MethodInvocation">
 		<aspect>
