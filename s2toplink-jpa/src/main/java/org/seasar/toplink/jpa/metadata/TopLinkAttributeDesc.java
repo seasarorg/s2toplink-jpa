@@ -87,7 +87,11 @@ public class TopLinkAttributeDesc implements AttributeDesc {
         this.mapping = mapping;
         this.serverSession = serverSession;
         this.name = mapping.getAttributeName();
-        this.type = mapping.getAttributeAccessor().getAttributeClass();
+        if (mapping instanceof ForeignReferenceMapping) {
+            this.type = ForeignReferenceMapping.class.cast(mapping).getReferenceClass();
+        } else {
+            this.type = mapping.getAttributeAccessor().getAttributeClass();
+        }
         this.id = mapping.isPrimaryKeyMapping();
         this.collection = mapping.isCollectionMapping();
         this.association = mapping.isForeignReferenceMapping();
