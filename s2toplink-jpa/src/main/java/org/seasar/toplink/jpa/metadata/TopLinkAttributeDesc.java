@@ -27,6 +27,7 @@ import javax.persistence.TemporalType;
 
 import oracle.toplink.essentials.descriptors.ClassDescriptor;
 import oracle.toplink.essentials.descriptors.VersionLockingPolicy;
+import oracle.toplink.essentials.indirection.WeavedAttributeValueHolderInterface;
 import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
 import oracle.toplink.essentials.internal.helper.DatabaseField;
 import oracle.toplink.essentials.mappings.AggregateMapping;
@@ -87,10 +88,13 @@ public class TopLinkAttributeDesc implements AttributeDesc {
         this.mapping = mapping;
         this.serverSession = serverSession;
         this.name = mapping.getAttributeName();
-        if (mapping instanceof ForeignReferenceMapping) {
+        Class<?> lType = mapping.getAttributeAccessor().getAttributeClass();
+        if (lType != null
+            && WeavedAttributeValueHolderInterface.class.isAssignableFrom(lType)
+            && mapping instanceof ForeignReferenceMapping) {
             this.type = ForeignReferenceMapping.class.cast(mapping).getReferenceClass();
         } else {
-            this.type = mapping.getAttributeAccessor().getAttributeClass();
+            this.type = lType;
         }
         this.id = mapping.isPrimaryKeyMapping();
         this.collection = mapping.isCollectionMapping();
@@ -175,7 +179,7 @@ public class TopLinkAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getValue(java.lang.Object)
      */
     public Object getValue(Object entity) {
-        return mapping.getAttributeValueFromObject(entity);
+        return mapping.getRealAttributeValueFromObject(entity, null);
     }
 
     /**
