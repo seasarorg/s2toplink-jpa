@@ -17,6 +17,7 @@ package org.seasar.toplink.jpa.transaction;
 
 import javax.transaction.TransactionManager;
 
+import org.seasar.extension.jta.SingletonTransactionManagerProxy;
 import org.seasar.extension.unit.S2TestCase;
 
 /**
@@ -41,7 +42,7 @@ public class S2TransactionControllerTest extends S2TestCase {
         S2TransactionController controller = new S2TransactionController();
 
         TransactionManager tm = controller.acquireTransactionManager();
-        assertEquals(getComponent(TransactionManager.class), tm);
+        assertTrue(tm instanceof SingletonTransactionManagerProxy);
     }
 
 }
