@@ -17,32 +17,23 @@ package org.seasar.toplink.jpa.transaction;
 
 import javax.transaction.TransactionManager;
 
+import oracle.toplink.essentials.transaction.JTATransactionController;
+
 import org.seasar.extension.jta.SingletonTransactionManagerProxy;
-import org.seasar.extension.unit.S2TestCase;
 
 /**
- * @author hid-yoshida
+ * Seasar2用のJTATransactionController実装です。
+ * @author Hidenoshin Yoshida
  *
  */
-public class S2TransactionControllerTest extends S2TestCase {
+public class SingletonS2TransactionController extends JTATransactionController {
     
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include("jpa.dicon");
-    }
-
     /**
-     * {@link org.seasar.toplink.jpa.transaction.S2TransactionController#acquireTransactionManager()} のためのテスト・メソッド。
-     * @throws Exception 
+     * @see oracle.toplink.essentials.transaction.JTATransactionController#acquireTransactionManager()
      */
-    public void testAcquireTransactionManager() throws Exception {
-        S2TransactionController controller = new S2TransactionController();
-
-        TransactionManager tm = controller.acquireTransactionManager();
-        assertTrue(tm instanceof SingletonTransactionManagerProxy);
+    @Override
+    protected TransactionManager acquireTransactionManager() throws Exception {
+        return new SingletonTransactionManagerProxy();
     }
 
 }

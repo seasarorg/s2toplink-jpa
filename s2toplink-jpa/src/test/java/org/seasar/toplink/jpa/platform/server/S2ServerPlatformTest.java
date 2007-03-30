@@ -16,7 +16,7 @@
 package org.seasar.toplink.jpa.platform.server;
 
 import org.seasar.extension.unit.S2TestCase;
-import org.seasar.toplink.jpa.transaction.S2TransactionController;
+import org.seasar.toplink.jpa.transaction.SingletonS2TransactionController;
 
 /**
  * @author Hidenoshin Yoshida
@@ -30,7 +30,7 @@ public class S2ServerPlatformTest extends S2TestCase {
      * {@link org.seasar.toplink.jpa.platform.server.S2ServerPlatform#getExternalTransactionControllerClass()} のためのテスト・メソッド。
      */
     public void testGetExternalTransactionControllerClass() {
-        assertEquals(S2TransactionController.class, serverPlatform.getExternalTransactionControllerClass());
+        assertEquals(SingletonS2TransactionController.class, serverPlatform.getExternalTransactionControllerClass());
     }
 
 }

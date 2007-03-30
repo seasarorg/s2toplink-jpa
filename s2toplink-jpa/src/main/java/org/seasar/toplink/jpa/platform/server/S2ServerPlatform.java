@@ -18,7 +18,7 @@ package org.seasar.toplink.jpa.platform.server;
 import oracle.toplink.essentials.internal.sessions.DatabaseSessionImpl;
 import oracle.toplink.essentials.platform.server.ServerPlatformBase;
 
-import org.seasar.toplink.jpa.transaction.S2TransactionController;
+import org.seasar.toplink.jpa.transaction.SingletonS2TransactionController;
 
 /**
  * Seasar2用のServerPlatform実装です。
@@ -41,7 +41,7 @@ public class S2ServerPlatform extends ServerPlatformBase {
     @SuppressWarnings("unchecked")
 	public Class getExternalTransactionControllerClass() {
     	if (externalTransactionControllerClass == null){
-    		externalTransactionControllerClass = S2TransactionController.class;
+    		externalTransactionControllerClass = SingletonS2TransactionController.class;
     	}
         return externalTransactionControllerClass;
 	}
