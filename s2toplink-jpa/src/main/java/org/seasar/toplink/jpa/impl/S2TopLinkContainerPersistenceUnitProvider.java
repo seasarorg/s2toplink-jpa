@@ -30,32 +30,35 @@ import org.seasar.framework.jpa.PersistenceUnitProvider;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
 
 /**
- * TopLink Essentials用のPersistenceUnitProvier実装です。 
- * PersistenceProviderのcreateContainerEntityManagerFactoryメソッドを利用して、EntityManagerFactoryを作成します。 
+ * TopLink Essentials用のPersistenceUnitProvier実装です。
+ * PersistenceProviderのcreateContainerEntityManagerFactoryメソッドを利用して、EntityManagerFactoryを作成します。
  * javaagentは利用せず、EntityManagerFactory生成処理の中でEntityクラスのエンハンス処理を実行します。
+ * 
  * @author Hidenoshin Yoshida
  */
 public class S2TopLinkContainerPersistenceUnitProvider implements
         PersistenceUnitProvider {
-    
+
     /**
      * PersistenceUnitManagerオブジェクト
      */
     protected PersistenceUnitManager persistenceUnitManager;
-    
+
     /**
      * PersistenceProviderオブジェクト
      */
     protected PersistenceProvider persistenceProvider;
-    
+
     /**
      * PersistenceUnitInfoのファクトリオブジェクト
      */
     protected PersistenceUnitInfoFactory persistenceUnitInfoFactory;
-    
+
     /**
      * PersistenceUnitManagerを設定します。
-     * @param persistenceUnitManager 設定するPersistenceUnitManager
+     * 
+     * @param persistenceUnitManager
+     *            設定するPersistenceUnitManager
      */
     public void setPersistenceUnitManager(
             PersistenceUnitManager persistenceUnitManager) {
@@ -64,7 +67,9 @@ public class S2TopLinkContainerPersistenceUnitProvider implements
 
     /**
      * PersistenceProviderを設定します。
-     * @param persistenceProvider 設定するPersistenceProvider
+     * 
+     * @param persistenceProvider
+     *            設定するPersistenceProvider
      */
     public void setPersistenceProvider(PersistenceProvider persistenceProvider) {
         this.persistenceProvider = persistenceProvider;
@@ -72,7 +77,9 @@ public class S2TopLinkContainerPersistenceUnitProvider implements
 
     /**
      * PersistenceUnitFactoryを設定します。
-     * @param persistenceUnitInfoFactory 設定するPersistenceUnitInfoFactory
+     * 
+     * @param persistenceUnitInfoFactory
+     *            設定するPersistenceUnitInfoFactory
      */
     public void setPersistenceUnitInfoFactory(
             PersistenceUnitInfoFactory persistenceUnitInfoFactory) {
@@ -99,19 +106,33 @@ public class S2TopLinkContainerPersistenceUnitProvider implements
      * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String)
      */
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
-        
-        PersistenceUnitInfo unitInfo = persistenceUnitInfoFactory.getPersistenceUnitInfo(unitName);
+        return createEntityManagerFactory(unitName, unitName);
+    }
+
+    /**
+     * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(String,
+     *      String)
+     */
+    public EntityManagerFactory createEntityManagerFactory(
+            String abstractUnitName, String concreteUnitName) {
+
+        PersistenceUnitInfo unitInfo = persistenceUnitInfoFactory
+                .getPersistenceUnitInfo(abstractUnitName, concreteUnitName);
         if (unitInfo == null) {
             return null;
         }
-        
+
         String providerClassName = unitInfo.getPersistenceProviderClassName();
         if (providerClassName == null
-            || providerClassName.equals("")
-            || providerClassName.equals(EntityManagerFactoryProvider.class.getName())
-            || providerClassName.equals(oracle.toplink.essentials.PersistenceProvider.class.getName())){
-        
-            return persistenceProvider.createContainerEntityManagerFactory(unitInfo, new HashMap<Object, Object>());
+                || providerClassName.equals("")
+                || providerClassName.equals(EntityManagerFactoryProvider.class
+                        .getName())
+                || providerClassName
+                        .equals(oracle.toplink.essentials.PersistenceProvider.class
+                                .getName())) {
+
+            return persistenceProvider.createContainerEntityManagerFactory(
+                    unitInfo, new HashMap<Object, Object>());
         }
         return null;
     }

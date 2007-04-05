@@ -17,25 +17,35 @@ package org.seasar.toplink.jpa;
 
 import javax.persistence.spi.PersistenceUnitInfo;
 
-
 /**
  * PersistenceUnitInfoの生成、既存のPersitenceUnitInfoオブジェクトへのデータ追加機能を提供します。
+ * 
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public interface PersistenceUnitInfoFactory {
 
     /**
-     * 指定されたPersistenceUnit名をキーにクラスパス内のpersistence.xmlを検索し、PersistenceUnitInfoオブジェクトを生成します。 
+     * 指定された具象永続ユニット名をキーにクラスパス内のpersistence.xmlを検索し、PersistenceUnitInfoオブジェクトを生成します。
      * 生成したオブジェクトには、自動登録対象のEntityクラスやマッピングファイル情報が反映されています。
-     * @param unitName PersistenceUnit名
-     * @return 指定したPersistenceUnit名に対応するPersistenceUnitInfoオブジェクト
+     * 
+     * @param abstractUnitName
+     *            抽象永続ユニット名
+     * @param concreteUnitName
+     *            具象永続ユニット名
+     * @return 指定した具象永続ユニット名に対応するPersistenceUnitInfoオブジェクト
      */
-    PersistenceUnitInfo getPersistenceUnitInfo(String unitName);
-    
+    PersistenceUnitInfo getPersistenceUnitInfo(String abstractUnitName,
+            String concreteUnitName);
+
     /**
-     * PersistenceUnitInfoオブジェクトを渡して、自動登録対象のEntityクラスやマッピングファイル情報を追加します。 
-     * @param persistenceUnitInfo PersistenceUnitInfoオブジェクト
+     * PersistenceUnitInfoオブジェクトを渡して、自動登録対象のEntityクラスやマッピングファイル情報を追加します。
+     * 
+     * @param abstractUnitName
+     *            抽象永続ユニット名
+     * @param persistenceUnitInfo
+     *            PersistenceUnitInfoオブジェクト
      */
-    void addAutoDetectResult(PersistenceUnitInfo persistenceUnitInfo);
+    void addAutoDetectResult(String abstractUnitName,
+            PersistenceUnitInfo persistenceUnitInfo);
 }

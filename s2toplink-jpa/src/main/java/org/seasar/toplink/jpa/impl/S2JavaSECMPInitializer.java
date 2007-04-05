@@ -26,31 +26,41 @@ import org.seasar.framework.container.factory.S2ContainerFactory;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
 
 /**
- * TopLink EssentialsのJavaSECMPInitializerを継承したクラス。 
+ * TopLink EssentialsのJavaSECMPInitializerを継承したクラス。
  * Seasar2が提供するEntityクラスやMappingファイルの自動登録機能に対応しています。
+ * 
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
-    
+
+    public static final String ABSTRACT_UNIT_NAME = "s2toplink.abstractUnitName";
+
     /**
      * JavaSECMPInitializerを取得します。
-     * @param configPath JavaSECMPInitializerを生成する定義を記述したdiconファイル名
-     * @param properties JavaSECMPInitializer生成時に渡すPropertiesオブジェクト
+     * 
+     * @param configPath
+     *            JavaSECMPInitializerを生成する定義を記述したdiconファイル名
+     * @param properties
+     *            JavaSECMPInitializer生成時に渡すPropertiesオブジェクト
      * @return JavaSECMPInitializerオブジェクト
      */
     @SuppressWarnings("unchecked")
-    public static JavaSECMPInitializer getJavaSECMPInitializer(String configPath, Map properties) {
+    public static JavaSECMPInitializer getJavaSECMPInitializer(
+            String configPath, Map properties) {
         if (javaSECMPInitializer == null) {
-           initializeFromContainer(configPath, properties);
-        }   
+            initializeFromContainer(configPath, properties);
+        }
         return javaSECMPInitializer;
     }
-    
+
     /**
      * JavaSECMPInitializerが生成されていない場合、configPathで指定されたdiconファイルを読み込んで生成処理を行います。
-     * @param configPath JavaSECMPInitializerを生成する定義を記述したdiconファイル名
-     * @param properties JavaSECMPInitializer生成時に渡すPropertiesオブジェクト
+     * 
+     * @param configPath
+     *            JavaSECMPInitializerを生成する定義を記述したdiconファイル名
+     * @param properties
+     *            JavaSECMPInitializer生成時に渡すPropertiesオブジェクト
      */
     @SuppressWarnings("unchecked")
     public static void initializeFromContainer(String configPath, Map properties) {
@@ -60,19 +70,23 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         S2Container container = S2ContainerFactory.create(configPath);
         container.init();
         try {
-            javaSECMPInitializer = (JavaSECMPInitializer) container.getComponent(JavaSECMPInitializer.class);
-            AbstractSessionLog.getLog().setLevel(JavaSECMPInitializer.getTopLinkLoggingLevel());
+            javaSECMPInitializer = (JavaSECMPInitializer) container
+                    .getComponent(JavaSECMPInitializer.class);
+            AbstractSessionLog.getLog().setLevel(
+                    JavaSECMPInitializer.getTopLinkLoggingLevel());
             javaSECMPInitializer.initialize(properties);
         } finally {
             container.destroy();
         }
     }
-    
+
     private PersistenceUnitInfoFactory persistenceUnitInfoFactory;
-    
+
     /**
      * PersistenceUnitInfoFactoryオブジェクトを設定します。
-     * @param persistenceUnitInfoFactory 設定するPersistenceUnitInfoFactory
+     * 
+     * @param persistenceUnitInfoFactory
+     *            設定するPersistenceUnitInfoFactory
      */
     public void setPersistenceUnitInfoFactory(
             PersistenceUnitInfoFactory persistenceUnitInfoFactory) {
@@ -81,14 +95,25 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
 
     /**
      * 指定されたpersistenceUnitInfoにSeasar2の自動登録情報を追加し、親クラスの処理を実行します。
-     * @see oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer#callPredeploy(oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo, java.util.Map)
+     * 
+     * @see oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer#callPredeploy(oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo,
+     *      java.util.Map)
      */
     @Override
     @SuppressWarnings("unchecked")
-    protected boolean callPredeploy(SEPersistenceUnitInfo persistenceUnitInfo, Map m) {
-        
-        persistenceUnitInfoFactory.addAutoDetectResult(persistenceUnitInfo);
+    protected boolean callPredeploy(SEPersistenceUnitInfo persistenceUnitInfo,
+            Map m) {
+
+        String abstractUnitName = null;
+        if (m != null && m.containsKey(ABSTRACT_UNIT_NAME)) {
+            abstractUnitName = String.class.cast(m.get(ABSTRACT_UNIT_NAME));
+        } else {
+            abstractUnitName = persistenceUnitInfo.getPersistenceUnitName();
+        }
+        persistenceUnitInfoFactory.addAutoDetectResult(abstractUnitName,
+                persistenceUnitInfo);
         return super.callPredeploy(persistenceUnitInfo, m);
+
     }
 
 }

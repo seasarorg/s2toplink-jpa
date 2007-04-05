@@ -24,7 +24,7 @@ import java.util.Map;
 import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.S2Container;
-import org.seasar.framework.convention.NamingConvention;
+import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.ClassTraversal.ClassHandler;
 import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
@@ -32,24 +32,17 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.toplink.jpa.S2TopLinkConfiguration;
 
-
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
 
-    public static final String DEFAULT_PERSISTENCE_UNIT_NAME = "persistenceUnit";
-
-    public static final String PERSISTENCE_UNIT_NAME_SUFFIX = "PersistenceUnit";
-
-    protected String defaultPersistenceUnitName = DEFAULT_PERSISTENCE_UNIT_NAME;
-
-    protected String persistenceUnitNameSuffix = PERSISTENCE_UNIT_NAME_SUFFIX;
-
     protected S2Container container;
-    
+
     protected ClassLoader tempClassLoader;
+
+    protected PersistenceUnitManager persistenceUnitManager;
 
     protected Map<String, List<String>> mappingFiles = CollectionsUtil
             .newHashMap();
@@ -63,14 +56,17 @@ public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
     protected Map<String, List<ClassAutoDetector>> persistenceClassAutoDetectors = CollectionsUtil
             .newHashMap();
 
-    
     public void setContainer(S2Container container) {
         this.container = container;
     }
 
-    
     public void setTempClassLoader(ClassLoader tempClassLoader) {
         this.tempClassLoader = tempClassLoader;
+    }
+
+    public void setPersistenceUnitManager(
+            PersistenceUnitManager persistenceUnitManager) {
+        this.persistenceUnitManager = persistenceUnitManager;
     }
 
     /**
@@ -81,7 +77,8 @@ public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
     }
 
     /**
-     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#addMappingFile(java.lang.String, java.lang.String)
+     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#addMappingFile(java.lang.String,
+     *      java.lang.String)
      */
     public void addMappingFile(String unitName, String fileName) {
         if (!mappingFiles.containsKey(unitName)) {
@@ -98,7 +95,8 @@ public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
     }
 
     /**
-     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#addPersistenceClass(java.lang.String, java.lang.Class)
+     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#addPersistenceClass(java.lang.String,
+     *      java.lang.Class)
      */
     public void addPersistenceClass(String unitName, Class<?> clazz) {
         if (!persistenceClasses.containsKey(unitName)) {
@@ -148,28 +146,30 @@ public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
     }
 
     /**
-     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#detectMappingFiles(java.lang.String, org.seasar.framework.util.ResourceTraversal.ResourceHandler)
+     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#detectMappingFiles(java.lang.String,
+     *      org.seasar.framework.util.ResourceTraversal.ResourceHandler)
      */
     public void detectMappingFiles(final String unitName,
-        final ResourceHandler handler) {
-            for (final String mappingFile : getMappingFileList(unitName)) {
+            final ResourceHandler handler) {
+        for (final String mappingFile : getMappingFileList(unitName)) {
+            handler.processResource(mappingFile, null);
+        }
+        for (final String mappingFile : getMappingFileList(null)) {
+            if (isTarget(unitName, mappingFile)) {
                 handler.processResource(mappingFile, null);
             }
-            for (final String mappingFile : getMappingFileList(null)) {
-                if (isTarget(unitName, mappingFile)) {
-                    handler.processResource(mappingFile, null);
-                }
-            }
-            for (final ResourceAutoDetector detector : getMappingFileAutoDetectorList(unitName)) {
-                detector.detect(handler);
-            }
-            for (final ResourceAutoDetector detector : getMappingFileAutoDetectorList(null)) {
-                detector.detect(new UnitNameAwareHandler(unitName, handler));
-            }
+        }
+        for (final ResourceAutoDetector detector : getMappingFileAutoDetectorList(unitName)) {
+            detector.detect(handler);
+        }
+        for (final ResourceAutoDetector detector : getMappingFileAutoDetectorList(null)) {
+            detector.detect(new UnitNameAwareHandler(unitName, handler));
+        }
     }
 
     /**
-     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#detectPersistenceClasses(java.lang.String, org.seasar.framework.util.ClassTraversal.ClassHandler)
+     * @see org.seasar.toplink.jpa.S2TopLinkConfiguration#detectPersistenceClasses(java.lang.String,
+     *      org.seasar.framework.util.ClassTraversal.ClassHandler)
      */
     public void detectPersistenceClasses(final String unitName,
             final ClassHandler handler) {
@@ -194,9 +194,9 @@ public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
      */
     public boolean isAutoDetection() {
         return persistenceClassAutoDetectors.size() > 0
-        || mappingFileAutoDetectors.size() > 0;
+                || mappingFileAutoDetectors.size() > 0;
     }
-    
+
     @SuppressWarnings("unchecked")
     protected List<String> getMappingFileList(final String unitName) {
         final List<String> result = mappingFiles.get(unitName);
@@ -244,11 +244,13 @@ public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
     }
 
     protected boolean isTarget(final String unitName, final String mappingFile) {
-        return unitName.equals(getPersistenceUnitName(mappingFile));
+        return unitName.equals(persistenceUnitManager
+                .getPersistenceUnitName(mappingFile));
     }
 
     protected boolean isTarget(final String unitName, final Class<?> clazz) {
-        return unitName.equals(getPersistenceUnitName(clazz));
+        return unitName.equals(persistenceUnitManager
+                .getPersistenceUnitName(clazz));
     }
 
     public class UnitNameAwareHandler implements ResourceHandler, ClassHandler {
@@ -281,37 +283,13 @@ public class S2TopLinkConfigurationImpl implements S2TopLinkConfiguration {
                 final String shortClassName) {
             final String className = ClassUtil.concatName(packageName,
                     shortClassName);
-            final Class<?> clazz = ReflectionUtil.forName(className, tempClassLoader);
+            final Class<?> clazz = ReflectionUtil.forName(className,
+                    tempClassLoader);
             if (isTarget(unitName, clazz)) {
                 delegateClassHandler.processClass(packageName, shortClassName);
             }
         }
 
     }
-    
-    public String getPersistenceUnitName(final Class<?> entityClass) {
-        return getPersistenceUnitName(entityClass.getName().replace('.', '/'));
-    }
-
-    public String getPersistenceUnitName(final String mappingFile) {
-        final NamingConvention convention = NamingConvention.class
-                .cast(container.getComponent(NamingConvention.class));
-        if (convention == null) {
-            return defaultPersistenceUnitName;
-        }
-        final String entityPackageName = convention.getEntityPackageName();
-        final String key = "/" + entityPackageName + "/";
-        final int pos = mappingFile.lastIndexOf(key);
-        if (pos < 0) {
-            return defaultPersistenceUnitName;
-        }
-        final int pos2 = mappingFile.lastIndexOf('/');
-        if (pos + key.length() - 1 == pos2) {
-            return defaultPersistenceUnitName;
-        }
-        return mappingFile.substring(pos + key.length(), pos2)
-                + persistenceUnitNameSuffix;
-    }
-
 
 }

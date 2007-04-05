@@ -16,6 +16,8 @@
 package org.seasar.toplink.jpa.impl;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.spi.PersistenceUnitInfo;
 
@@ -28,17 +30,19 @@ import org.seasar.toplink.jpa.entity.Customer;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2JavaSECMPInitializerTest extends S2TestCase {
-    
+
     private static final String MAPPING_FILE_NAME = "org/seasar/toplink/jpa/entity/CustomerOrm.xml";
-    
+
     private JavaSECMPInitializer javaSECMPInitializer;
 
     private PersistenceUnitInfoFactory persistenceUnitInfoFactory;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
@@ -47,47 +51,66 @@ public class S2JavaSECMPInitializerTest extends S2TestCase {
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#getJavaSECMPInitializer(java.lang.String, java.util.Map)} のためのテスト・メソッド。
-     * @throws NoSuchFieldException 
-     * @throws SecurityException 
-     * @throws IllegalAccessException 
-     * @throws IllegalArgumentException 
+     * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#getJavaSECMPInitializer(java.lang.String, java.util.Map)}
+     * のためのテスト・メソッド。
+     * 
+     * @throws NoSuchFieldException
+     * @throws SecurityException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
      */
-    public void testGetJavaSECMPInitializerStringMap() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field field = JavaSECMPInitializer.class.getDeclaredField("javaSECMPInitializer");
+    public void testGetJavaSECMPInitializerStringMap()
+            throws SecurityException, NoSuchFieldException,
+            IllegalArgumentException, IllegalAccessException {
+        Field field = JavaSECMPInitializer.class
+                .getDeclaredField("javaSECMPInitializer");
         field.setAccessible(true);
         field.set(null, null);
-        javaSECMPInitializer = S2JavaSECMPInitializer.getJavaSECMPInitializer("s2toplink-jpa.dicon", null);
+        javaSECMPInitializer = S2JavaSECMPInitializer.getJavaSECMPInitializer(
+                "s2toplink-jpa.dicon", null);
         assertEquals(field.get(null), javaSECMPInitializer);
         javaSECMPInitializer = new S2JavaSECMPInitializer();
         field.set(null, javaSECMPInitializer);
-        assertEquals(javaSECMPInitializer, S2JavaSECMPInitializer.getJavaSECMPInitializer("s2toplink-jpa.dicon", null));
+        assertEquals(javaSECMPInitializer, S2JavaSECMPInitializer
+                .getJavaSECMPInitializer("s2toplink-jpa.dicon", null));
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#initializeFromContainer(java.lang.String, java.util.Map)} のためのテスト・メソッド。
-     * @throws NoSuchFieldException 
-     * @throws SecurityException 
-     * @throws IllegalAccessException 
-     * @throws IllegalArgumentException 
+     * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#initializeFromContainer(java.lang.String, java.util.Map)}
+     * のためのテスト・メソッド。
+     * 
+     * @throws NoSuchFieldException
+     * @throws SecurityException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
      */
-    public void testInitializeFromContainer() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Field field = JavaSECMPInitializer.class.getDeclaredField("javaSECMPInitializer");
+    public void testInitializeFromContainer() throws SecurityException,
+            NoSuchFieldException, IllegalArgumentException,
+            IllegalAccessException {
+        Field field = JavaSECMPInitializer.class
+                .getDeclaredField("javaSECMPInitializer");
         field.setAccessible(true);
         field.set(null, null);
-        S2JavaSECMPInitializer.initializeFromContainer("s2toplink-jpa.dicon", null);
+        S2JavaSECMPInitializer.initializeFromContainer("s2toplink-jpa.dicon",
+                null);
         assertNotNull(field.get(null));
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#callPredeploy(oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo, java.util.Map)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#callPredeploy(oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo, java.util.Map)}
+     * のためのテスト・メソッド。
      */
     public void testCallPredeploySEPersistenceUnitInfoMap() {
-        PersistenceUnitInfo unitInfo = persistenceUnitInfoFactory.getPersistenceUnitInfo("persistenceUnit");
+        PersistenceUnitInfo unitInfo = persistenceUnitInfoFactory
+                .getPersistenceUnitInfo("persistenceUnit", "persistenceUnit");
         unitInfo.getManagedClassNames().clear();
         unitInfo.getMappingFileNames().clear();
-        S2JavaSECMPInitializer.class.cast(javaSECMPInitializer).callPredeploy(SEPersistenceUnitInfo.class.cast(unitInfo), null);
-        assertTrue(unitInfo.getManagedClassNames().contains(Customer.class.getName()));
+        Map<String, String> prop = new HashMap<String, String>();
+        prop.put(S2JavaSECMPInitializer.ABSTRACT_UNIT_NAME, "persistenceUnit");
+        S2JavaSECMPInitializer.class.cast(javaSECMPInitializer).callPredeploy(
+                SEPersistenceUnitInfo.class.cast(unitInfo), prop);
+        assertTrue(unitInfo.getManagedClassNames().contains(
+                Customer.class.getName()));
         assertTrue(unitInfo.getMappingFileNames().contains(MAPPING_FILE_NAME));
     }
 

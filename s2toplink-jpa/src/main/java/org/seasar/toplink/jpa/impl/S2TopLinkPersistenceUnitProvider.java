@@ -26,9 +26,10 @@ import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
 
 /**
- * TopLink Essentials用のPersistenceUnitProvier実装です。 
- * PersistenceProviderのcreateEntityManagerFactoryメソッドを利用して、EntityManagerFactoryを作成します。 
+ * TopLink Essentials用のPersistenceUnitProvier実装です。
+ * PersistenceProviderのcreateEntityManagerFactoryメソッドを利用して、EntityManagerFactoryを作成します。
  * javaagentからS2JavaSECMPInitializerAgentを実行していた場合、N:1の関連に対するEntityのLAZYロード設定が有効になります。
+ * 
  * @author Hidenoshin Yoshida
  */
 public class S2TopLinkPersistenceUnitProvider implements
@@ -38,20 +39,22 @@ public class S2TopLinkPersistenceUnitProvider implements
      * PersistenceUnitManagerオブジェクト
      */
     protected PersistenceUnitManager persistenceUnitManager;
-    
+
     /**
      * PersistenceProviderオブジェクト
      */
     protected PersistenceProvider persistenceProvider;
-    
+
     /**
      * JavaSECMPInitializerオブジェクト
      */
     protected JavaSECMPInitializer javaSECMPInitializer;
-    
+
     /**
      * PersistenceUnitManagerを設定します。
-     * @param persistenceUnitManager 設定するPersistenceUnitManager
+     * 
+     * @param persistenceUnitManager
+     *            設定するPersistenceUnitManager
      */
     public void setPersistenceUnitManager(
             PersistenceUnitManager persistenceUnitManager) {
@@ -60,7 +63,9 @@ public class S2TopLinkPersistenceUnitProvider implements
 
     /**
      * PersistenceProviderを設定します。
-     * @param persistenceProvider 設定するPersistenceProvider
+     * 
+     * @param persistenceProvider
+     *            設定するPersistenceProvider
      */
     public void setPersistenceProvider(PersistenceProvider persistenceProvider) {
         this.persistenceProvider = persistenceProvider;
@@ -68,9 +73,12 @@ public class S2TopLinkPersistenceUnitProvider implements
 
     /**
      * JavaSECMPInitializerを設定します。
-     * @param javaSECMPInitializer 設定するJavaSECMPInitializer
+     * 
+     * @param javaSECMPInitializer
+     *            設定するJavaSECMPInitializer
      */
-    public void setJavaSECMPInitializer(JavaSECMPInitializer javaSECMPInitializer) {
+    public void setJavaSECMPInitializer(
+            JavaSECMPInitializer javaSECMPInitializer) {
         this.javaSECMPInitializer = javaSECMPInitializer;
     }
 
@@ -89,11 +97,22 @@ public class S2TopLinkPersistenceUnitProvider implements
     public void unregister() {
         persistenceUnitManager.removeProvider(this);
     }
-    
+
     /**
      * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String)
      */
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
-        return persistenceProvider.createEntityManagerFactory(unitName, null);
+        return createEntityManagerFactory(null, unitName);
     }
+
+    /**
+     * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(String,
+     *      String)
+     */
+    public EntityManagerFactory createEntityManagerFactory(
+            String abstractUnitName, String concreteUnitName) {
+        return persistenceProvider.createEntityManagerFactory(concreteUnitName,
+                null);
+    }
+
 }

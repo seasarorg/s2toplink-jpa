@@ -32,31 +32,36 @@ import org.seasar.toplink.jpa.entity.Customer;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
 
     private PersistenceUnitInfoFactory unitInfoFactory;
-    
+
     private PersistenceUnitInfo unitInfo;
-    
+
     private static final String MAPPING_FILE_NAME = "org/seasar/toplink/jpa/entity/CustomerOrm.xml";
-    
+
     private static final String CLASS_NAME = Customer.class.getName();
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
         super.setUp();
-        include(PersistenceUnitInfoFactoryImplTest.class.getSimpleName() + ".dicon");
+        include(PersistenceUnitInfoFactoryImplTest.class.getSimpleName()
+                + ".dicon");
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl#init()} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl#init()}
+     * のためのテスト・メソッド。
      */
     public void testInit() {
-        PersistenceUnitInfoFactoryImpl impl = PersistenceUnitInfoFactoryImpl.class.cast(unitInfoFactory);
+        PersistenceUnitInfoFactoryImpl impl = PersistenceUnitInfoFactoryImpl.class
+                .cast(unitInfoFactory);
         impl.init();
         Map<String, SEPersistenceUnitInfo> map = impl.sePersistenceUnitInfoMap;
         assertEquals(4, map.size());
@@ -65,13 +70,17 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl#getPersistenceUnitInfo(java.lang.String)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl#getPersistenceUnitInfo(java.lang.String)}
+     * のためのテスト・メソッド。
      */
     public void testGetPersistenceUnitInfo() {
-        PersistenceUnitInfo info = unitInfoFactory.getPersistenceUnitInfo("persistenceUnit");
+        PersistenceUnitInfo info = unitInfoFactory.getPersistenceUnitInfo(
+                "persistenceUnit", "persistenceUnit");
         assertEquals("persistenceUnit", info.getPersistenceUnitName());
-        assertEquals(EntityManagerFactoryProvider.class.getName(), info.getPersistenceProviderClassName());
-        assertEquals(PersistenceUnitTransactionType.JTA, info.getTransactionType());
+        assertEquals(EntityManagerFactoryProvider.class.getName(), info
+                .getPersistenceProviderClassName());
+        assertEquals(PersistenceUnitTransactionType.JTA, info
+                .getTransactionType());
         assertTrue(info.getJtaDataSource() instanceof DataSourceImpl);
         assertNull(info.getNonJtaDataSource());
         List<String> filelist = info.getMappingFileNames();
@@ -82,18 +91,21 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
         assertEquals(CLASS_NAME, classList.get(0));
         assertTrue(info.excludeUnlistedClasses());
         Properties prop = info.getProperties();
-        assertEquals("org.seasar.toplink.jpa.platform.server.S2ServerPlatform", prop.getProperty("toplink.target-server"));
-        assertEquals("oracle.toplink.essentials.platform.database.H2Platform", prop.getProperty("toplink.target-database"));
+        assertEquals("org.seasar.toplink.jpa.platform.server.S2ServerPlatform",
+                prop.getProperty("toplink.target-server"));
+        assertEquals("oracle.toplink.essentials.platform.database.H2Platform",
+                prop.getProperty("toplink.target-database"));
         assertEquals("FINE", prop.getProperty("toplink.logging.level"));
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl#addAutoDetectResult(javax.persistence.spi.PersistenceUnitInfo)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl#addAutoDetectResult(javax.persistence.spi.PersistenceUnitInfo)}
+     * のためのテスト・メソッド。
      */
     public void testAddAutoDetectResult() {
         assertFalse(unitInfo.getMappingFileNames().contains(MAPPING_FILE_NAME));
         assertFalse(unitInfo.getManagedClassNames().contains(CLASS_NAME));
-        unitInfoFactory.addAutoDetectResult(unitInfo);
+        unitInfoFactory.addAutoDetectResult("persistenceUnit", unitInfo);
         assertTrue(unitInfo.getMappingFileNames().contains(MAPPING_FILE_NAME));
         assertTrue(unitInfo.getManagedClassNames().contains(CLASS_NAME));
     }

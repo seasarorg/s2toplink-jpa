@@ -40,13 +40,13 @@ import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class PersistenceUnitInfoFactoryImpl implements
         PersistenceUnitInfoFactory {
 
     private static final Logger logger = Logger
-        .getLogger(PersistenceUnitInfoFactoryImpl.class);
+            .getLogger(PersistenceUnitInfoFactoryImpl.class);
 
     /**
      * PersistenceUnit名をキー、SEPersistenceUnitInfoを値に持つMap
@@ -57,41 +57,47 @@ public class PersistenceUnitInfoFactoryImpl implements
      * S2コンテナ
      */
     protected S2Container container;
-    
 
     /**
      * Entity・マッピングファイル自動登録用Configuration
      */
     protected S2TopLinkConfiguration s2TopLinkConfiguration;
-    
+
     /**
      * 初期化処理を行います。
      * クラスパス上のpersistence.xmlを検索し、設定データをsePersistenceUnitInfoMapに保持します。
      */
     protected void init() {
         sePersistenceUnitInfoMap = new HashMap<String, SEPersistenceUnitInfo>();
-        Set<Archive> archives = PersistenceUnitProcessor.findPersistenceArchives();
+        Set<Archive> archives = PersistenceUnitProcessor
+                .findPersistenceArchives();
         for (Archive archive : archives) {
-            List<SEPersistenceUnitInfo> unitInfoList = PersistenceUnitProcessor.getPersistenceUnits(archive, Thread.currentThread().getContextClassLoader());
+            List<SEPersistenceUnitInfo> unitInfoList = PersistenceUnitProcessor
+                    .getPersistenceUnits(archive, Thread.currentThread()
+                            .getContextClassLoader());
             for (SEPersistenceUnitInfo unitInfo : unitInfoList) {
-                sePersistenceUnitInfoMap.put(unitInfo.getPersistenceUnitName(), unitInfo);
+                sePersistenceUnitInfoMap.put(unitInfo.getPersistenceUnitName(),
+                        unitInfo);
             }
-            
+
         }
     }
-    
+
     /**
      * S2コンテナを設定します。
-     * @param container 設定するS2コンテナ
+     * 
+     * @param container
+     *            設定するS2コンテナ
      */
     public void setContainer(S2Container container) {
         this.container = container;
     }
 
-
     /**
      * Configurationを設定します
-     * @param topLinkConfiguration 設定するConfiguration
+     * 
+     * @param topLinkConfiguration
+     *            設定するConfiguration
      */
     @Binding(bindingType = BindingType.MAY)
     public void setS2TopLinkConfiguration(
@@ -100,61 +106,76 @@ public class PersistenceUnitInfoFactoryImpl implements
     }
 
     /**
-     * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#getPersistenceUnitInfo(java.lang.String)
+     * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#getPersistenceUnitInfo(String,
+     *      String)
      */
-    public PersistenceUnitInfo getPersistenceUnitInfo(String unitName) {
+    public PersistenceUnitInfo getPersistenceUnitInfo(String abstractUnitName,
+            String concreteUnitName) {
         if (sePersistenceUnitInfoMap == null) {
             init();
         }
-        SEPersistenceUnitInfo unitInfo = sePersistenceUnitInfoMap.get(unitName);
+        SEPersistenceUnitInfo unitInfo = sePersistenceUnitInfoMap
+                .get(concreteUnitName);
         if (unitInfo == null) {
             return null;
         }
-        S2TopLinkPersistenceUnitInfo s2UnitInfo =
-            S2TopLinkPersistenceUnitInfo.class.cast(container.getComponent(S2TopLinkPersistenceUnitInfo.class));
+        S2TopLinkPersistenceUnitInfo s2UnitInfo = S2TopLinkPersistenceUnitInfo.class
+                .cast(container
+                        .getComponent(S2TopLinkPersistenceUnitInfo.class));
         s2UnitInfo.setPersistenceUnitName(unitInfo.getPersistenceUnitName());
-        s2UnitInfo.setPersistenceProviderClassName(unitInfo.getPersistenceProviderClassName());
+        s2UnitInfo.setPersistenceProviderClassName(unitInfo
+                .getPersistenceProviderClassName());
         s2UnitInfo.setTransactionType(unitInfo.getTransactionType());
         s2UnitInfo.setJtaDataSource(unitInfo.getJtaDataSource());
         s2UnitInfo.setNonJtaDataSource(unitInfo.getNonJtaDataSource());
         s2UnitInfo.setMappingFileNames(unitInfo.getMappingFileNames());
         s2UnitInfo.setJarFileUrls(unitInfo.getJarFileUrls());
-        s2UnitInfo.setPersistenceUnitRootUrl(unitInfo.getPersistenceUnitRootUrl());
+        s2UnitInfo.setPersistenceUnitRootUrl(unitInfo
+                .getPersistenceUnitRootUrl());
         s2UnitInfo.setManagedClassNames(unitInfo.getManagedClassNames());
         s2UnitInfo.setExcludeUnlistedClasses(unitInfo.excludeUnlistedClasses());
         s2UnitInfo.setProperties(unitInfo.getProperties());
-        
+
         if (s2TopLinkConfiguration != null) {
-            addMappingFiles(s2UnitInfo);
-            addAnnotatedClasses(s2UnitInfo);
+            addMappingFiles(abstractUnitName, s2UnitInfo);
+            addAnnotatedClasses(abstractUnitName, s2UnitInfo);
         }
         return s2UnitInfo;
     }
-    
+
     /**
      * PersistenceUnitInfoにSmart Deploy規約に適合したマッピングファイルを自動登録します
-     * @param unitInfo PersistenceUnitInfo
+     * 
+     * @param abstractUnitName
+     *            抽象永続ユニット名
+     * @param unitInfo
+     *            PersistenceUnitInfo
      */
-    protected void addMappingFiles(final PersistenceUnitInfo unitInfo) {
-        s2TopLinkConfiguration.detectMappingFiles(
-                unitInfo.getPersistenceUnitName(),
+    protected void addMappingFiles(final String abstractUnitName,
+            final PersistenceUnitInfo unitInfo) {
+        s2TopLinkConfiguration.detectMappingFiles(abstractUnitName,
                 new MappingFileHandler(unitInfo));
     }
 
     /**
      * PersistenceUnitInfoにSmart Deploy規約に適合したEntityを自動登録します
-     * @param unitInfo PersistenceUnitInfo
+     * 
+     * @param abstractUnitName
+     *            抽象永続ユニット名
+     * @param unitInfo
+     *            PersistenceUnitInfo
      */
-    protected void addAnnotatedClasses(final PersistenceUnitInfo unitInfo) {
-        s2TopLinkConfiguration.detectPersistenceClasses(
-                unitInfo.getPersistenceUnitName(),
+    protected void addAnnotatedClasses(final String abstractUnitName,
+            final PersistenceUnitInfo unitInfo) {
+        s2TopLinkConfiguration.detectPersistenceClasses(abstractUnitName,
                 new PersistenceClassHandler(unitInfo));
     }
 
     /**
      * Mappingファイル自動登録用ResourceHandler
+     * 
      * @author Hidenoshin Yoshida
-     *
+     * 
      */
     public class MappingFileHandler implements ResourceHandler {
 
@@ -165,18 +186,22 @@ public class PersistenceUnitInfoFactoryImpl implements
 
         /**
          * コンストラクタ
-         * @param unitInfo PersistenceUnitInfo
+         * 
+         * @param unitInfo
+         *            PersistenceUnitInfo
          */
         public MappingFileHandler(final PersistenceUnitInfo unitInfo) {
             this.unitInfo = unitInfo;
         }
 
         /**
-         * @see org.seasar.framework.util.ResourceTraversal.ResourceHandler#processResource(java.lang.String, java.io.InputStream)
+         * @see org.seasar.framework.util.ResourceTraversal.ResourceHandler#processResource(java.lang.String,
+         *      java.io.InputStream)
          */
         public void processResource(final String path, final InputStream is) {
             if (logger.isDebugEnabled()) {
-                logger.log("DTLJPA0002", new Object[] { path, unitInfo.getPersistenceUnitName() });
+                logger.log("DTLJPA0002", new Object[] { path,
+                        unitInfo.getPersistenceUnitName() });
             }
             unitInfo.getMappingFileNames().add(path);
         }
@@ -185,8 +210,9 @@ public class PersistenceUnitInfoFactoryImpl implements
 
     /**
      * Entity自動登録用ClassHandler
+     * 
      * @author Hidenoshin Yoshida
-     *
+     * 
      */
     public class PersistenceClassHandler implements ClassHandler {
 
@@ -197,35 +223,40 @@ public class PersistenceUnitInfoFactoryImpl implements
 
         /**
          * コンストラクタ
-         * @param unitInfo PersistenceUnitInfo
+         * 
+         * @param unitInfo
+         *            PersistenceUnitInfo
          */
         public PersistenceClassHandler(final PersistenceUnitInfo unitInfo) {
             this.unitInfo = unitInfo;
         }
 
         /**
-         * @see org.seasar.framework.util.ClassTraversal.ClassHandler#processClass(java.lang.String, java.lang.String)
+         * @see org.seasar.framework.util.ClassTraversal.ClassHandler#processClass(java.lang.String,
+         *      java.lang.String)
          */
         public void processClass(final String packageName,
                 final String shortClassName) {
             final String className = ClassUtil.concatName(packageName,
                     shortClassName);
             if (logger.isDebugEnabled()) {
-                logger.log("DTLJPA0001", new Object[] { className, unitInfo.getPersistenceUnitName() });
+                logger.log("DTLJPA0001", new Object[] { className,
+                        unitInfo.getPersistenceUnitName() });
             }
             unitInfo.getManagedClassNames().add(className);
         }
     }
 
     /**
-     * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#addAutoDetectResult(javax.persistence.spi.PersistenceUnitInfo)
+     * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#addAutoDetectResult(String,
+     *      PersistenceUnitInfo)
      */
-    public void addAutoDetectResult(PersistenceUnitInfo unitInfo) {
+    public void addAutoDetectResult(final String abstractUnitName,
+            final PersistenceUnitInfo unitInfo) {
         if (s2TopLinkConfiguration != null) {
-            addMappingFiles(unitInfo);
-            addAnnotatedClasses(unitInfo);
+            addMappingFiles(abstractUnitName, unitInfo);
+            addAnnotatedClasses(abstractUnitName, unitInfo);
         }
     }
 
-    
 }
