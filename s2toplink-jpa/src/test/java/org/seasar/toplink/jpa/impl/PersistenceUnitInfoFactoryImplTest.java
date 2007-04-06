@@ -98,16 +98,4 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
         assertEquals("FINE", prop.getProperty("toplink.logging.level"));
     }
 
-    /**
-     * {@link org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl#addAutoDetectResult(javax.persistence.spi.PersistenceUnitInfo)}
-     * のためのテスト・メソッド。
-     */
-    public void testAddAutoDetectResult() {
-        assertFalse(unitInfo.getMappingFileNames().contains(MAPPING_FILE_NAME));
-        assertFalse(unitInfo.getManagedClassNames().contains(CLASS_NAME));
-        unitInfoFactory.addAutoDetectResult("persistenceUnit", unitInfo);
-        assertTrue(unitInfo.getMappingFileNames().contains(MAPPING_FILE_NAME));
-        assertTrue(unitInfo.getManagedClassNames().contains(CLASS_NAME));
-    }
-
 }

@@ -22,19 +22,23 @@ import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
 /**
  * javaagentにより実行され、Instrumentationオブジェクトを取得し、JavaSECMPInitializerオブジェクトの生成処理を行います。
+ * 
  * @author Hidenoshin Yoshida
  */
 public class S2JavaSECMPInitializerAgent {
-    
+
     /**
      * JavaSECMPInitializerを生成する定義を記述したdiconファイルのデフォルト名
      */
-    public static final String DEFAULT_CONFIG_PATH = "s2toplink-jpa.dicon";
-    
+    public static final String DEFAULT_CONFIG_PATH = "s2toplink-jpa-preload.dicon";
+
     /**
      * javaagentにより実行され、InstrumentationオブジェクトをJavaSECMPInitializerのstaticフィールドに設定します。
-     * @param agentArgs javaagent実行時に指定された引数
-     * @param instr Instrumentationオブジェクト
+     * 
+     * @param agentArgs
+     *            javaagent実行時に指定された引数
+     * @param instr
+     *            Instrumentationオブジェクト
      */
     public static void premain(String agentArgs, Instrumentation instr) {
         if ((agentArgs != null) && agentArgs.equals("main")) {
@@ -46,20 +50,27 @@ public class S2JavaSECMPInitializerAgent {
 
     /**
      * 指定されたInstrumentationオブジェクトをJavaSECMPInitializerのstaticフィールドに保持し、JavaSECMPInitializerオブジェクトを生成します。
-     * @param agentArgs javaagent実行時に指定された引数
-     * @param instr Instrumentationオブジェクト
+     * 
+     * @param agentArgs
+     *            javaagent実行時に指定された引数
+     * @param instr
+     *            Instrumentationオブジェクト
      */
     @SuppressWarnings("unchecked")
-    public static void initializeFromAgent(String agentArgs, Instrumentation instr) {
+    public static void initializeFromAgent(String agentArgs,
+            Instrumentation instr) {
         JavaSECMPInitializer.globalInstrumentation = instr;
 
         String configPath = agentArgs != null ? agentArgs : DEFAULT_CONFIG_PATH;
-        S2JavaSECMPInitializer.getJavaSECMPInitializer(configPath, new HashMap());
+        S2JavaSECMPInitializer.getJavaSECMPInitializer(configPath,
+                new HashMap());
     }
 
     /**
      * 指定されたInstrumentationオブジェクトをJavaSECMPInitializerのstaticフィールドに保持します。
-     * @param instr Instrumentationオブジェクト
+     * 
+     * @param instr
+     *            Instrumentationオブジェクト
      */
     public static void initializeFromMain(Instrumentation instr) {
         JavaSECMPInitializer.globalInstrumentation = instr;

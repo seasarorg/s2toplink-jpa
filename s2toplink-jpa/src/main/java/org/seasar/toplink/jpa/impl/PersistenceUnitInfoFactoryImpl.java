@@ -15,7 +15,6 @@
  */
 package org.seasar.toplink.jpa.impl;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +29,8 @@ import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
-import org.seasar.framework.log.Logger;
-import org.seasar.framework.util.ClassUtil;
-import org.seasar.framework.util.ClassTraversal.ClassHandler;
-import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
+import org.seasar.framework.jpa.PersistenceConfiguration;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
-import org.seasar.toplink.jpa.S2TopLinkConfiguration;
 import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 
 /**
@@ -44,9 +39,6 @@ import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
  */
 public class PersistenceUnitInfoFactoryImpl implements
         PersistenceUnitInfoFactory {
-
-    private static final Logger logger = Logger
-            .getLogger(PersistenceUnitInfoFactoryImpl.class);
 
     /**
      * PersistenceUnit名をキー、SEPersistenceUnitInfoを値に持つMap
@@ -61,7 +53,7 @@ public class PersistenceUnitInfoFactoryImpl implements
     /**
      * Entity・マッピングファイル自動登録用Configuration
      */
-    protected S2TopLinkConfiguration s2TopLinkConfiguration;
+    protected PersistenceConfiguration configuration;
 
     /**
      * 初期化処理を行います。
@@ -100,9 +92,9 @@ public class PersistenceUnitInfoFactoryImpl implements
      *            設定するConfiguration
      */
     @Binding(bindingType = BindingType.MAY)
-    public void setS2TopLinkConfiguration(
-            S2TopLinkConfiguration topLinkConfiguration) {
-        s2TopLinkConfiguration = topLinkConfiguration;
+    public void setPersistenceConfiguration(
+            PersistenceConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     /**
@@ -136,9 +128,9 @@ public class PersistenceUnitInfoFactoryImpl implements
         s2UnitInfo.setExcludeUnlistedClasses(unitInfo.excludeUnlistedClasses());
         s2UnitInfo.setProperties(unitInfo.getProperties());
 
-        if (s2TopLinkConfiguration != null) {
+        if (configuration != null) {
             addMappingFiles(abstractUnitName, s2UnitInfo);
-            addAnnotatedClasses(abstractUnitName, s2UnitInfo);
+            addPersistenceClasses(abstractUnitName, s2UnitInfo);
         }
         return s2UnitInfo;
     }
@@ -153,7 +145,7 @@ public class PersistenceUnitInfoFactoryImpl implements
      */
     protected void addMappingFiles(final String abstractUnitName,
             final PersistenceUnitInfo unitInfo) {
-        s2TopLinkConfiguration.detectMappingFiles(abstractUnitName,
+        configuration.detectMappingFiles(abstractUnitName,
                 new MappingFileHandler(unitInfo));
     }
 
@@ -165,97 +157,17 @@ public class PersistenceUnitInfoFactoryImpl implements
      * @param unitInfo
      *            PersistenceUnitInfo
      */
-    protected void addAnnotatedClasses(final String abstractUnitName,
+    protected void addPersistenceClasses(final String abstractUnitName,
             final PersistenceUnitInfo unitInfo) {
-        s2TopLinkConfiguration.detectPersistenceClasses(abstractUnitName,
-                new PersistenceClassHandler(unitInfo));
-    }
+        ClassLoader original = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(
+                new TempClassLoader(original));
+        try {
 
-    /**
-     * Mappingファイル自動登録用ResourceHandler
-     * 
-     * @author Hidenoshin Yoshida
-     * 
-     */
-    public class MappingFileHandler implements ResourceHandler {
-
-        /**
-         * PersistenceUnitInfo
-         */
-        protected PersistenceUnitInfo unitInfo;
-
-        /**
-         * コンストラクタ
-         * 
-         * @param unitInfo
-         *            PersistenceUnitInfo
-         */
-        public MappingFileHandler(final PersistenceUnitInfo unitInfo) {
-            this.unitInfo = unitInfo;
-        }
-
-        /**
-         * @see org.seasar.framework.util.ResourceTraversal.ResourceHandler#processResource(java.lang.String,
-         *      java.io.InputStream)
-         */
-        public void processResource(final String path, final InputStream is) {
-            if (logger.isDebugEnabled()) {
-                logger.log("DTLJPA0002", new Object[] { path,
-                        unitInfo.getPersistenceUnitName() });
-            }
-            unitInfo.getMappingFileNames().add(path);
-        }
-
-    }
-
-    /**
-     * Entity自動登録用ClassHandler
-     * 
-     * @author Hidenoshin Yoshida
-     * 
-     */
-    public class PersistenceClassHandler implements ClassHandler {
-
-        /**
-         * PersistenceUnitInfo
-         */
-        protected PersistenceUnitInfo unitInfo;
-
-        /**
-         * コンストラクタ
-         * 
-         * @param unitInfo
-         *            PersistenceUnitInfo
-         */
-        public PersistenceClassHandler(final PersistenceUnitInfo unitInfo) {
-            this.unitInfo = unitInfo;
-        }
-
-        /**
-         * @see org.seasar.framework.util.ClassTraversal.ClassHandler#processClass(java.lang.String,
-         *      java.lang.String)
-         */
-        public void processClass(final String packageName,
-                final String shortClassName) {
-            final String className = ClassUtil.concatName(packageName,
-                    shortClassName);
-            if (logger.isDebugEnabled()) {
-                logger.log("DTLJPA0001", new Object[] { className,
-                        unitInfo.getPersistenceUnitName() });
-            }
-            unitInfo.getManagedClassNames().add(className);
-        }
-    }
-
-    /**
-     * @see org.seasar.toplink.jpa.PersistenceUnitInfoFactory#addAutoDetectResult(String,
-     *      PersistenceUnitInfo)
-     */
-    public void addAutoDetectResult(final String abstractUnitName,
-            final PersistenceUnitInfo unitInfo) {
-        if (s2TopLinkConfiguration != null) {
-            addMappingFiles(abstractUnitName, unitInfo);
-            addAnnotatedClasses(abstractUnitName, unitInfo);
+            configuration.detectPersistenceClasses(abstractUnitName,
+                    new PersistenceClassHandler(unitInfo));
+        } finally {
+            Thread.currentThread().setContextClassLoader(original);
         }
     }
 

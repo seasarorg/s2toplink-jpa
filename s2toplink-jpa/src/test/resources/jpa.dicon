@@ -10,7 +10,7 @@
 	-->
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="javaSECMPInitializer">
-			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa.dicon", #{})
+			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa-preload.dicon", #{})
 		</property>
 	</component>
 

@@ -21,11 +21,7 @@
 		</aspect>
 	</component>
 	
-	<component class="org.seasar.toplink.jpa.impl.S2TopLinkConfigurationImpl">
-		<property name="tempClassLoader">
-			<component class="org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader"/>
-		</property>
-	</component>
+	<component class="org.seasar.framework.jpa.impl.PersistenceConfigurationImpl"/>
 
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	

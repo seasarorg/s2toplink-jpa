@@ -16,39 +16,16 @@
 package org.seasar.toplink.jpa.impl;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.persistence.spi.PersistenceUnitInfo;
-
-import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
 import org.seasar.extension.unit.S2TestCase;
-import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
-import org.seasar.toplink.jpa.entity.Customer;
 
 /**
  * @author Hidenoshin Yoshida
  * 
  */
 public class S2JavaSECMPInitializerTest extends S2TestCase {
-
-    private static final String MAPPING_FILE_NAME = "org/seasar/toplink/jpa/entity/CustomerOrm.xml";
-
-    private JavaSECMPInitializer javaSECMPInitializer;
-
-    private PersistenceUnitInfoFactory persistenceUnitInfoFactory;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include("s2toplink-jpa.dicon");
-    }
 
     /**
      * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#getJavaSECMPInitializer(java.lang.String, java.util.Map)}
@@ -66,13 +43,13 @@ public class S2JavaSECMPInitializerTest extends S2TestCase {
                 .getDeclaredField("javaSECMPInitializer");
         field.setAccessible(true);
         field.set(null, null);
-        javaSECMPInitializer = S2JavaSECMPInitializer.getJavaSECMPInitializer(
-                "s2toplink-jpa.dicon", null);
+        JavaSECMPInitializer javaSECMPInitializer = S2JavaSECMPInitializer
+                .getJavaSECMPInitializer("s2toplink-jpa-preload.dicon", null);
         assertEquals(field.get(null), javaSECMPInitializer);
         javaSECMPInitializer = new S2JavaSECMPInitializer();
         field.set(null, javaSECMPInitializer);
         assertEquals(javaSECMPInitializer, S2JavaSECMPInitializer
-                .getJavaSECMPInitializer("s2toplink-jpa.dicon", null));
+                .getJavaSECMPInitializer("s2toplink-jpa-preload.dicon", null));
     }
 
     /**
@@ -91,27 +68,9 @@ public class S2JavaSECMPInitializerTest extends S2TestCase {
                 .getDeclaredField("javaSECMPInitializer");
         field.setAccessible(true);
         field.set(null, null);
-        S2JavaSECMPInitializer.initializeFromContainer("s2toplink-jpa.dicon",
-                null);
+        S2JavaSECMPInitializer.initializeFromContainer(
+                "s2toplink-jpa-preload.dicon", null);
         assertNotNull(field.get(null));
-    }
-
-    /**
-     * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#callPredeploy(oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo, java.util.Map)}
-     * のためのテスト・メソッド。
-     */
-    public void testCallPredeploySEPersistenceUnitInfoMap() {
-        PersistenceUnitInfo unitInfo = persistenceUnitInfoFactory
-                .getPersistenceUnitInfo("persistenceUnit", "persistenceUnit");
-        unitInfo.getManagedClassNames().clear();
-        unitInfo.getMappingFileNames().clear();
-        Map<String, String> prop = new HashMap<String, String>();
-        prop.put(S2JavaSECMPInitializer.ABSTRACT_UNIT_NAME, "persistenceUnit");
-        S2JavaSECMPInitializer.class.cast(javaSECMPInitializer).callPredeploy(
-                SEPersistenceUnitInfo.class.cast(unitInfo), prop);
-        assertTrue(unitInfo.getManagedClassNames().contains(
-                Customer.class.getName()));
-        assertTrue(unitInfo.getMappingFileNames().contains(MAPPING_FILE_NAME));
     }
 
 }

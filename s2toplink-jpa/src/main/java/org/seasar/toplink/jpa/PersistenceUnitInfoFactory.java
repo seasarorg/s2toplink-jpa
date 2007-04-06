@@ -38,14 +38,4 @@ public interface PersistenceUnitInfoFactory {
     PersistenceUnitInfo getPersistenceUnitInfo(String abstractUnitName,
             String concreteUnitName);
 
-    /**
-     * PersistenceUnitInfoオブジェクトを渡して、自動登録対象のEntityクラスやマッピングファイル情報を追加します。
-     * 
-     * @param abstractUnitName
-     *            抽象永続ユニット名
-     * @param persistenceUnitInfo
-     *            PersistenceUnitInfoオブジェクト
-     */
-    void addAutoDetectResult(String abstractUnitName,
-            PersistenceUnitInfo persistenceUnitInfo);
 }
