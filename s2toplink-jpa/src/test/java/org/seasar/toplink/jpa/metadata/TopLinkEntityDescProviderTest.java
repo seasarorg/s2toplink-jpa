@@ -23,13 +23,15 @@ import org.seasar.toplink.jpa.entity.Product;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class TopLinkEntityDescProviderTest extends S2TestCase {
-    
+
     private EntityDescProvider provider;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
@@ -38,7 +40,8 @@ public class TopLinkEntityDescProviderTest extends S2TestCase {
     }
 
     /**
-     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider#createEntityDesc(java.lang.Class)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider#createEntityDesc(java.lang.Class)}
+     * のためのテスト・メソッド。
      */
     public void testCreateEntityDesc() {
         EntityDesc desc = provider.createEntityDesc(Integer.class);

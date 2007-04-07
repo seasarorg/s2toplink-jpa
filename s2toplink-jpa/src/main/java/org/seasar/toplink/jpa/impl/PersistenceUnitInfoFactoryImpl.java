@@ -29,7 +29,8 @@ import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
-import org.seasar.framework.jpa.PersistenceConfiguration;
+import org.seasar.framework.jpa.PersistenceUnitConfiguration;
+import org.seasar.framework.util.ChildFirstClassLoader;
 import org.seasar.toplink.jpa.PersistenceUnitInfoFactory;
 import org.seasar.toplink.jpa.S2TopLinkPersistenceUnitInfo;
 
@@ -53,7 +54,7 @@ public class PersistenceUnitInfoFactoryImpl implements
     /**
      * Entity・マッピングファイル自動登録用Configuration
      */
-    protected PersistenceConfiguration configuration;
+    protected PersistenceUnitConfiguration configuration;
 
     /**
      * 初期化処理を行います。
@@ -92,8 +93,8 @@ public class PersistenceUnitInfoFactoryImpl implements
      *            設定するConfiguration
      */
     @Binding(bindingType = BindingType.MAY)
-    public void setPersistenceConfiguration(
-            PersistenceConfiguration configuration) {
+    public void setPersistenceUnitConfiguration(
+            PersistenceUnitConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -161,7 +162,7 @@ public class PersistenceUnitInfoFactoryImpl implements
             final PersistenceUnitInfo unitInfo) {
         ClassLoader original = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(
-                new TempClassLoader(original));
+                new ChildFirstClassLoader(original));
         try {
 
             configuration.detectPersistenceClasses(abstractUnitName,

@@ -21,7 +21,7 @@
 		</aspect>
 	</component>
 	
-	<component class="org.seasar.framework.jpa.impl.PersistenceConfigurationImpl"/>
+	<component class="org.seasar.framework.jpa.impl.PersistenceUnitConfigurationImpl"/>
 
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
 	

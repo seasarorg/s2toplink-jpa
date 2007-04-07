@@ -15,6 +15,8 @@
  */
 package org.seasar.toplink.jpa.impl;
 
+import java.io.InputStream;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 
@@ -26,7 +28,10 @@ import oracle.toplink.essentials.logging.AbstractSessionLog;
 
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.S2ContainerFactory;
-import org.seasar.framework.jpa.PersistenceConfiguration;
+import org.seasar.framework.jpa.PersistenceUnitConfiguration;
+import org.seasar.framework.util.ChildFirstClassLoader;
+import org.seasar.framework.util.ClassUtil;
+import org.seasar.framework.util.InputStreamUtil;
 
 /**
  * TopLink EssentialsのJavaSECMPInitializerを継承したクラス。
@@ -39,11 +44,11 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
 
     public static final String ABSTRACT_UNIT_NAME = "s2toplink.abstractUnitName";
 
-    private PersistenceConfiguration configuration;
+    private PersistenceUnitConfiguration configuration;
 
-    public void setPersistenceConfiguration(
-            PersistenceConfiguration persistenceConfiguration) {
-        this.configuration = persistenceConfiguration;
+    public void setPersistenceUnitConfiguration(
+            final PersistenceUnitConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     /**
@@ -57,7 +62,7 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
      */
     @SuppressWarnings("unchecked")
     public static JavaSECMPInitializer getJavaSECMPInitializer(
-            String configPath, Map properties) {
+            final String configPath, final Map properties) {
         if (javaSECMPInitializer == null) {
             initializeFromContainer(configPath, properties);
         }
@@ -73,11 +78,12 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
      *            JavaSECMPInitializer生成時に渡すPropertiesオブジェクト
      */
     @SuppressWarnings("unchecked")
-    public static void initializeFromContainer(String configPath, Map properties) {
+    public static void initializeFromContainer(final String configPath,
+            final Map properties) {
         if (javaSECMPInitializer != null) {
             return;
         }
-        S2Container container = S2ContainerFactory.create(configPath);
+        final S2Container container = S2ContainerFactory.create(configPath);
         container.init();
         try {
             javaSECMPInitializer = (JavaSECMPInitializer) container
@@ -98,17 +104,33 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
      */
     @Override
     @SuppressWarnings("unchecked")
-    protected boolean callPredeploy(SEPersistenceUnitInfo unitInfo, Map m) {
-        String abstractUnitName = null;
-        Properties props = unitInfo.getProperties();
-        if (props != null && props.containsKey(ABSTRACT_UNIT_NAME)) {
-            abstractUnitName = props.getProperty(ABSTRACT_UNIT_NAME);
-        } else {
-            abstractUnitName = unitInfo.getPersistenceUnitName();
-        }
+    protected boolean callPredeploy(final SEPersistenceUnitInfo unitInfo,
+            final Map m) {
+        final String abstractUnitName = getAbstractUnitName(unitInfo);
         addMappingFiles(abstractUnitName, unitInfo);
         addPersistenceClasses(abstractUnitName, unitInfo);
+        if (JavaSECMPInitializer.globalInstrumentation == null) {
+            JavaSECMPInitializer.globalInstrumentation = new InstrumentationImpl(
+                    unitInfo.getManagedClassNames());
+        }
         return super.callPredeploy(unitInfo, m);
+    }
+
+    protected String getAbstractUnitName(final SEPersistenceUnitInfo unitInfo) {
+        final Properties props = unitInfo.getProperties();
+        if (props != null && props.containsKey(ABSTRACT_UNIT_NAME)) {
+            return props.getProperty(ABSTRACT_UNIT_NAME);
+        }
+        return unitInfo.getPersistenceUnitName();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected ClassLoader createTempLoader(final Collection classNames,
+            final boolean shouldOverrideLoadClassForCollectionMembers) {
+        final ClassLoader currentLoader = Thread.currentThread()
+                .getContextClassLoader();
+        return new S2TempEntityLoader(currentLoader, classNames);
     }
 
     /**
@@ -135,9 +157,10 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
      */
     protected void addPersistenceClasses(final String abstractUnitName,
             final PersistenceUnitInfo unitInfo) {
-        ClassLoader original = Thread.currentThread().getContextClassLoader();
+        final ClassLoader original = Thread.currentThread()
+                .getContextClassLoader();
         Thread.currentThread().setContextClassLoader(
-                new TempClassLoader(original));
+                new ChildFirstClassLoader(original));
         try {
             configuration.detectPersistenceClasses(abstractUnitName,
                     new PersistenceClassHandler(unitInfo));
@@ -146,4 +169,43 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         }
     }
 
+    public static class S2TempEntityLoader extends ClassLoader {
+
+        protected Collection<String> classNames;
+
+        protected S2TempEntityLoader(final ClassLoader parent,
+                final Collection<String> classNames) {
+            super(parent);
+            this.classNames = classNames;
+        }
+
+        @Override
+        protected Class<?> loadClass(final String name, final boolean resolve)
+                throws ClassNotFoundException {
+            if (classNames.contains(name)) {
+                Class<?> c = findLoadedClass(name);
+                if (c == null) {
+                    c = findClass(name);
+                }
+                if (resolve) {
+                    resolveClass(c);
+                }
+                return c;
+            } else {
+                return super.loadClass(name, resolve);
+            }
+        }
+
+        @Override
+        protected Class<?> findClass(final String name)
+                throws ClassNotFoundException {
+            final String path = ClassUtil.getResourcePath(name);
+            final InputStream in = getResourceAsStream(path);
+            if (in == null) {
+                throw new ClassNotFoundException(name);
+            }
+            final byte[] bytes = InputStreamUtil.getBytes(in);
+            return defineClass(name, bytes, 0, bytes.length);
+        }
+    }
 }
