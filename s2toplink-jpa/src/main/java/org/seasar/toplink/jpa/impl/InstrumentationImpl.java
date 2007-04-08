@@ -36,6 +36,12 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
+ * 指定されたクラスの変換を行うクラスです。
+ * 
+ * <p>
+ * クラスの変換は{@link InstrumentationImpl#addTransformer(ClassFileTransformer)}が呼びされた時点で行われます。
+ * </p>
+ * 
  * @author taedium
  * 
  */
@@ -52,8 +58,17 @@ public class InstrumentationImpl implements Instrumentation {
         defineClassMethod.setAccessible(true);
     }
 
+    /**
+     * 変換されるクラス名のリストです。
+     */
     protected final List<String> classNames;
 
+    /**
+     * インスタンスを構築します。
+     * 
+     * @param classNames
+     *            変換されるクラス名のリスト
+     */
     public InstrumentationImpl(final List<String> classNames) {
         this.classNames = classNames;
     }
@@ -82,6 +97,13 @@ public class InstrumentationImpl implements Instrumentation {
         }
     }
 
+    /**
+     * 変換されるクラスが定義されることになるクラスローダーを検出します。
+     * 
+     * @param resourcePath
+     *            クラス名のパス表現
+     * @return 変換されるクラスが定義されることになるクラスローダー
+     */
     protected ClassLoader detectClassLoader(final String resourcePath) {
         final String topLinkPath = ClassUtil
                 .getResourcePath(TopLinkWeaved.class);
@@ -114,6 +136,15 @@ public class InstrumentationImpl implements Instrumentation {
         return list;
     }
 
+    /**
+     * 基点となるクラスローダーとその上位の階層のクラスローダーに指定されたクラスがロードされている場合<code>true</code>を返します。
+     * 
+     * @param loader
+     *            基点となるクラスローダー
+     * @param className
+     *            クラス名
+     * @return 指定されたクラスがすでにロードされているならば<code>true</code>、されていないならば<code>false</code>
+     */
     protected boolean isLoaded(final ClassLoader loader, final String className) {
         try {
             return ClassLoaderUtil.findLoadedClass(loader, className) != null;

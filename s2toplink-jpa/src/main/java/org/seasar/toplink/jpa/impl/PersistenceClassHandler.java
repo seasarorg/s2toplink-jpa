@@ -22,8 +22,7 @@ import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.ClassTraversal.ClassHandler;
 
 /**
- * TopLink EssentialsのJavaSECMPInitializerを継承したクラス。
- * Seasar2が提供するEntityクラスやMappingファイルの自動登録機能に対応しています。
+ * 永続クラス自動登録用ClassHandlerです。
  * 
  * @author taedium
  * 
@@ -34,7 +33,7 @@ public class PersistenceClassHandler implements ClassHandler {
             .getLogger(S2JavaSECMPInitializer.class);
 
     /**
-     * PersistenceUnitInfo
+     * 永続ユニット情報です。
      */
     protected PersistenceUnitInfo unitInfo;
 
@@ -42,7 +41,7 @@ public class PersistenceClassHandler implements ClassHandler {
      * コンストラクタ
      * 
      * @param unitInfo
-     *            PersistenceUnitInfo
+     *            永続ユニット情報
      */
     public PersistenceClassHandler(final PersistenceUnitInfo unitInfo) {
         this.unitInfo = unitInfo;

@@ -23,7 +23,7 @@ import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
 
 /**
- * Mappingファイル自動登録用ResourceHandler
+ * Mappingファイル自動登録用ResourceHandlerです。
  * 
  * @author taedium
  * 
@@ -34,7 +34,7 @@ public class MappingFileHandler implements ResourceHandler {
             .getLogger(S2JavaSECMPInitializer.class);
 
     /**
-     * PersistenceUnitInfo
+     * 永続ユニット情報です。
      */
     protected PersistenceUnitInfo unitInfo;
 
@@ -42,7 +42,7 @@ public class MappingFileHandler implements ResourceHandler {
      * コンストラクタ
      * 
      * @param unitInfo
-     *            PersistenceUnitInfo
+     *            永続ユニット情報
      */
     public MappingFileHandler(final PersistenceUnitInfo unitInfo) {
         this.unitInfo = unitInfo;

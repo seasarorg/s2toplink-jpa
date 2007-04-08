@@ -34,14 +34,19 @@ import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.InputStreamUtil;
 
 /**
- * TopLink EssentialsのJavaSECMPInitializerを継承したクラス。
+ * TopLink EssentialsのJavaSECMPInitializerを継承したクラスです。
+ * <p>
  * Seasar2が提供するEntityクラスやMappingファイルの自動登録機能に対応しています。
+ * </p>
  * 
  * @author Hidenoshin Yoshida
  * 
  */
 public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
 
+    /**
+     * 抽象永続ユニット名のプロパティのキーです。
+     */
     public static final String ABSTRACT_UNIT_NAME = "s2toplink.abstractUnitName";
 
     private PersistenceUnitConfiguration configuration;
@@ -116,6 +121,16 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         return super.callPredeploy(unitInfo, m);
     }
 
+    /**
+     * 永続ユニット情報から抽象永続ユニット名を返します。
+     * <p>
+     * 永続ユニット情報に抽象永続ユニット名が定義されていない場合は通常の永続ユニット名を抽象永続ユニット名として返します。
+     * </p>
+     * 
+     * @param unitInfo
+     *            永続ユニット情報
+     * @return 抽象永続ユニット名
+     */
     protected String getAbstractUnitName(final SEPersistenceUnitInfo unitInfo) {
         final Properties props = unitInfo.getProperties();
         if (props != null && props.containsKey(ABSTRACT_UNIT_NAME)) {
@@ -134,12 +149,12 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
     }
 
     /**
-     * PersistenceUnitInfoにSmart Deploy規約に適合したマッピングファイルを自動登録します
+     * 永続ユニット情報にSMART deploy規約に適合したマッピングファイルを自動登録します。
      * 
      * @param abstractUnitName
      *            抽象永続ユニット名
      * @param unitInfo
-     *            PersistenceUnitInfo
+     *            永続ユニット情報
      */
     protected void addMappingFiles(final String abstractUnitName,
             final PersistenceUnitInfo unitInfo) {
@@ -148,12 +163,12 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
     }
 
     /**
-     * PersistenceUnitInfoにSmart Deploy規約に適合したEntityを自動登録します
+     * 永続ユニット情報にSMART deploy規約に適合したEntityを自動登録します。
      * 
      * @param abstractUnitName
      *            抽象永続ユニット名
      * @param unitInfo
-     *            PersistenceUnitInfo
+     *            永続ユニット情報
      */
     protected void addPersistenceClasses(final String abstractUnitName,
             final PersistenceUnitInfo unitInfo) {
@@ -169,10 +184,27 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         }
     }
 
+    /**
+     * 指定されたエンティティクラスをロードする一時的なクラスローダーです。
+     * 
+     * @author taedium
+     * 
+     */
     public static class S2TempEntityLoader extends ClassLoader {
 
+        /**
+         * このインスタンスでロードするエンティティクラス名のコレクションです。
+         */
         protected Collection<String> classNames;
 
+        /**
+         * インスタンスを構築します。
+         * 
+         * @param parent
+         *            親クラスローダー
+         * @param classNames
+         *            このインスタンスでロードするエンティティクラス名の集合
+         */
         protected S2TempEntityLoader(final ClassLoader parent,
                 final Collection<String> classNames) {
             super(parent);
