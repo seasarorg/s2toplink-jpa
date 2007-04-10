@@ -16,7 +16,9 @@
 package org.seasar.toplink.jpa.impl;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
 
@@ -209,6 +211,12 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
                 final Collection<String> classNames) {
             super(parent);
             this.classNames = classNames;
+        }
+
+        @Override
+        public Enumeration<URL> getResources(String name)
+                throws java.io.IOException {
+            return this.getParent().getResources(name);
         }
 
         @Override
