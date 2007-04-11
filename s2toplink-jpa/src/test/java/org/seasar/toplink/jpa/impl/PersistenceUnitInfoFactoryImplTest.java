@@ -38,7 +38,7 @@ public class PersistenceUnitInfoFactoryImplTest extends S2TestCase {
 
     private PersistenceUnitInfoFactory unitInfoFactory;
 
-    private PersistenceUnitInfo unitInfo;
+//    private PersistenceUnitInfo unitInfo;
 
     private static final String MAPPING_FILE_NAME = "org/seasar/toplink/jpa/entity/CustomerOrm.xml";
 
