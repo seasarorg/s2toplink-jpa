@@ -2,12 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.seasar.toplink</groupId>
 	<artifactId>s2toplink-jpa</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0-rc2</version>
+	<version>1.0.0-rc3-SNAPSHOT</version>
 	<name>S2TopLink-JPA Project</name>
 	<description></description>
 	<url>http://s2toplink.sandbox.seasar.org/</url>
@@ -195,16 +194,16 @@
 	</build>
 	<repositories>
 		<repository>
+			<id>java.net</id>
+			<url>
+				http://download.java.net/maven/1
+			</url>
+			<layout>legacy</layout>
+		</repository>
+		<repository>
 			<id>maven.seasar.org</id>
 			<name>The Seasar Foundation Maven2 Repository</name>
 			<url>http://maven.seasar.org/maven2</url>
-		</repository>
-		<repository>
-			<id>java.net</id>
-			<url>
-				https://maven-repository.dev.java.net/nonav/repository
-			</url>
-			<layout>legacy</layout>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -216,17 +215,16 @@
 	</pluginRepositories>
 	<dependencies>
 		<dependency>
-			<groupId>org.seasar.container</groupId>
-			<artifactId>s2-tiger</artifactId>
-			<version>2.4.12</version>
+			<groupId>toplink.essentials</groupId>
+			<artifactId>toplink-essentials</artifactId>
+			<version>2.0-44</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.3.1</version>
+			<groupId>org.seasar.container</groupId>
+			<artifactId>s2-tiger</artifactId>
+			<version>2.4.13-rc1</version>
 			<type>jar</type>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
@@ -264,17 +262,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-jpa_3.0_spec</artifactId>
-			<version>1.0</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.3.1</version>
 			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>toplink-essentials</artifactId>
-			<version>2.0-b40-rc</version>
-			<type>jar</type>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
