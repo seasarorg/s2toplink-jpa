@@ -15,39 +15,33 @@
  */
 package org.seasar.toplink.jpa.impl;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import org.seasar.extension.unit.S2TestCase;
+import junit.framework.TestCase;
+
 import org.seasar.framework.container.S2Container;
-import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class S2TopLinkTempClassLoaderTest extends S2TestCase {
+public class S2TopLinkTempClassLoaderTest extends TestCase {
     
-    private S2TopLinkTempClassLoader loader;
-
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include(S2TopLinkTempClassLoaderTest.class.getSimpleName() + ".dicon");
-    }
-
     /**
      * {@link org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader#isTargetClass(java.lang.String)} のためのテスト・メソッド。
      */
     public void testIsTargetClass() {
-        assertTrue(loader.isTargetClass("org.seasar.toplink.jpa.entity.Customer"));
-        assertTrue(loader.isTargetClass("org.seasar.toplink.jpa.entity.Product"));
-        assertFalse(loader.isTargetClass(S2Container.class.getName()));
-        Set<String> set = CollectionsUtil.newHashSet();
+        Set<String> set = new HashSet<String>();
+        set.add("org.seasar.toplink.jpa.entity.Customer");
+        set.add("org.seasar.toplink.jpa.entity.Product");
+        S2TopLinkTempClassLoader loader = new S2TopLinkTempClassLoader(
+                Thread.currentThread().getContextClassLoader(), set);
+        assertFalse(loader.isStystemClass("org.seasar.toplink.jpa.entity.Customer"));
+        assertFalse(loader.isStystemClass("org.seasar.toplink.jpa.entity.Product"));
+        assertTrue(loader.isStystemClass(S2Container.class.getName()));
         set.add(S2Container.class.getName());
-        loader.setTempClassNameSet(set);
-        assertTrue(loader.isTargetClass(S2Container.class.getName()));
+        assertFalse(loader.isStystemClass(S2Container.class.getName()));
     }
 
 }

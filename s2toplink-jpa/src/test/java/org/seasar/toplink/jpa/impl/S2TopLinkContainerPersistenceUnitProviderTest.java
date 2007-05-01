@@ -46,8 +46,7 @@ public class S2TopLinkContainerPersistenceUnitProviderTest extends S2TestCase {
         assertNotNull(factory);
         assertTrue(factory instanceof EntityManagerFactoryImpl);
         factory = provider.createEntityManagerFactory("persistenceUnit2");
-        assertNotNull(factory);
-        assertTrue(factory instanceof EntityManagerFactoryImpl);
+        assertNull(factory);
         factory = provider.createEntityManagerFactory("persistenceUnit3");
         assertNotNull(factory);
         assertTrue(factory instanceof EntityManagerFactoryImpl);

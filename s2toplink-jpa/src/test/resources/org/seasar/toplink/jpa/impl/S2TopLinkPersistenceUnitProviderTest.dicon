@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components initializeOnCreate="true">
+	<include path="javaee5.dicon"/>
+	<include path="s2toplink-jpa.dicon"/>
+
+	<!-- 1. PersistenceUnitProviderの設定 -->
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
+		<property name="javaSECMPInitializer">
+			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa-preload.dicon", #{})
+		</property>
+	</component>
+
+	<!-- 2. Oracle TopLink PersistenceProviderの設定 -->	
+	<component class="oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider"/>
+	
+	<!-- 3. Kuina-Dao用Componentの設定 -->	
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkDialect"/>
+	<component class="org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider"/>
+
+	<!-- 4. S2Assert(TestCase)用Componentの設定 -->
+	<component class="org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider"/>
+
+	<!-- 5. テスト用DataSourceの設定 -->
+	<!-- for test -->
+	<component name="dataSourceProxy" class="org.seasar.extension.datasource.impl.SingletonDataSourceProxy"/>
+
+	<!-- 6. EntityManagerFactory、EntityManagerの設定 -->
+	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
+		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
+	</component>
+
+	<component name="entityManager" class="org.seasar.framework.jpa.impl.TxScopedEntityManagerProxy">
+		<aspect pointcut="createNamedQuery">
+			<component class="org.seasar.toplink.jpa.aop.interceptors.S2TopLinkEntityManagerInterceptor"/>
+		</aspect>
+	</component>
+	
+</components>

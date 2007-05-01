@@ -35,7 +35,7 @@ public class S2TopLinkPersistenceUnitProviderTest extends S2TestCase {
      */
     protected void setUp() throws Exception {
         super.setUp();
-        include("jpa.dicon");
+        include(S2TopLinkPersistenceUnitProviderTest.class.getSimpleName() + ".dicon");
     }
 
     /**

@@ -8,9 +8,7 @@
 
 	<component class="org.seasar.framework.jpa.impl.PersistenceUnitConfigurationImpl"/>
 	
-	<component class="org.seasar.toplink.jpa.impl.PersistenceUnitInfoFactoryImpl"/>
-	
-	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitInfoImpl" instance="prototype"/>
+	<component class="org.seasar.framework.jpa.impl.PersistenceUnitInfoFactoryImpl"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.JpaInstrumentationImpl"/>
 	

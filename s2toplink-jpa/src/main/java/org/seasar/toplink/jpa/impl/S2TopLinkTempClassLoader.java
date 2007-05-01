@@ -17,14 +17,13 @@ package org.seasar.toplink.jpa.impl;
 
 import java.util.Set;
 
-import org.seasar.framework.container.hotdeploy.HotdeployClassLoader;
-import org.seasar.framework.convention.NamingConvention;
+import org.seasar.framework.util.ChildFirstClassLoader;
 
 /**
- * HotdeployClassLoaderを継承した、エンハンス対象Entityクラス情報を取得する為のClassLoaderです。
+ * ChildFirstClassLoaderを継承した、エンハンス対象Entityクラス情報を取得する為のClassLoaderです。
  * @author Hidenoshin Yoshida
  */
-public class S2TopLinkTempClassLoader extends HotdeployClassLoader {
+public class S2TopLinkTempClassLoader extends ChildFirstClassLoader {
     
     /**
      * エンハンス対象Entityクラス名のSet
@@ -33,39 +32,24 @@ public class S2TopLinkTempClassLoader extends HotdeployClassLoader {
     
     /**
      * コンストラクタ
-     * @param namingConvention 設定するNamingConvention
-     */
-    public S2TopLinkTempClassLoader(NamingConvention namingConvention) {
-        super(Thread.currentThread().getContextClassLoader(), namingConvention);
-    }
-
-    /**
-     * コンストラクタ
      * @param classLoader 設定するClassLoader
-     * @param namingConvention 設定するNamingConvention
+     * @param tempClassNameSet このクラスローダによるロード対象クラスSet
      */
     public S2TopLinkTempClassLoader(ClassLoader classLoader,
-            NamingConvention namingConvention) {
-        super(classLoader, namingConvention);
-    }
-
-    /**
-     * エンハンス対象Entityクラス名のSetを設定します。
-     * @param tempClassNameSet 設定するSet
-     */
-    public void setTempClassNameSet(Set<String> tempClassNameSet) {
+            Set<String> tempClassNameSet) {
+        super(classLoader);
         this.tempClassNameSet = tempClassNameSet;
     }
-
+    
     /**
-     * NamingConventionによる判定に加え、tempClassNameSetにクラス名が存在した場合もtrueを返します。
-     * @see org.seasar.framework.container.hotdeploy.HotdeployClassLoader#isTargetClass(java.lang.String)
+     * @see org.seasar.framework.util.ChildFirstClassLoader#isStystemClass(java.lang.String)
      */
     @Override
-    protected boolean isTargetClass(String className) {
-        boolean ret = super.isTargetClass(className);
+    protected boolean isStystemClass(String className) {
+        boolean ret = super.isStystemClass(className);
+        
         if (!ret && tempClassNameSet != null) {
-            ret = tempClassNameSet.contains(className);
+            ret = !tempClassNameSet.contains(className);
         }
         return ret;
     }

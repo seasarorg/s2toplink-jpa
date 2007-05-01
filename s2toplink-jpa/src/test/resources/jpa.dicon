@@ -6,11 +6,14 @@
 	<include path="s2toplink-jpa.dicon"/>
 
 	<!-- 1. PersistenceUnitProviderの設定 -->
+	<!--
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="javaSECMPInitializer">
 			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa-preload.dicon", #{})
 		</property>
 	</component>
+	-->
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProvider"/>
 
 	<!-- 2. Oracle TopLink PersistenceProviderの設定 -->	
 	<component class="oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider"/>
