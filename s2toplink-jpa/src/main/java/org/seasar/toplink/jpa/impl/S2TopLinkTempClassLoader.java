@@ -21,33 +21,37 @@ import org.seasar.framework.util.ChildFirstClassLoader;
 
 /**
  * ChildFirstClassLoaderを継承した、エンハンス対象Entityクラス情報を取得する為のClassLoaderです。
+ * 
  * @author Hidenoshin Yoshida
  */
 public class S2TopLinkTempClassLoader extends ChildFirstClassLoader {
-    
+
     /**
      * エンハンス対象Entityクラス名のSet
      */
     protected Set<String> tempClassNameSet;
-    
+
     /**
      * コンストラクタ
-     * @param classLoader 設定するClassLoader
-     * @param tempClassNameSet このクラスローダによるロード対象クラスSet
+     * 
+     * @param classLoader
+     *            設定するClassLoader
+     * @param tempClassNameSet
+     *            このクラスローダによるロード対象クラスSet
      */
     public S2TopLinkTempClassLoader(ClassLoader classLoader,
             Set<String> tempClassNameSet) {
         super(classLoader);
         this.tempClassNameSet = tempClassNameSet;
     }
-    
+
     /**
      * @see org.seasar.framework.util.ChildFirstClassLoader#isStystemClass(java.lang.String)
      */
     @Override
-    protected boolean isStystemClass(String className) {
-        boolean ret = super.isStystemClass(className);
-        
+    protected boolean isExcludedClass(String className) {
+        boolean ret = super.isExcludedClass(className);
+
         if (!ret && tempClassNameSet != null) {
             ret = !tempClassNameSet.contains(className);
         }
