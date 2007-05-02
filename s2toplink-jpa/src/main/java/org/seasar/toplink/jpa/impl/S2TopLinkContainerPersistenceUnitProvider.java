@@ -319,7 +319,7 @@ public class S2TopLinkContainerPersistenceUnitProvider implements
             } else {
                 set = PersistenceUnitProcessor.buildClassSet(this, getClassLoader());
             }
-            return new S2TopLinkTempClassLoader(getClassLoader(), set);
+            return new ChildFirstClassLoader(getClassLoader(), set);
         }
 
         /**
