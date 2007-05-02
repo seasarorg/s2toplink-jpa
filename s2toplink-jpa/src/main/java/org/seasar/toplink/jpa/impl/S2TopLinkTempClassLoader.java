@@ -46,14 +46,14 @@ public class S2TopLinkTempClassLoader extends ChildFirstClassLoader {
     }
 
     /**
-     * @see org.seasar.framework.util.ChildFirstClassLoader#isStystemClass(java.lang.String)
+     * @see org.seasar.framework.util.ChildFirstClassLoader#isIncludedClass(java.lang.String)
      */
     @Override
-    protected boolean isExcludedClass(String className) {
-        boolean ret = super.isExcludedClass(className);
+    protected boolean isIncludedClass(String className) {
+        boolean ret = super.isIncludedClass(className);
 
-        if (!ret && tempClassNameSet != null) {
-            ret = !tempClassNameSet.contains(className);
+        if (ret && tempClassNameSet != null) {
+            ret = tempClassNameSet.contains(className);
         }
         return ret;
     }

@@ -24,24 +24,27 @@ import org.seasar.framework.container.S2Container;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2TopLinkTempClassLoaderTest extends TestCase {
-    
+
     /**
-     * {@link org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader#isTargetClass(java.lang.String)} のためのテスト・メソッド。
+     * {@link org.seasar.toplink.jpa.impl.S2TopLinkTempClassLoader#isTargetClass(java.lang.String)}
+     * のためのテスト・メソッド。
      */
     public void testIsTargetClass() {
         Set<String> set = new HashSet<String>();
         set.add("org.seasar.toplink.jpa.entity.Customer");
         set.add("org.seasar.toplink.jpa.entity.Product");
-        S2TopLinkTempClassLoader loader = new S2TopLinkTempClassLoader(
-                Thread.currentThread().getContextClassLoader(), set);
-        assertFalse(loader.isStystemClass("org.seasar.toplink.jpa.entity.Customer"));
-        assertFalse(loader.isStystemClass("org.seasar.toplink.jpa.entity.Product"));
-        assertTrue(loader.isStystemClass(S2Container.class.getName()));
+        S2TopLinkTempClassLoader loader = new S2TopLinkTempClassLoader(Thread
+                .currentThread().getContextClassLoader(), set);
+        assertTrue(loader
+                .isIncludedClass("org.seasar.toplink.jpa.entity.Customer"));
+        assertTrue(loader
+                .isIncludedClass("org.seasar.toplink.jpa.entity.Product"));
+        assertFalse(loader.isIncludedClass(S2Container.class.getName()));
         set.add(S2Container.class.getName());
-        assertFalse(loader.isStystemClass(S2Container.class.getName()));
+        assertTrue(loader.isIncludedClass(S2Container.class.getName()));
     }
 
 }
