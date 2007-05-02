@@ -6,7 +6,9 @@
 	<include path="s2toplink-jpa.dicon"/>
 
 	<!-- 1. PersistenceUnitProviderの設定 -->
-	<component class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
+	<component name="persistenceUnitProvider"
+			class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
+		<property name="unitName">"persistenceUnit"</property>
 		<property name="javaSECMPInitializer">
 			@org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer@getJavaSECMPInitializer("s2toplink-jpa-preload.dicon", #{})
 		</property>
@@ -28,7 +30,7 @@
 
 	<!-- 6. EntityManagerFactory、EntityManagerの設定 -->
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
-		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
+		persistenceUnitProvider.entityManagerFactory
 	</component>
 
 	<component name="entityManager" class="org.seasar.framework.jpa.impl.TxScopedEntityManagerProxy">

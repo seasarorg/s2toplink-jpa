@@ -2,14 +2,7 @@
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
-	<include path="javaee5.dicon"/>
-	<include condition="@org.seasar.framework.container.util.SmartDeployUtil@isSmartdeployMode(container)"
-		path="s2toplink-jpa-smart.dicon"/>
+	<include path="jpa-support.dicon"/>
 
-	<component class="org.seasar.framework.jpa.impl.PersistenceUnitConfigurationImpl"/>
-	
-	<component class="org.seasar.framework.jpa.impl.PersistenceUnitInfoFactoryImpl"/>
-	
 	<component class="org.seasar.toplink.jpa.impl.JpaInstrumentationImpl"/>
-	
 </components>

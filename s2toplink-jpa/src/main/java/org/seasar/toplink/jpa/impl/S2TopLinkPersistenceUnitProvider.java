@@ -20,10 +20,7 @@ import javax.persistence.spi.PersistenceProvider;
 
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
-import org.seasar.framework.container.annotation.tiger.DestroyMethod;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
-import org.seasar.framework.jpa.PersistenceUnitManager;
-import org.seasar.framework.jpa.PersistenceUnitProvider;
+import org.seasar.framework.jpa.impl.AbstractPersistenceUnitProvider;
 
 /**
  * TopLink Essentials用のPersistenceUnitProvier実装です。
@@ -32,13 +29,8 @@ import org.seasar.framework.jpa.PersistenceUnitProvider;
  * 
  * @author Hidenoshin Yoshida
  */
-public class S2TopLinkPersistenceUnitProvider implements
-        PersistenceUnitProvider {
-
-    /**
-     * PersistenceUnitManagerオブジェクト
-     */
-    protected PersistenceUnitManager persistenceUnitManager;
+public class S2TopLinkPersistenceUnitProvider extends
+        AbstractPersistenceUnitProvider {
 
     /**
      * PersistenceProviderオブジェクト
@@ -49,17 +41,6 @@ public class S2TopLinkPersistenceUnitProvider implements
      * JavaSECMPInitializerオブジェクト
      */
     protected JavaSECMPInitializer javaSECMPInitializer;
-
-    /**
-     * PersistenceUnitManagerを設定します。
-     * 
-     * @param persistenceUnitManager
-     *            設定するPersistenceUnitManager
-     */
-    public void setPersistenceUnitManager(
-            PersistenceUnitManager persistenceUnitManager) {
-        this.persistenceUnitManager = persistenceUnitManager;
-    }
 
     /**
      * PersistenceProviderを設定します。
@@ -80,29 +61,6 @@ public class S2TopLinkPersistenceUnitProvider implements
     public void setJavaSECMPInitializer(
             JavaSECMPInitializer javaSECMPInitializer) {
         this.javaSECMPInitializer = javaSECMPInitializer;
-    }
-
-    /**
-     * PersistenceUnitManagerにこのオブジェクトを登録します。
-     */
-    @InitMethod
-    public void register() {
-        persistenceUnitManager.addProvider(this);
-    }
-
-    /**
-     * PersistenceUnitManagerからこのオブジェクトを削除します。
-     */
-    @DestroyMethod
-    public void unregister() {
-        persistenceUnitManager.removeProvider(this);
-    }
-
-    /**
-     * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String)
-     */
-    public EntityManagerFactory createEntityManagerFactory(String unitName) {
-        return createEntityManagerFactory(null, unitName);
     }
 
     /**
