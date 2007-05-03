@@ -6,12 +6,9 @@
 	version="1.0">
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
 		<provider>oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider</provider>
-
-		<jta-data-source>java:comp/env/dataSourceProxy</jta-data-source>
-
+		<jta-data-source>jdbc/dataSource</jta-data-source>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-		<properties>
-			
+		<properties>			
 			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatform"/>
 			<property name="toplink.target-database" value="oracle.toplink.essentials.platform.database.H2Platform"/>
 			<property name="toplink.logging.level" value="FINE"/>
@@ -22,7 +19,7 @@
  		</properties>
 	</persistence-unit>
 	<persistence-unit name="persistenceUnit2" transaction-type="JTA">
-		<jta-data-source>java:comp/env/dataSourceProxy</jta-data-source>
+		<jta-data-source>jdbc/dataSource</jta-data-source>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatform"/>
@@ -33,7 +30,7 @@
 	</persistence-unit>
 	<persistence-unit name="persistenceUnit3" transaction-type="JTA">
 		<provider>oracle.toplink.essentials.PersistenceProvider</provider>
-		<jta-data-source>java:comp/env/dataSourceProxy</jta-data-source>
+		<jta-data-source>jdbc/dataSource</jta-data-source>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="toplink.target-server" value="org.seasar.toplink.jpa.platform.server.S2ServerPlatform"/>

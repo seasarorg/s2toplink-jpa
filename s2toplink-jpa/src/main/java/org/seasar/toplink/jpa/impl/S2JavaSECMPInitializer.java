@@ -31,6 +31,8 @@ import oracle.toplink.essentials.logging.AbstractSessionLog;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.S2ContainerFactory;
 import org.seasar.framework.jpa.PersistenceUnitConfiguration;
+import org.seasar.framework.jpa.impl.ContainerPersistenceUnitProvider.MappingFileHandler;
+import org.seasar.framework.jpa.impl.ContainerPersistenceUnitProvider.PersistenceClassHandler;
 import org.seasar.framework.util.ChildFirstClassLoader;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.InputStreamUtil;
@@ -51,11 +53,11 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
      */
     public static final String ABSTRACT_UNIT_NAME = "s2toplink.abstractUnitName";
 
-    private PersistenceUnitConfiguration configuration;
+    private PersistenceUnitConfiguration persistenceUnitConfiguration;
 
     public void setPersistenceUnitConfiguration(
             final PersistenceUnitConfiguration configuration) {
-        this.configuration = configuration;
+        this.persistenceUnitConfiguration = configuration;
     }
 
     /**
@@ -140,16 +142,7 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         }
         return unitInfo.getPersistenceUnitName();
     }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected ClassLoader createTempLoader(final Collection classNames,
-            final boolean shouldOverrideLoadClassForCollectionMembers) {
-        final ClassLoader currentLoader = Thread.currentThread()
-                .getContextClassLoader();
-        return new S2TempEntityLoader(currentLoader, classNames);
-    }
-
+    
     /**
      * 永続ユニット情報にSMART deploy規約に適合したマッピングファイルを自動登録します。
      * 
@@ -160,7 +153,7 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
      */
     protected void addMappingFiles(final String abstractUnitName,
             final PersistenceUnitInfo unitInfo) {
-        configuration.detectMappingFiles(abstractUnitName,
+        persistenceUnitConfiguration.detectMappingFiles(abstractUnitName,
                 new MappingFileHandler(unitInfo));
     }
 
@@ -179,11 +172,26 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
         Thread.currentThread().setContextClassLoader(
                 new ChildFirstClassLoader(original));
         try {
-            configuration.detectPersistenceClasses(abstractUnitName,
-                    new PersistenceClassHandler(unitInfo));
+            persistenceUnitConfiguration.detectPersistenceClasses(
+                    abstractUnitName, new PersistenceClassHandler(unitInfo));
         } finally {
             Thread.currentThread().setContextClassLoader(original);
         }
+    }
+
+
+    /**
+     * @see oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer#createTempLoader(java.util.Collection, boolean)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    protected ClassLoader createTempLoader(final Collection classNames,
+            final boolean shouldOverrideLoadClassForCollectionMembers) {
+        final ClassLoader currentLoader = Thread.currentThread()
+                .getContextClassLoader();
+        return new S2TempEntityLoader(currentLoader, classNames);
+//        return new ChildFirstClassLoader(currentLoader,
+//                CollectionsUtil.newHashSet(classNames));
     }
 
     /**

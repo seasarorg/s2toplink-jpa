@@ -3,9 +3,6 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="javaee5.dicon"/>
-	<include condition="@org.seasar.framework.container.util.SmartDeployUtil@isSmartdeployMode(container)"
-		path="s2toplink-jpa-smart.dicon"/>
 	
 	<component class="org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer"/>
-	<component class="org.seasar.framework.jpa.impl.PersistenceUnitConfigurationImpl"/>
 </components>

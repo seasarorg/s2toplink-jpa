@@ -33,7 +33,7 @@ public class InstrumentationImplTest extends S2TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        include("jpa.dicon");
+        include(InstrumentationImplTest.class.getSimpleName() + ".dicon");
     }
 
     public void test() throws Exception {

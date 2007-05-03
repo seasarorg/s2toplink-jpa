@@ -28,7 +28,7 @@
 		</property>
 		<property name="URL">
 			"jdbc:h2:"
-			+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.impl.S2TopLinkContainerPersistenceUnitProviderTest@class).getCanonicalPath()
+			+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.toplink.jpa.entity.Customer@class).getCanonicalPath()
 			+ "/data/demo;DB_CLOSE_ON_EXIT=FALSE"
 		</property>
 		<property name="user">"sa"</property>
