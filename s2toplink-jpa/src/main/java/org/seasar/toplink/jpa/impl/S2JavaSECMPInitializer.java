@@ -33,7 +33,7 @@ import org.seasar.framework.container.factory.S2ContainerFactory;
 import org.seasar.framework.jpa.PersistenceUnitConfiguration;
 import org.seasar.framework.jpa.impl.ContainerPersistenceUnitProvider.MappingFileHandler;
 import org.seasar.framework.jpa.impl.ContainerPersistenceUnitProvider.PersistenceClassHandler;
-import org.seasar.framework.util.ChildFirstClassLoader;
+import org.seasar.framework.jpa.util.ChildFirstClassLoader;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.InputStreamUtil;
 
