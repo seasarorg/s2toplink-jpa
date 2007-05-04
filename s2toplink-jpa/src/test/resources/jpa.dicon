@@ -9,6 +9,7 @@
 		<property name="providerClassName">"oracle.toplink.essentials.PersistenceProvider"</property>
 	</component>
 
+	<!--
 	<component name="localUnitProvider" class="org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider">
 		<property name="unitName">"persistenceUnit"</property>
 		<property name="javaSECMPInitializer">
@@ -16,7 +17,8 @@
 		</property>
 	</component>
 	<component class="oracle.toplink.essentials.PersistenceProvider"/>
-
+	-->
+	
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		persistenceUnitProvider.entityManagerFactory
 	</component>
