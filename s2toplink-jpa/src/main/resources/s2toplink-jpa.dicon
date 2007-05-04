@@ -4,6 +4,7 @@
 <components>
 	<include path="javaee5.dicon"/>
 
+	<component class="org.seasar.toplink.jpa.impl.S2TopLinkInitializer"/>
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkDialect"/>
 	<component class="org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider"/>
 </components>
