@@ -27,7 +27,6 @@ import java.util.List;
 
 import oracle.toplink.essentials.internal.weaving.TopLinkWeaved;
 
-import org.seasar.framework.exception.ClassNotFoundRuntimeException;
 import org.seasar.framework.util.ClassLoaderUtil;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.InputStreamUtil;
@@ -146,11 +145,7 @@ public class InstrumentationImpl implements Instrumentation {
      * @return 指定されたクラスがすでにロードされているならば<code>true</code>、されていないならば<code>false</code>
      */
     protected boolean isLoaded(final ClassLoader loader, final String className) {
-        try {
-            return ClassLoaderUtil.findLoadedClass(loader, className) != null;
-        } catch (final ClassNotFoundException e) {
-            throw new ClassNotFoundRuntimeException(e);
-        }
+        return ClassLoaderUtil.findLoadedClass(loader, className) != null;
     }
 
     @SuppressWarnings("unchecked")
