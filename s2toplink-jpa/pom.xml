@@ -169,6 +169,12 @@
 						<link>
 							http://s2container.seasar.org/ja/s2-framework/apidocs/
 						</link>
+						<link>
+							http://s2container.seasar.org/ja/s2-extension/apidocs/
+						</link>
+						<link>
+							http://s2container.seasar.org/ja/s2-tiger/apidocs/
+						</link>
 					</links>
 				</configuration>
 			</plugin>
@@ -195,9 +201,7 @@
 	<repositories>
 		<repository>
 			<id>java.net</id>
-			<url>
-				http://download.java.net/maven/1
-			</url>
+			<url>http://download.java.net/maven/1</url>
 			<layout>legacy</layout>
 		</repository>
 		<repository>
