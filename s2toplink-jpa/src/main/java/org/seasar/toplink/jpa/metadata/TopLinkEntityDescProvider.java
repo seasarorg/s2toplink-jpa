@@ -20,62 +20,26 @@ import javax.persistence.EntityManagerFactory;
 import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.threetier.ServerSession;
 
-import org.seasar.framework.container.annotation.tiger.DestroyMethod;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
-import org.seasar.framework.jpa.metadata.EntityDesc;
-import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 
 /**
  * TopLink Essentials用のEntityDescProvider実装です。
+ * 
  * @author Hidenoshin Yoshida
  */
 public class TopLinkEntityDescProvider implements EntityDescProvider {
-    
-    /**
-     * EntityManagerFactoryImplオブジェクト
-     */
-    protected EntityManagerFactoryImpl emf;
-    
-    /**
-     * ServerSessionオブジェクト
-     */
-    protected ServerSession serverSession;
-    
-    
-    
+
     /**
      * コンストラクタ
-     * @param entityManagerFactory EntityManagerFactoryオブジェクト
+     * 
      */
-    @SuppressWarnings("unchecked")
-    public TopLinkEntityDescProvider(EntityManagerFactory entityManagerFactory) {
-        this.emf = EntityManagerFactoryImpl.class.cast(entityManagerFactory);
+    public TopLinkEntityDescProvider() {
     }
 
-    /**
-     * EntityDescFactoryにこのオブジェクトを追加します。
-     */
-    @InitMethod
-    public void register() {
-        EntityDescFactory.addProvider(this);
-    }
-
-    /**
-     * EntityDescFactoryからこのオブジェクトを削除します。
-     */
-    @DestroyMethod
-    public void unregister() {
-        EntityDescFactory.removeProvider(this);
-    }
-
-    /**
-     * @see org.seasar.framework.jpa.metadata.EntityDescProvider#createEntityDesc(java.lang.Class)
-     */
-    public EntityDesc createEntityDesc(Class<?> entityClass) {
-        if (serverSession == null) {
-            serverSession = emf.getServerSession();
-        }
+    public TopLinkEntityDesc createEntityDesc(EntityManagerFactory emf,
+            Class<?> entityClass) {
+        ServerSession serverSession = EntityManagerFactoryImpl.class.cast(emf)
+                .getServerSession();
         if (serverSession.getDescriptor(entityClass) != null) {
             return new TopLinkEntityDesc(entityClass, serverSession);
         }

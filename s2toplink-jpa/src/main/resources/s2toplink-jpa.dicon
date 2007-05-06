@@ -6,5 +6,6 @@
 
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkInitializer"/>
 	<component class="org.seasar.toplink.jpa.impl.S2TopLinkDialect"/>
+	<component class="org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider"/>
 	<component class="org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider"/>
 </components>

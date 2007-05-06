@@ -18,36 +18,18 @@ package org.seasar.toplink.jpa.unit;
 import java.util.Collection;
 import java.util.Map;
 
-import org.seasar.framework.container.annotation.tiger.DestroyMethod;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
-import org.seasar.framework.jpa.unit.EntityReaderFactory;
 import org.seasar.framework.jpa.unit.EntityReaderProvider;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.toplink.jpa.metadata.TopLinkEntityDesc;
 
 /**
  * TopLink Essentials用のEntityReaderProvider実装です。
+ * 
  * @author Hidenoshin Yoshida
  */
 public class TopLinkEntityReaderProvider implements EntityReaderProvider {
-
-    /**
-     * EntityReaderFactoryにこのオブジェクトを登録します。
-     */
-    @InitMethod
-    public void register() {
-        EntityReaderFactory.addProvider(this);
-    }
-
-    /**
-     * EntityReaderFactoryからこのオブジェクトを削除します。
-     */
-    @DestroyMethod
-    public void unregister() {
-        EntityReaderFactory.removeProvider(this);
-    }
 
     /**
      * @see org.seasar.framework.jpa.unit.EntityReaderProvider#createEntityReader(java.lang.Object)
@@ -56,8 +38,7 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
         if (entity == null) {
             return null;
         }
-        final TopLinkEntityDesc entityDesc = getEntityDesc(entity
-                .getClass());
+        final TopLinkEntityDesc entityDesc = getEntityDesc(entity.getClass());
         if (entityDesc == null) {
             return null;
         }
@@ -67,7 +48,8 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
     /**
      * @see org.seasar.framework.jpa.unit.EntityReaderProvider#createEntityReader(java.util.Collection)
      */
-    public TopLinkEntityCollectionReader createEntityReader(final Collection<?> entities) {
+    public TopLinkEntityCollectionReader createEntityReader(
+            final Collection<?> entities) {
         if (entities == null) {
             return null;
         }
@@ -95,7 +77,9 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
 
     /**
      * entitiesの中にObject配列が含まれていた場合、配列の要素をCollectionに追加して、新たなCollectionを生成します。
-     * @param entities 対象Collection
+     * 
+     * @param entities
+     *            対象Collection
      * @return 新規作成したCollection
      */
     protected Collection<Object> flatten(final Collection<?> entities) {
@@ -115,7 +99,9 @@ public class TopLinkEntityReaderProvider implements EntityReaderProvider {
 
     /**
      * 指定したentityClassに対応するTopLinkEntityDescオブジェクトを返します。
-     * @param entityClass Entityクラス
+     * 
+     * @param entityClass
+     *            Entityクラス
      * @return entityClassに対応するTopLinkEntityDesc
      */
     protected TopLinkEntityDesc getEntityDesc(final Class<?> entityClass) {

@@ -15,6 +15,8 @@
  */
 package org.seasar.toplink.jpa.metadata;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
@@ -28,6 +30,8 @@ import org.seasar.toplink.jpa.entity.Product;
 public class TopLinkEntityDescProviderTest extends S2TestCase {
 
     private EntityDescProvider provider;
+
+    private EntityManagerFactory emf;
 
     /*
      * (non-Javadoc)
@@ -44,11 +48,11 @@ public class TopLinkEntityDescProviderTest extends S2TestCase {
      * のためのテスト・メソッド。
      */
     public void testCreateEntityDesc() {
-        EntityDesc desc = provider.createEntityDesc(Integer.class);
+        EntityDesc desc = provider.createEntityDesc(emf, Integer.class);
         assertNull(desc);
-        desc = provider.createEntityDesc(Customer.class);
+        desc = provider.createEntityDesc(emf, Customer.class);
         assertNotNull(desc);
-        desc = provider.createEntityDesc(Product.class);
+        desc = provider.createEntityDesc(emf, Product.class);
         assertNotNull(desc);
     }
 
