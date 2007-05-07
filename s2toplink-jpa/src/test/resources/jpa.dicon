@@ -29,6 +29,4 @@
 		</aspect>
 	</component>
 
-	<component class="org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider"/>
-
 </components>
