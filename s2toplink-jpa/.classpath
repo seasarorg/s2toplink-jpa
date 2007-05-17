@@ -5,9 +5,9 @@
 	<classpathentry kind="src" output="build/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="build/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/toplink-essentials-2.0-46.jar" sourcepath="libsrc/toplink-essentials-2.0-46-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
 	<classpathentry kind="lib" path="lib/h2-1.0.20070429.jar"/>
+	<classpathentry kind="lib" path="lib/toplink-essentials-2.0-47.jar" sourcepath="libsrc/toplink-essentials-2.0-47-sources.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
