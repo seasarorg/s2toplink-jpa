@@ -21,19 +21,20 @@ import javax.persistence.EntityManager;
 
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.Dialect;
+import org.seasar.toplink.jpa.entity.Customer;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2TopLinkDialectTest extends S2TestCase {
-    
+
     private EntityManager entityManager;
-    
+
     private EntityManager mockEntityManager;
 
     private Dialect dialect;
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -41,12 +42,18 @@ public class S2TopLinkDialectTest extends S2TestCase {
     }
 
     public void testGetConnectionTx() {
-        
         Connection con = dialect.getConnection(entityManager);
         assertNotNull(con);
         con = dialect.getConnection(mockEntityManager);
         assertNull(con);
-        
     }
-    
+
+    public void testDetachTx() throws Exception {
+        Customer cust1 = entityManager.find(Customer.class, 1);
+        dialect.detach(entityManager, cust1);
+        assertFalse(entityManager.contains(cust1));
+        Customer cust2 = entityManager.find(Customer.class, 1);
+        assertNotSame(cust1, cust2);
+    }
+
 }
