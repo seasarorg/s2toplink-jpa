@@ -44,8 +44,6 @@ public class S2TopLinkDialectTest extends S2TestCase {
     public void testGetConnectionTx() {
         Connection con = dialect.getConnection(entityManager);
         assertNotNull(con);
-        con = dialect.getConnection(mockEntityManager);
-        assertNull(con);
     }
 
     public void testDetachTx() throws Exception {
