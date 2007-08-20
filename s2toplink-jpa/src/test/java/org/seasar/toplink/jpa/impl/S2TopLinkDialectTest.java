@@ -31,8 +31,6 @@ public class S2TopLinkDialectTest extends S2TestCase {
 
     private EntityManager entityManager;
 
-    private EntityManager mockEntityManager;
-
     private Dialect dialect;
 
     @Override
