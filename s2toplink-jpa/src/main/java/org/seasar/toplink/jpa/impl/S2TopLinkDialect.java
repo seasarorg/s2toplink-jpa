@@ -71,6 +71,9 @@ public class S2TopLinkDialect implements Dialect {
                 new Properties());
     }
 
+    /**
+     * @see org.seasar.framework.jpa.Dialect#detach(javax.persistence.EntityManager, java.lang.Object)
+     */
     public void detach(EntityManager em, Object managedEntity) {
         Object delegate = em.getDelegate();
         oracle.toplink.essentials.ejb.cmp3.EntityManager toplinkEm = oracle.toplink.essentials.ejb.cmp3.EntityManager.class
