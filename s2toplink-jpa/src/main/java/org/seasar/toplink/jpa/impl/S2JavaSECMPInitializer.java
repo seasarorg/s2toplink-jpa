@@ -26,6 +26,7 @@ import javax.persistence.spi.PersistenceUnitInfo;
 
 import oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo;
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
+import oracle.toplink.essentials.internal.ejb.cmp3.PersistenceInitializationActivator;
 import oracle.toplink.essentials.logging.AbstractSessionLog;
 
 import org.seasar.framework.container.S2Container;
@@ -99,7 +100,7 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
                     .getComponent(JavaSECMPInitializer.class);
             AbstractSessionLog.getLog().setLevel(
                     JavaSECMPInitializer.getTopLinkLoggingLevel());
-            javaSECMPInitializer.initialize(properties);
+            javaSECMPInitializer.initialize(properties, javaSECMPInitializer);
         } finally {
             container.destroy();
         }
@@ -107,22 +108,19 @@ public class S2JavaSECMPInitializer extends JavaSECMPInitializer {
 
     /**
      * 指定されたpersistenceUnitInfoにSeasar2の自動登録情報を追加し、親クラスの処理を実行します。
-     * 
-     * @see oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer#callPredeploy(oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo,
-     *      java.util.Map)
+     * @see oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer#callPredeploy(oracle.toplink.essentials.ejb.cmp3.persistence.SEPersistenceUnitInfo, java.util.Map, oracle.toplink.essentials.internal.ejb.cmp3.PersistenceInitializationActivator)
      */
     @Override
     @SuppressWarnings("unchecked")
-    protected boolean callPredeploy(final SEPersistenceUnitInfo unitInfo,
-            final Map m) {
-        final String abstractUnitName = getAbstractUnitName(unitInfo);
-        addMappingFiles(abstractUnitName, unitInfo);
-        addPersistenceClasses(abstractUnitName, unitInfo);
+    protected boolean callPredeploy(SEPersistenceUnitInfo persistenceUnitInfo, Map m, PersistenceInitializationActivator persistenceActivator) {
+        final String abstractUnitName = getAbstractUnitName(persistenceUnitInfo);
+        addMappingFiles(abstractUnitName, persistenceUnitInfo);
+        addPersistenceClasses(abstractUnitName, persistenceUnitInfo);
         if (JavaSECMPInitializer.globalInstrumentation == null) {
             JavaSECMPInitializer.globalInstrumentation = new InstrumentationImpl(
-                    unitInfo.getManagedClassNames());
+                    persistenceUnitInfo.getManagedClassNames());
         }
-        return super.callPredeploy(unitInfo, m);
+        return super.callPredeploy(persistenceUnitInfo, m, persistenceActivator);
     }
 
     /**
