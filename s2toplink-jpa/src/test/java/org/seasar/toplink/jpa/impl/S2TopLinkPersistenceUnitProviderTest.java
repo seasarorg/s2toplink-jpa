@@ -28,7 +28,7 @@ import org.seasar.framework.jpa.PersistenceUnitProvider;
  */
 public class S2TopLinkPersistenceUnitProviderTest extends S2TestCase {
     
-    private PersistenceUnitProvider provider;
+    private PersistenceUnitProvider localUnitProvider;
 
     /* (non-Javadoc)
      * @see junit.framework.TestCase#setUp()
@@ -43,16 +43,16 @@ public class S2TopLinkPersistenceUnitProviderTest extends S2TestCase {
      */
     public void testCreateEntityManagerFactory() {
 //        assertTrue(provider instanceof S2TopLinkPersistenceUnitProvider);
-        EntityManagerFactory factory = provider.createEntityManagerFactory("persistenceUnit");
+        EntityManagerFactory factory = localUnitProvider.createEntityManagerFactory("persistenceUnit");
         assertNotNull(factory);
         assertTrue(factory instanceof EntityManagerFactoryImpl);
-        factory = provider.createEntityManagerFactory("persistenceUnit2");
+        factory = localUnitProvider.createEntityManagerFactory("persistenceUnit2");
         assertNotNull(factory);
         assertTrue(factory instanceof EntityManagerFactoryImpl);
-        factory = provider.createEntityManagerFactory("persistenceUnit3");
+        factory = localUnitProvider.createEntityManagerFactory("persistenceUnit3");
         assertNotNull(factory);
         assertTrue(factory instanceof EntityManagerFactoryImpl);
-        factory = provider.createEntityManagerFactory("persistenceUnit4");
+        factory = localUnitProvider.createEntityManagerFactory("persistenceUnit4");
         assertNull(factory);
     }
 
