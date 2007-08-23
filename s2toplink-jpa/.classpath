@@ -7,7 +7,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
-	<classpathentry kind="lib" path="lib/toplink-essentials-2.0-58b.jar" sourcepath="libsrc/toplink-essentials-2.0-58b-sources.jar"/>
 	<classpathentry kind="lib" path="lib/h2-1.0.20070429.jar"/>
+	<classpathentry kind="lib" path="lib/toplink-essentials-2.0-58c.jar" sourcepath="libsrc/toplink-essentials-2.0-58c-sources.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
