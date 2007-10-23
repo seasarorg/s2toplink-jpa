@@ -1,5 +1,5 @@
 <project name="s2toplink-jpa" default="dist" basedir=".">
-	<property name="ver" value="1.0.0-rc3"/>
+	<property name="ver" value="1.0.0-rc4"/>
 
 	<target name="dist">
 		<zip zipfile="target/S2TopLink-JPA-${ver}.zip">
