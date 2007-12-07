@@ -9,7 +9,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>S2TopLink-JPA Project</name>
 	<description></description>
-	<url>http://s2toplink.sandbox.seasar.org/</url>
+	<url>http://s2toplink.seasar.org/</url>
 	<issueManagement>
 		<system>JIRA</system>
 		<url>
@@ -98,12 +98,12 @@
 	</licenses>
 	<scm>
 		<connection>
-			scm:svn:https://www.seasar.org/svn/sandbox/s2toplink/trunk/s2toplink-jpa/
+			scm:svn:https://www.seasar.org/svn/s2toplink/trunk/s2toplink-jpa/
 		</connection>
 		<developerConnection>
-			scm:svn:https://www.seasar.org/svn/sandbox/s2toplink/trunk/s2toplink-jpa/
+			scm:svn:https://www.seasar.org/svn/s2toplink/trunk/s2toplink-jpa/
 		</developerConnection>
-		<url>http://svn.seasar.org/browse/?root=sandbox.s2toplink</url>
+		<url>http://svn.seasar.org/browse/?root=s2toplink</url>
 	</scm>
 	<organization>
 		<name>The Seasar Foundation</name>
