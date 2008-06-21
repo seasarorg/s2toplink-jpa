@@ -6,7 +6,7 @@
 	<groupId>org.seasar.toplink</groupId>
 	<artifactId>s2toplink-jpa</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>S2TopLink-JPA Project</name>
 	<description></description>
 	<url>http://s2toplink.seasar.org/</url>
