@@ -1,8 +1,11 @@
 <project name="s2toplink-jpa" default="dist" basedir=".">
-	<property name="ver" value="1.0.0"/>
+	<tstamp>
+		<format property="releaseDate" pattern="yyyy-MM-dd" locale="ja,JP"/>
+	</tstamp>
 
-	<target name="dist">
-		<zip zipfile="target/S2TopLink-JPA-${ver}.zip">
+	<target name="dist" depends="fix-site">
+		<mkdir dir="target/site/downloads/${releaseDate}"/>
+		<zip zipfile="target/site/downloads/${releaseDate}/S2TopLink-JPA-${ver}.zip">
 			<zipfileset prefix="s2toplink-jpa" dir=".">
 				<exclude name="**/build/**"/>
 				<exclude name="**/target/**"/>
@@ -15,16 +18,27 @@
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/resources" dir="src/test/resources">
 				<include name="jpa.dicon"/>
-				<include name="s2toplink-jpa.dicon"/>
 			</zipfileset>
 			<zipfileset prefix="s2toplink-jpa/resources/META-INF" dir="src/test/dist/resources/META-INF">
 				<include name="persistence.xml"/>
 			</zipfileset>
-			<zipfileset prefix="s2toplink-jpa/doc" dir="../s2toplink-www">
-				<exclude name="**/download/**"/>
-				<exclude name=".project"/>
-				<exclude name="**/.settings/**"/>
+			<zipfileset prefix="s2toplink-jpa/doc" dir="target/site">
 			</zipfileset>
 		</zip>
+	</target>
+	
+	<target name="fix-site">
+		<mkdir dir="target/site/en"/>
+		<move todir="target/site/en">
+			<fileset dir="target/site">
+				<exclude name="apidocs/**"/>
+				<exclude name="en/**"/>
+				<exclude name="ja/**"/>
+				<exclude name="index.html.en"/>
+				<exclude name="index.html.ja"/>
+			</fileset>
+		</move>
+		<delete file="target/site/ja/index.html.en"/>
+		<delete file="target/site/ja/index.html.ja"/>
 	</target>
 </project>

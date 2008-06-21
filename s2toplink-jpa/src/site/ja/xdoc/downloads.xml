@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Downloads</title>
+	</properties>
+	<body>
+		<section name="Latest Release">
+			<ul>
+				<li><p><a href="../downloads/2008-06-21/S2TopLink-JPA-1.0.1.zip">S2TopLink-JPA 1.0.1</a> (2008/06/21)</p></li>
+			</ul>
+		</section>
+		<section name="All Releases">
+			<ul>
+				<li><p><a href="../downloads/2008-06-21/S2TopLink-JPA-1.0.1.zip">S2TopLink-JPA 1.0.1</a> (2008/06/21)</p></li>
+			</ul>
+			<ul>
+				<li><p><a href="../downloads/2007-12-14/S2TopLink-JPA-1.0.0.zip">S2TopLink-JPA 1.0.0</a> (2007/12/14)</p></li>
+			</ul>
+		</section>
+	</body>
+</document>

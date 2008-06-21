@@ -167,16 +167,24 @@
 							http://aopalliance.sourceforge.net/doc/
 						</link>
 						<link>
-							http://s2container.seasar.org/ja/s2-framework/apidocs/
+							http://s2container.seasar.org/2.4/s2-framework/ja/apidocs/
 						</link>
 						<link>
-							http://s2container.seasar.org/ja/s2-extension/apidocs/
+							http://s2container.seasar.org/2.4/s2-extension/ja/apidocs/
 						</link>
 						<link>
-							http://s2container.seasar.org/ja/s2-tiger/apidocs/
+							http://s2container.seasar.org/2.4/s2-tiger/ja/apidocs/
 						</link>
 					</links>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>site</phase>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -189,6 +197,27 @@
 						</manifestEntries>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>ant-dist</id>
+						<phase>site</phase>
+						<configuration>
+							<tasks>
+								<ant antfile="build.xml"
+									target="dist">
+									<property name="ver"
+										value="${version}" />
+								</ant>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<extensions>
@@ -272,6 +301,31 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+			<type>jar</type>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.jms</groupId>
+					<artifactId>jms</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.4</version>
@@ -301,5 +355,9 @@
 			</name>
 			<url>dav:https://www.seasar.org/maven/maven2-snapshot</url>
 		</snapshotRepository>
+		<site>
+			<id>maven.seasar.org</id>
+			<url>dav:https://www.seasar.org/site/s2toplink</url>
+		</site>
 	</distributionManagement>
 </project>

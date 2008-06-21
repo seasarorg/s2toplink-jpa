@@ -1,0 +1,17 @@
+ ------
+S2TopLink-JPA Changelog
+ ------
+ ------
+ ------
+
+
+
+Version {1.0.1} (2008/06/21)
+
+* 変更点
+
+** Bug
+
+	* [{{{https://www.seasar.org/issues/browse/TOPLINK-1}TOPLINK-1}}] - EntityReaderで、InheritanceType.JOINEDの継承戦略を使った子クラスの、子クラス側テーブルIDが取得できない
+	
+	* [{{{https://www.seasar.org/issues/browse/TOPLINK-2}TOPLINK-2}}] - EntityReaderで、N対１関連のEntityの外部キーカラムの値が取得出来ない
