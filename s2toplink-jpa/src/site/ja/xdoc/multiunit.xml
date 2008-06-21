@@ -34,7 +34,7 @@
 		persistenceUnitProvider.entityManagerFactory
 	&lt;/component&gt;
 
-	&lt;component name=&quot;entityManager&quot;
+	&lt;component name=&quot;<strong>entityManager</strong>&quot;
 		class=&quot;org.seasar.framework.jpa.impl.TxScopedEntityManagerProxy&quot;&gt;
 		&lt;aspect pointcut=&quot;createNamedQuery&quot;&gt;
 			&lt;component class=&quot;org.seasar.toplink.jpa.aop.interceptors.S2TopLinkEntityManagerInterceptor&quot;/&gt;
