@@ -16,7 +16,7 @@
 package org.seasar.toplink.jpa.entity;
 
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 
 
 /**

@@ -15,15 +15,15 @@
  */
 package org.seasar.toplink.jpa.unit;
 
-import java.util.List;
+//import java.util.List;
 
-import javax.persistence.EntityManager;
+//import javax.persistence.EntityManager;
 
 import org.junit.runner.RunWith;
-import org.seasar.toplink.jpa.entity.TablePerClassChild;
-import org.seasar.toplink.jpa.entity.TablePerClassSample;
+//import org.seasar.toplink.jpa.entity.TablePerClassChild;
+//import org.seasar.toplink.jpa.entity.TablePerClassSample;
 import org.seasar.framework.unit.Seasar2;
-import org.seasar.framework.unit.TestContext;
+//import org.seasar.framework.unit.TestContext;
 
 import static org.seasar.framework.unit.S2Assert.*;
 
@@ -35,9 +35,9 @@ import static org.seasar.framework.unit.S2Assert.*;
 @RunWith(Seasar2.class)
 public class TablePerClassSampleTest {
     
-    private TestContext ctx;
+//    private TestContext ctx;
     
-    private EntityManager em;
+//    private EntityManager em;
     
     public void testTablePerClassSample() {
         assertTrue(true);
