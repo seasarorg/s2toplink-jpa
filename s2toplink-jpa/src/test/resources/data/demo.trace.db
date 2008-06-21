@@ -1,0 +1,23 @@
+06-21 02:57:07 jdbc[2]: SQLException
+org.h2.jdbc.JdbcSQLException: 列番号が一致しません
+Column count does not match; SQL statement:
+INSERT INTO JOINDSAMPLE(ID,D_NAME) VALUES
+(1,'名前１','P'),
+(2,'名前２','C1'),
+(3,'名前３','C2') [21002-73]
+	at org.h2.message.Message.getSQLException(Message.java:103)
+	at org.h2.message.Message.getSQLException(Message.java:114)
+	at org.h2.message.Message.getSQLException(Message.java:77)
+	at org.h2.message.Message.getSQLException(Message.java:149)
+	at org.h2.command.dml.Insert.prepare(Insert.java:183)
+	at org.h2.command.Parser.prepareCommand(Parser.java:233)
+	at org.h2.engine.Session.prepareLocal(Session.java:284)
+	at org.h2.engine.Session.prepareCommand(Session.java:245)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1015)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:151)
+	at org.h2.server.web.WebThread.getResult(WebThread.java:1656)
+	at org.h2.server.web.WebThread.query(WebThread.java:1219)
+	at org.h2.server.web.WebThread.process(WebThread.java:414)
+	at org.h2.server.web.WebThread.processRequest(WebThread.java:161)
+	at org.h2.server.web.WebThread.process(WebThread.java:211)
+	at org.h2.server.web.WebThread.run(WebThread.java:171)
