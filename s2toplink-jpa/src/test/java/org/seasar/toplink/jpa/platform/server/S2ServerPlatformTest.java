@@ -15,14 +15,18 @@
  */
 package org.seasar.toplink.jpa.platform.server;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.toplink.jpa.transaction.SingletonS2TransactionController;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class S2ServerPlatformTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class S2ServerPlatformTest {
 
     private S2ServerPlatform serverPlatform = new S2ServerPlatform(null);
 

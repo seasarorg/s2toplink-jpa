@@ -17,21 +17,19 @@ package org.seasar.toplink.jpa.platform.database;
 
 import oracle.toplink.essentials.queryframework.ValueReadQuery;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
+import org.seasar.framework.unit.Seasar2;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class HSQLDBPlatformTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class HSQLDBPlatformTest {
     
     private HSQLDBPlatform platform = new HSQLDBPlatform();
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        include("jpa.dicon");
-    }
 
     /**
      * {@link org.seasar.toplink.jpa.platform.database.HSQLDBPlatform#supportsForeignKeyConstraints()} のためのテスト・メソッド。

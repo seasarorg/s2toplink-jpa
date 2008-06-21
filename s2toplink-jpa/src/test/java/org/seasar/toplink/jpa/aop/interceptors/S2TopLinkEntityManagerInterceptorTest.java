@@ -18,26 +18,24 @@ package org.seasar.toplink.jpa.aop.interceptors;
 import oracle.toplink.essentials.ejb.cmp3.EJBQuery;
 
 import org.aopalliance.intercept.MethodInvocation;
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.aop.interceptors.MockInterceptor;
+import org.seasar.framework.unit.Seasar2;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class S2TopLinkEntityManagerInterceptorTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class S2TopLinkEntityManagerInterceptorTest {
     
     private S2TopLinkEntityManagerInterceptor interceptor;
     
     private MethodInvocation invocation;
     
     private MockInterceptor mockInterceptor;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        include(S2TopLinkEntityManagerInterceptorTest.class.getSimpleName() + ".dicon");
-    }
 
     /**
      * {@link org.seasar.toplink.jpa.aop.interceptors.S2TopLinkEntityManagerInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)} のためのテスト・メソッド。

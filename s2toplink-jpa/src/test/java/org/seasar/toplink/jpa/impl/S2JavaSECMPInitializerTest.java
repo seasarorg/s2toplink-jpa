@@ -19,13 +19,17 @@ import java.lang.reflect.Field;
 
 import oracle.toplink.essentials.internal.ejb.cmp3.JavaSECMPInitializer;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
+import org.seasar.framework.unit.Seasar2;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  * 
  */
-public class S2JavaSECMPInitializerTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class S2JavaSECMPInitializerTest {
 
     /**
      * {@link org.seasar.toplink.jpa.impl.S2JavaSECMPInitializer#getJavaSECMPInitializer(java.lang.String, java.util.Map)}

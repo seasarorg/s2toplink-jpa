@@ -17,23 +17,19 @@ package org.seasar.toplink.jpa.transaction;
 
 import javax.transaction.TransactionManager;
 
+import org.junit.runner.RunWith;
 import org.seasar.extension.jta.SingletonTransactionManagerProxy;
-import org.seasar.extension.unit.S2TestCase;
+import org.seasar.framework.unit.Seasar2;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author hid-yoshida
  *
  */
-public class SingletonS2TransactionControllerTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class SingletonS2TransactionControllerTest {
     
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include("jpa.dicon");
-    }
-
     /**
      * {@link org.seasar.toplink.jpa.transaction.SingletonS2TransactionController#acquireTransactionManager()} のためのテスト・メソッド。
      * @throws Exception 

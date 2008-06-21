@@ -19,25 +19,23 @@ import java.sql.Connection;
 
 import javax.persistence.EntityManager;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.Dialect;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.toplink.jpa.entity.Customer;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  * 
  */
-public class S2TopLinkDialectTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class S2TopLinkDialectTest {
 
     private EntityManager entityManager;
 
     private Dialect dialect;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        include(S2TopLinkDialectTest.class.getSimpleName() + ".dicon");
-    }
 
     public void testGetConnectionTx() {
         Connection con = dialect.getConnection(entityManager);

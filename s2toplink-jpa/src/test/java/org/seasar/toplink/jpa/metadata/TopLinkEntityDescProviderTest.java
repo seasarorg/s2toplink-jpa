@@ -17,31 +17,25 @@ package org.seasar.toplink.jpa.metadata;
 
 import javax.persistence.EntityManagerFactory;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.toplink.jpa.entity.Customer;
 import org.seasar.toplink.jpa.entity.Product;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  * 
  */
-public class TopLinkEntityDescProviderTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class TopLinkEntityDescProviderTest {
 
     private EntityDescProvider provider;
 
     private EntityManagerFactory emf;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include("jpa.dicon");
-    }
 
     /**
      * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDescProvider#createEntityDesc(java.lang.Class)}

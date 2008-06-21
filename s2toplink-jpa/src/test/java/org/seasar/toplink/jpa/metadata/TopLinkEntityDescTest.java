@@ -23,29 +23,25 @@ import javax.persistence.EntityManagerFactory;
 import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 import oracle.toplink.essentials.threetier.ServerSession;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.toplink.jpa.entity.Customer;
 import org.seasar.toplink.jpa.entity.Enemy;
 import org.seasar.toplink.jpa.entity.Product;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class TopLinkEntityDescTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class TopLinkEntityDescTest {
     
     private EntityManagerFactory emf;
     
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include("jpa.dicon");
-    }
-
     /**
      * {@link org.seasar.toplink.jpa.metadata.TopLinkEntityDesc#TopLinkEntityDesc(java.lang.Class, oracle.toplink.essentials.threetier.ServerSession)} のためのテスト・メソッド。
      */

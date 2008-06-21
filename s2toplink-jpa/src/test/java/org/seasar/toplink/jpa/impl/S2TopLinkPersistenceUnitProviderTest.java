@@ -19,24 +19,20 @@ import javax.persistence.EntityManagerFactory;
 
 import oracle.toplink.essentials.internal.ejb.cmp3.EntityManagerFactoryImpl;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
+import org.seasar.framework.unit.Seasar2;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class S2TopLinkPersistenceUnitProviderTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class S2TopLinkPersistenceUnitProviderTest {
     
     private PersistenceUnitProvider localUnitProvider;
-
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include(S2TopLinkPersistenceUnitProviderTest.class.getSimpleName() + ".dicon");
-    }
 
     /**
      * {@link org.seasar.toplink.jpa.impl.S2TopLinkPersistenceUnitProvider#createEntityManagerFactory(java.lang.String)} のためのテスト・メソッド。

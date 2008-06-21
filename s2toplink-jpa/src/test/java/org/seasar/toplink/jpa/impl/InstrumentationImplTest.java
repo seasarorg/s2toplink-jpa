@@ -21,20 +21,19 @@ import java.util.List;
 
 import oracle.toplink.essentials.internal.weaving.TopLinkWeaved;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.toplink.jpa.entity.Customer;
 import org.seasar.toplink.jpa.entity.Product;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author taedium
  * 
  */
-public class InstrumentationImplTest extends S2TestCase {
-
-    protected void setUp() throws Exception {
-        super.setUp();
-        include(InstrumentationImplTest.class.getSimpleName() + ".dicon");
-    }
+@RunWith(Seasar2.class)
+public class InstrumentationImplTest {
 
     public void test() throws Exception {
         List<Type> interfaces = Arrays.asList(Customer.class
