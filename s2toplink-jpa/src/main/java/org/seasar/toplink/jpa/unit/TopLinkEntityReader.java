@@ -18,10 +18,15 @@ package org.seasar.toplink.jpa.unit;
 import java.util.List;
 import java.util.Map;
 
+import oracle.toplink.essentials.descriptors.ClassDescriptor;
 import oracle.toplink.essentials.descriptors.InheritancePolicy;
 import oracle.toplink.essentials.internal.databaseaccess.DatabasePlatform;
 import oracle.toplink.essentials.internal.helper.DatabaseField;
+import oracle.toplink.essentials.internal.helper.DatabaseTable;
+import oracle.toplink.essentials.internal.indirection.UnitOfWorkQueryValueHolder;
+import oracle.toplink.essentials.internal.sessions.AbstractRecord;
 import oracle.toplink.essentials.mappings.DatabaseMapping;
+import oracle.toplink.essentials.mappings.OneToOneMapping;
 import oracle.toplink.essentials.threetier.ServerSession;
 
 import org.seasar.extension.dataset.ColumnType;
@@ -33,6 +38,9 @@ import org.seasar.extension.dataset.impl.DataSetImpl;
 import org.seasar.extension.dataset.states.RowStates;
 import org.seasar.extension.dataset.types.BigDecimalType;
 import org.seasar.extension.dataset.types.ColumnTypes;
+import org.seasar.framework.jpa.metadata.AttributeDesc;
+import org.seasar.framework.jpa.metadata.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.toplink.jpa.metadata.TopLinkAttributeDesc;
@@ -94,21 +102,16 @@ public class TopLinkEntityReader implements EntityReader {
      */
     protected void setupAttributeColumns() {
         ServerSession serverSession = getEntityDesc().getServerSession();
+        ClassDescriptor cd = serverSession.getClassDescriptor(getEntityDesc().getEntityClass());
         DatabasePlatform platform = serverSession.getPlatform();
-        
-        for (TopLinkAttributeDesc attribute : getEntityDesc().getAttributeDescs()) { 
-            DatabaseMapping mapping = attribute.getMapping();
-            List<DatabaseField> fields = mapping.getFields();
-            for (DatabaseField field : fields) {
-                DataTable table = dataSet.getTable(field.getTableName());
-                int sqlType = platform.getJDBCType(field);
-                String columnName = field.getName();
-                if (!table.hasColumn(columnName)) {
-                    table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
-                }
+        for (DatabaseField field : cd.getFields()) {
+            DataTable table = dataSet.getTable(field.getTableName());
+            int sqlType = platform.getJDBCType(field);
+            String columnName = field.getName();
+            if (!table.hasColumn(columnName)) {
+                table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
             }
-            
-        }
+        }        
     }
     
     /**
@@ -143,15 +146,31 @@ public class TopLinkEntityReader implements EntityReader {
             List<DatabaseField> fields = mapping.getFields();
             for (DatabaseField field : fields) {
                 DataTable table = dataSet.getTable(field.getTableName());
-                DataRow row = rowMap.get(table.getTableName());
-                if (row == null) {
-                    row = table.addRow();
-                    rowMap.put(table.getTableName(), row);
-                }
+                DataRow row = getRow(rowMap, table);
                 Object value = mapping.getAttributeValueFromObject(entity);
                 if (value != null) {
                     if (attribute.isComponent()) {
                         value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
+                    } else if (attribute.isAssociation()) {
+                        UnitOfWorkQueryValueHolder holder = UnitOfWorkQueryValueHolder.class.cast(value);
+                        AbstractRecord record = holder.getRow();
+                        if (record != null) {
+                            value = record.get(field);
+                        } else {
+                            if (mapping instanceof OneToOneMapping) {
+                                OneToOneMapping otoMapping = OneToOneMapping.class.cast(mapping);
+                                if (otoMapping.getSourceToTargetKeyFields() != null) {
+                                    DatabaseField fField = otoMapping.getSourceToTargetKeyFields().get(field);
+                                    Object targetEntity = holder.getValue();
+                                    EntityDesc fDesc = EntityDescFactory.getEntityDesc(targetEntity.getClass());
+                                    AttributeDesc faDesc = fDesc.getAttributeDesc(fField.getName());
+                                    if (faDesc == null) {
+                                        faDesc = fDesc.getAttributeDesc(fField.getName().toLowerCase());
+                                    }
+                                    value = faDesc.getValue(targetEntity);
+                                }
+                            }
+                        }
                     }
                     if (value instanceof Enum) {
                         DataColumn column = table.getColumn(field.getName());
@@ -162,6 +181,9 @@ public class TopLinkEntityReader implements EntityReader {
                     }
                 }
                 row.setValue(field.getName(), value);
+                if (attribute.isId()) {
+                    setAdditionalIdRow(rowMap, field, value);
+                }
             }
             
         }
@@ -169,16 +191,51 @@ public class TopLinkEntityReader implements EntityReader {
             InheritancePolicy inheritancePolicy = getEntityDesc().getInheritancePolicy();
             DatabaseField field = inheritancePolicy.getClassIndicatorField();
             DataTable table = dataSet.getTable(field.getTableName());
-            DataRow row = rowMap.get(table.getTableName());
-            if (row == null) {
-                row = table.addRow();
-                rowMap.put(table.getTableName(), row);
-            }
+            DataRow row = getRow(rowMap, table);
             Object value = inheritancePolicy.getClassIndicatorMapping().get(getEntityDesc().getEntityClass());
             row.setValue(field.getName(), value);
         }
         for (String key : rowMap.keySet()) {
             rowMap.get(key).setState(RowStates.UNCHANGED);
+        }
+    }
+
+    /**
+     * tableに紐づくDataRowがrowMapに存在していれば返し、無かった場合は新規作成してrowMapにセットして返します。
+     * @param rowMap テーブル名をキー、DataRowを値に持つMap
+     * @param table DataTableオブジェクト
+     * @return
+     */
+    protected DataRow getRow(Map<String, DataRow> rowMap, DataTable table) {
+        DataRow row = rowMap.get(table.getTableName());
+        if (row == null) {
+            row = table.addRow();
+            rowMap.put(table.getTableName(), row);
+        }
+        return row;
+    }
+
+    /**
+     * 継承戦略を使った子クラスのID値をDataRowにセットします。
+     * @param rowMap テーブル名をキー、DataRowを値に持つMap
+     * @param field DatabaseField
+     * @param value ID値
+     */
+    protected void setAdditionalIdRow(Map<String, DataRow> rowMap,
+            DatabaseField field, Object value) {
+        ServerSession serverSession = getEntityDesc().getServerSession();
+        ClassDescriptor cd = serverSession.getClassDescriptor(getEntityDesc().getEntityClass());
+        Map<DatabaseTable, Map<DatabaseField, DatabaseField>> idMap = cd.getAdditionalTablePrimaryKeyFields();
+        if (idMap != null) {
+            for (DatabaseTable dt : idMap.keySet()) {
+                Map<DatabaseField, DatabaseField> fMap = idMap.get(dt);
+                DatabaseField cField = fMap.get(field);
+                if (cField != null) {
+                    DataTable cTable = dataSet.getTable(dt.getName());
+                    DataRow cRow = getRow(rowMap, cTable);
+                    cRow.setValue(cField.getName(), value);                 
+                }
+            }
         }
     }
 
