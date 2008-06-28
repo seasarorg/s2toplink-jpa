@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="S2OpenJPA">
+<project name="S2TopLink">
   <skin>
     <groupId>org.seasar.project</groupId>
     <artifactId>seasar-skin</artifactId>
